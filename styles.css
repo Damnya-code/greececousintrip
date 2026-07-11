@@ -1204,6 +1204,18 @@ dialog::backdrop {
     padding-bottom: 4px
 }
 
+.planning-lounge-link + .planning-lounge-link {
+    margin-left: 20px
+}
+
+@media (max-width: 760px) {
+    .planning-lounge-link + .planning-lounge-link {
+        display: table;
+        margin-top: 12px;
+        margin-left: 0
+    }
+}
+
 .hero-art {
     position: relative;
     height: 440px;
@@ -1601,7 +1613,7 @@ footer {
 
 .hero,
 .stats,
-.section:not(.journey-itinerary) {
+.section:not(.journey-itinerary):not(.booking) {
     width: 100%;
     max-width: 1212px;
     margin-left: auto;
