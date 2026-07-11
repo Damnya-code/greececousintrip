@@ -1157,8 +1157,10 @@ dialog::backdrop {
     }
 
     .sun {
-        right: -140px;
-        top: 130px
+        right: 12px;
+        top: 130px;
+        width: min(300px, calc(100% - 24px));
+        height: min(300px, calc(100% - 24px))
     }
 
     .hero-art:before {
