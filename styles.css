@@ -1252,6 +1252,13 @@ dialog::backdrop {
     line-height: 1.45
 }
 
+@media (min-width: 901px) {
+    .hero-art {
+        width: calc(100% - 140px);
+        transform: translateX(-70px)
+    }
+}
+
 @media(max-width:760px) {
     .hero-art {
         height: 340px;
