@@ -21,3 +21,12 @@
 @keyframes heroSettle{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:scale(1.02)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.day-hero-image{animation:none}.reveal{opacity:1;transform:none;transition:none}.experience-card{transition:none}}
 @media(max-width:760px){.day-nav{padding-inline:20px}.day-nav nav{display:none}.day-hero{min-height:680px}.day-hero-inner{padding:0 20px 100px}.day-hero h1{font-size:68px;letter-spacing:-4px}.day-hero-subtitle{font-size:16px}.day-scroll-cue{left:20px;right:auto;bottom:38px}.day-container{width:calc(100% - 40px)}.day-intro,.taste,.practical-grid,.route-overview{grid-template-columns:1fr;gap:35px}.day-intro,.day-section{padding-top:80px;padding-bottom:80px}.day-intro .day-intro-lead{font-size:28px}.day-section-heading{margin-bottom:35px}.editorial-timeline li{grid-template-columns:62px 1fr;gap:14px;padding:25px 0}.editorial-timeline li>a{grid-column:2;justify-self:start}.editorial-timeline h3{font-size:23px}.highlight-grid{grid-template-columns:1fr}.experience-card{min-height:290px}.taste-label>span{display:none}.taste dl{grid-template-columns:1fr}.practical-list{grid-template-columns:1fr}.practical-list article:nth-child(n){border-right:0;padding-left:0}.day-pagination{grid-template-columns:1fr 1fr}.day-pagination>span,.day-pagination>a{padding:25px 20px;font-size:17px}.day-pagination-home{grid-row:2;grid-column:1/-1;border-top:1px solid #d0cbbb;border-left:0;border-right:0}.day-page footer{padding-inline:20px}}
+
+/* Four-card day highlights and chapter teaser */
+.highlight-grid-four{grid-template-columns:repeat(4,1fr)}
+.highlight-grid-four .experience-card{min-height:380px}
+.highlight-grid-four .experience-card h3{font-size:29px}
+.next-chapter{padding-top:10px;padding-bottom:110px}
+.next-chapter blockquote{max-width:850px;margin:20px 0 32px;font:600 clamp(38px,5vw,65px)/1.05 "Playfair Display";letter-spacing:-2px;color:var(--day-navy)}
+.next-chapter>a{color:var(--day-navy);font-size:13px;font-weight:700}
+@media(max-width:760px){.highlight-grid-four{grid-template-columns:1fr}.highlight-grid-four .experience-card{min-height:290px}.next-chapter{padding-bottom:80px}}
