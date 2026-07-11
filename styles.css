@@ -1536,6 +1536,68 @@ dialog::backdrop {
 }
 
 /* Mobile itinerary: one clean vertical sequence */
+/* @media (max-width: 760px) {
+    .journey-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+        padding-left: 28px;
+    }
+
+    .journey-card,
+    .journey-card:nth-child(n) {
+        width: 100%;
+        min-height: 0;
+        margin: 0 !important;
+        transform: none !important;
+    }
+
+    .journey-ready .journey-card.journey-left,
+    .journey-ready .journey-card.journey-right,
+    .journey-ready .journey-card.journey-left.is-visible,
+    .journey-ready .journey-card.journey-right.is-visible {
+        transform: none !important;
+    }
+} */
+
+/* Responsive layout corrections */
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+main,
+.hero,
+.section,
+.stats,
+footer {
+    max-width: 100%;
+}
+
+.hero-copy,
+.hero-art,
+.route > *,
+.playbook > *,
+.booking > * {
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .hero,
+    .route,
+    .playbook,
+    .booking {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 48px;
+    }
+
+    .hero {
+        min-height: 0;
+    }
+}
+
 @media (max-width: 760px) {
     .journey-timeline {
         display: flex;
