@@ -52,6 +52,8 @@ body {
 
     opacity: 0.92;
     pointer-events: none;
+    animation: sun-breathe 6s ease-in-out infinite;
+    transform-origin: center;
 }
 
 .sun::before {
@@ -83,6 +85,8 @@ body {
             transparent 77%);
 
     transform: rotate(-7deg);
+
+    animation: sun-rays-drift 45s linear infinite;
 }
 
 .sun::after {
@@ -102,6 +106,44 @@ body {
 
     transform: translate(12px, -8px);
     z-index: -1;
+}
+
+@keyframes sun-breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow:
+            0 28px 65px rgba(213, 144, 49, 0.18),
+            0 0 0 rgba(240, 189, 100, 0),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    50% {
+        transform: scale(1.015);
+        box-shadow:
+            0 32px 78px rgba(213, 144, 49, 0.24),
+            0 0 55px rgba(240, 189, 100, 0.22),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+    }
+}
+
+@keyframes sun-rays-drift {
+    from {
+        transform: rotate(-7deg);
+    }
+
+    to {
+        transform: rotate(353deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sun,
+    .sun::before {
+        animation: none;
+    }
 }
 
 .nav {
