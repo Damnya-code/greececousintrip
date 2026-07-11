@@ -38,3 +38,6 @@
 
 /* Day Three: Chania harbour tones */
 .day-three{--day-gold:#c89558;--day-navy:#12324a;--day-ivory:#fbf4e7}.day-three .day-hero-shade{background:linear-gradient(90deg,rgba(12,35,51,.72),rgba(12,35,51,.08)),linear-gradient(0deg,rgba(12,35,51,.58),transparent 58%)}.day-three .experience-card-featured{background:#1e7180;border-color:#1e7180}.day-three .practical{background:#e2f0ed}.day-three .next-chapter{border-top:1px solid #b8d3cd}.day-three .taste h2 em{color:#b57743}
+
+/* Day Four: subtle rose sand and lagoon turquoise */
+.day-four{--day-gold:#c99182;--day-navy:#173b4a;--day-ivory:#fff9ef}.day-four .day-hero-shade{background:linear-gradient(90deg,rgba(15,48,59,.66),rgba(15,48,59,.05)),linear-gradient(0deg,rgba(15,48,59,.52),transparent 60%)}.day-four .experience-card-featured{background:#287f88;border-color:#287f88}.day-four .day-highlights{background:#143a48}.day-four .practical{background:#f4e6df}.day-four .taste h2 em{color:#b8766e}.day-four .next-chapter{border-top:1px solid #dfc5ba}
