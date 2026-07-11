@@ -15,3 +15,19 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 }
 
 document.documentElement.classList.add('day-page-ready');
+
+const parallaxImage = document.querySelector('[data-parallax]');
+if (parallaxImage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  let ticking = false;
+  const updateParallax = () => {
+    const shift = Math.min(window.scrollY * 0.08, 42);
+    parallaxImage.style.transform = `scale(1.06) translateY(${shift}px)`;
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, { passive: true });
+}
