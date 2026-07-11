@@ -1253,9 +1253,15 @@ dialog::backdrop {
 }
 
 @media (min-width: 901px) {
+    .sun {
+        left: calc(50% + 420px);
+        right: auto
+    }
+
     .hero-art {
-        width: calc(100% - 140px);
-        transform: translateX(-70px)
+        width: 420px;
+        max-width: 100%;
+        transform: none
     }
 }
 
@@ -1589,11 +1595,17 @@ body {
 }
 
 main,
-.hero,
-.section,
-.stats,
 footer {
     max-width: 100%;
+}
+
+.hero,
+.stats,
+.section:not(.journey-itinerary) {
+    width: 100%;
+    max-width: 1212px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-copy,
