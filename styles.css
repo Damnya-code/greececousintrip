@@ -1060,11 +1060,11 @@ dialog::backdrop {
     }
 
     .nav nav {
-        display: none
+        /* display: none */
     }
 
     .nav-button {
-        display: none
+        /* display: none */
     }
 
     .hero {
@@ -1663,5 +1663,40 @@ footer {
     .journey-ready .journey-card.journey-left.is-visible,
     .journey-ready .journey-card.journey-right.is-visible {
         transform: none !important;
+    }
+}
+
+@media (max-width: 760px) {
+    .nav {
+        height: auto;
+        padding: 16px 20px 12px;
+        flex-wrap: wrap;
+        row-gap: 14px;
+    }
+
+    .nav nav {
+        display: flex;
+        order: 3;
+        width: 100%;
+        gap: 20px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav nav a {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    .nav-button {
+        display: none;
     }
 }

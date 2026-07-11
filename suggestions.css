@@ -1,12 +1,707 @@
-:root{--plan-ink:#17233b;--plan-blue:#155f72;--plan-ivory:#fbf7ed;--plan-gold:#bd9b61;--plan-coral:#d9795d;--plan-green:#527d69;--profile-a:#a55047;--profile-b:#286c7a;--profile-c:#765f91}
-.planning-page{background:var(--plan-ivory);color:var(--plan-ink)}
-.planning-skip{position:fixed;top:-70px;left:15px;z-index:40;background:white;color:var(--plan-ink);padding:12px 16px;font-weight:700}.planning-skip:focus{top:12px}
-.planning-page a:focus-visible,.planning-page button:focus-visible,.planning-page textarea:focus-visible,.planning-page select:focus-visible{outline:3px solid var(--plan-gold);outline-offset:4px}.planning-nav-button{text-decoration:none}
-.planning-hero{min-height:700px;display:grid;grid-template-columns:1fr 1fr;max-width:1212px;margin:auto;padding:70px 34px 110px;gap:80px;align-items:center}.planning-hero h1,.planning-heading h2,.booking-board h2,.sharing h2,.wildcard h2{font:600 clamp(52px,7vw,88px)/.93 "Playfair Display";letter-spacing:-4px;margin:0}.planning-hero h1 em{color:var(--plan-blue)}.planning-hero-copy>p:not(.eyebrow){max-width:520px;font-size:18px;line-height:1.65;color:#53626b}.planning-hero-copy>a{display:inline-block;margin-top:20px;padding:14px 18px;background:var(--plan-ink);color:white;text-decoration:none;font-size:13px;font-weight:700}.planning-hero-copy>a span{margin-left:18px}.planning-hero-image{position:relative;height:500px;margin:0;box-shadow:22px 22px 0 #dce8e2;overflow:hidden}.planning-hero-image:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,#101d31aa)}.planning-hero-image img{width:100%;height:100%;object-fit:cover}.planning-hero-image figcaption{position:absolute;z-index:2;left:20px;bottom:18px;color:white;font:500 10px "DM Mono";text-transform:uppercase;letter-spacing:1px}
-.planning-section{padding:125px max(34px,calc((100vw - 1212px)/2 + 34px))}.planning-heading{max-width:760px;margin-bottom:55px}.planning-heading>p:not(.eyebrow),.booking-intro>p:not(.eyebrow){max-width:650px;color:#5b686e;line-height:1.65}.planning-heading>small{display:block;max-width:680px;margin-top:16px;padding-left:15px;border-left:2px solid var(--plan-gold);color:#6f7676;line-height:1.5}
-.profile-panel{display:flex;justify-content:space-between;align-items:end;gap:30px;padding:24px 0;border-top:1px solid #c9c5b9;border-bottom:1px solid #c9c5b9}.profile-switcher,.view-toggle{display:flex;gap:8px;flex-wrap:wrap}.profile-switcher button,.view-toggle button{border:1px solid #aaa99f;background:transparent;color:var(--plan-ink);padding:10px 13px;font:600 12px "DM Sans";cursor:pointer}.profile-switcher button[aria-pressed="true"],.view-toggle button[aria-pressed="true"]{background:var(--plan-ink);border-color:var(--plan-ink);color:white}.profile-mark{font-size:17px;margin-right:8px}.mark-a{color:var(--profile-a)}.mark-b{color:var(--profile-b)}.mark-c{color:var(--profile-c)}.profile-switcher button[aria-pressed="true"] .profile-mark{color:white}.view-controls{text-align:right}.view-controls>span{display:block;margin-bottom:10px;font:500 10px "DM Mono";text-transform:uppercase;color:#6c7576}.group-state{margin:24px 0 40px;padding:13px 16px;background:#e6eeeb;color:#405d5b;font-size:13px}
-.preference-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.preference-card{min-height:360px;padding:30px;border:1px solid #cbc8bd;background:#fffdf8}.preference-card:nth-child(4){background:var(--plan-blue);color:white;border-color:var(--plan-blue)}.preference-card:nth-child(5){grid-column:1/-1}.question-index{font:500 10px "DM Mono";text-transform:uppercase;color:#9b7945}.preference-card:nth-child(4) .question-index{color:#e0c58f}.preference-card h3{font:600 31px/1.1 "Playfair Display";margin:28px 0 23px;max-width:520px}.option-list{display:grid;gap:8px}.option-button{width:100%;display:grid;grid-template-columns:1fr auto;gap:15px;text-align:left;padding:14px;border:1px solid #bbb8ad;background:transparent;color:inherit;cursor:pointer}.option-button[aria-pressed="true"]{border-color:var(--plan-coral);box-shadow:inset 4px 0 var(--plan-coral)}.option-button strong{display:block;font-size:13px}.option-button small{display:block;margin-top:5px;line-height:1.45;color:#687277}.preference-card:nth-child(4) .option-button small{color:#dce7ea}.marker-list{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.marker-chip{white-space:nowrap;font:600 9px "DM Sans"}.marker-chip .profile-mark{font-size:13px;margin-right:3px}.result-badge{display:inline-block;margin-top:15px;padding:5px 8px;background:#e8e2d5;color:#64563f;font:600 9px "DM Sans";text-transform:uppercase}.preference-card:nth-child(4) .result-badge{background:#ffffff1f;color:white}
-.wildcard,.sharing{display:grid;grid-template-columns:.75fr 1.25fr;gap:90px;margin-top:100px;padding-top:70px;border-top:1px solid #c9c5b9}.wildcard h2,.sharing h2{font-size:58px}.wildcard p,.sharing p{color:#5d696e;line-height:1.6}.wildcard label,.sharing-tools label,.import-dialog label{display:flex;justify-content:space-between;margin-bottom:8px;font:600 11px "DM Sans"}.wildcard textarea,.sharing textarea,.import-dialog textarea{width:100%;resize:vertical;padding:13px;border:1px solid #aaa99f;background:#fffdf8;color:var(--plan-ink);font:14px/1.5 "DM Sans"}.wildcard-group{display:grid;gap:8px;margin-top:15px}.wildcard-idea{padding:12px;background:#eee8dc;font-size:13px}.wildcard-idea .marker-chip{display:block;margin-bottom:5px}.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.action-grid button,.dialog-actions button{padding:12px;border:1px solid var(--plan-ink);background:var(--plan-ink);color:white;font:700 11px "DM Sans";cursor:pointer}.action-grid .quiet-action,.dialog-actions .quiet-action{background:transparent;color:var(--plan-ink)}.action-feedback{min-height:22px;font-size:12px!important;color:#416a5c!important}
-.booking-board{display:grid;grid-template-columns:.8fr 1.2fr;gap:90px;background:#e5eeeb}.booking-list{border-top:1px solid #9eb1ac}.booking-card{display:grid;grid-template-columns:32px 1fr auto;gap:15px;padding:20px 0;border-bottom:1px solid #9eb1ac;align-items:start}.booking-card>.question-index{padding-top:7px}.booking-card h3{margin:0 0 5px;font:600 23px "Playfair Display"}.booking-card p{margin:0;color:#60706c;font-size:12px;line-height:1.5}.booking-card details{margin-top:10px}.booking-card summary{cursor:pointer;font-size:11px;font-weight:700}.booking-card details p{margin-top:8px}.booking-controls{display:grid;gap:8px;justify-items:end}.status-control{min-width:112px;padding:9px 12px;border:1px solid var(--plan-ink);border-radius:20px;background:transparent;color:var(--plan-ink);font:700 9px "DM Sans";text-transform:uppercase;cursor:pointer}.status-control[data-state="ready"]{background:var(--plan-gold);border-color:var(--plan-gold);color:white}.status-control[data-state="confirmed"]{background:var(--plan-green);border-color:var(--plan-green);color:white}.lead-control label{margin-right:6px;font:600 9px "DM Sans";text-transform:uppercase}.lead-control select{padding:7px;border:1px solid #82928d;background:#f8fbf9;color:var(--plan-ink);font:12px "DM Sans"}.status-key{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}.status-key span{padding:6px 9px;border-radius:15px;font:600 9px "DM Sans";text-transform:uppercase;border:1px solid #89958f}.status-key span[data-state="ready"]{background:var(--plan-gold);border-color:var(--plan-gold);color:white}.status-key span[data-state="confirmed"]{background:var(--plan-green);border-color:var(--plan-green);color:white}.departure-note{margin-top:20px;padding-left:13px;border-left:2px solid var(--plan-gold);font-size:13px}.planning-close{padding:120px max(34px,calc((100vw - 1212px)/2 + 34px));background:var(--plan-ink);color:white}.planning-close blockquote{max-width:1000px;margin:20px 0 35px;font:600 clamp(42px,6vw,76px)/1.05 "Playfair Display";letter-spacing:-3px}.planning-close a{color:white;font-size:13px;font-weight:700}
-.import-dialog{width:min(620px,calc(100% - 30px));border:0;background:var(--plan-ivory);color:var(--plan-ink);padding:0;box-shadow:0 25px 80px #0008}.import-dialog::backdrop{background:#101d31aa}.import-dialog form{padding:38px}.import-dialog h2{font:600 40px "Playfair Display";margin:0 0 14px}.dialog-close{position:absolute;right:12px;top:8px;border:0;background:none;font-size:30px;cursor:pointer}.dialog-actions{display:flex;gap:8px;margin-top:15px}.import-dialog #import-feedback{min-height:22px;color:#416a5c;font-size:12px}
-@media(max-width:760px){.planning-nav{padding-inline:20px}.planning-nav nav{display:none}.planning-hero{display:block;min-height:0;padding:60px 20px 90px}.planning-hero h1{font-size:56px}.planning-hero-image{height:350px;margin-top:48px;box-shadow:10px 10px 0 #dce8e2}.planning-section{padding:80px 20px}.planning-heading{margin-bottom:40px}.profile-panel{display:block}.view-controls{text-align:left;margin-top:20px}.preference-grid,.booking-board,.wildcard,.sharing{grid-template-columns:1fr}.preference-card:nth-child(5){grid-column:auto}.wildcard,.sharing{gap:25px;margin-top:70px}.action-grid{grid-template-columns:1fr}.booking-board{gap:45px}.booking-card{grid-template-columns:27px 1fr}.booking-controls{grid-column:2;justify-items:start}.marker-list{justify-content:flex-start;grid-column:1/-1}.planning-close{padding:85px 20px}.planning-close blockquote{letter-spacing:-2px}.planning-page footer{padding-inline:20px}}
+:root {
+    --plan-ink: #17233b;
+    --plan-blue: #155f72;
+    --plan-ivory: #fbf7ed;
+    --plan-gold: #bd9b61;
+    --plan-coral: #d9795d;
+    --plan-green: #527d69;
+    --profile-a: #a55047;
+    --profile-b: #286c7a;
+    --profile-c: #765f91
+}
+
+.planning-page {
+    background: var(--plan-ivory);
+    color: var(--plan-ink)
+}
+
+.planning-skip {
+    position: fixed;
+    top: -70px;
+    left: 15px;
+    z-index: 40;
+    background: white;
+    color: var(--plan-ink);
+    padding: 12px 16px;
+    font-weight: 700
+}
+
+.planning-skip:focus {
+    top: 12px
+}
+
+.planning-page a:focus-visible,
+.planning-page button:focus-visible,
+.planning-page textarea:focus-visible,
+.planning-page select:focus-visible {
+    outline: 3px solid var(--plan-gold);
+    outline-offset: 4px
+}
+
+.planning-nav-button {
+    text-decoration: none
+}
+
+.planning-hero {
+    min-height: 700px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1212px;
+    margin: auto;
+    padding: 70px 34px 110px;
+    gap: 80px;
+    align-items: center
+}
+
+.planning-hero h1,
+.planning-heading h2,
+.booking-board h2,
+.sharing h2,
+.wildcard h2 {
+    font: 600 clamp(52px, 7vw, 88px)/.93 "Playfair Display";
+    letter-spacing: -4px;
+    margin: 0
+}
+
+.planning-hero h1 em {
+    color: var(--plan-blue)
+}
+
+.planning-hero-copy>p:not(.eyebrow) {
+    max-width: 520px;
+    font-size: 18px;
+    line-height: 1.65;
+    color: #53626b
+}
+
+.planning-hero-copy>a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: var(--plan-ink);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700
+}
+
+.planning-hero-copy>a span {
+    margin-left: 18px
+}
+
+.planning-hero-image {
+    position: relative;
+    height: 500px;
+    margin: 0;
+    box-shadow: 22px 22px 0 #dce8e2;
+    overflow: hidden
+}
+
+.planning-hero-image:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, #101d31aa)
+}
+
+.planning-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.planning-hero-image figcaption {
+    position: absolute;
+    z-index: 2;
+    left: 20px;
+    bottom: 18px;
+    color: white;
+    font: 500 10px "DM Mono";
+    text-transform: uppercase;
+    letter-spacing: 1px
+}
+
+.planning-section {
+    padding: 125px max(34px, calc((100vw - 1212px)/2 + 34px))
+}
+
+.planning-heading {
+    max-width: 760px;
+    margin-bottom: 55px
+}
+
+.planning-heading>p:not(.eyebrow),
+.booking-intro>p:not(.eyebrow) {
+    max-width: 650px;
+    color: #5b686e;
+    line-height: 1.65
+}
+
+.planning-heading>small {
+    display: block;
+    max-width: 680px;
+    margin-top: 16px;
+    padding-left: 15px;
+    border-left: 2px solid var(--plan-gold);
+    color: #6f7676;
+    line-height: 1.5
+}
+
+.profile-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 30px;
+    padding: 24px 0;
+    border-top: 1px solid #c9c5b9;
+    border-bottom: 1px solid #c9c5b9
+}
+
+.profile-switcher,
+.view-toggle {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap
+}
+
+.profile-switcher button,
+.view-toggle button {
+    border: 1px solid #aaa99f;
+    background: transparent;
+    color: var(--plan-ink);
+    padding: 10px 13px;
+    font: 600 12px "DM Sans";
+    cursor: pointer
+}
+
+.profile-switcher button[aria-pressed="true"],
+.view-toggle button[aria-pressed="true"] {
+    background: var(--plan-ink);
+    border-color: var(--plan-ink);
+    color: white
+}
+
+.profile-mark {
+    font-size: 17px;
+    margin-right: 8px
+}
+
+.mark-a {
+    color: var(--profile-a)
+}
+
+.mark-b {
+    color: var(--profile-b)
+}
+
+.mark-c {
+    color: var(--profile-c)
+}
+
+.profile-switcher button[aria-pressed="true"] .profile-mark {
+    color: white
+}
+
+.view-controls {
+    text-align: right
+}
+
+.view-controls>span {
+    display: block;
+    margin-bottom: 10px;
+    font: 500 10px "DM Mono";
+    text-transform: uppercase;
+    color: #6c7576
+}
+
+.group-state {
+    margin: 24px 0 40px;
+    padding: 13px 16px;
+    background: #e6eeeb;
+    color: #405d5b;
+    font-size: 13px
+}
+
+.preference-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px
+}
+
+.preference-card {
+    min-height: 360px;
+    padding: 30px;
+    border: 1px solid #cbc8bd;
+    background: #fffdf8
+}
+
+.preference-card:nth-child(4) {
+    background: var(--plan-blue);
+    color: white;
+    border-color: var(--plan-blue)
+}
+
+.preference-card:nth-child(5) {
+    grid-column: 1/-1
+}
+
+.question-index {
+    font: 500 10px "DM Mono";
+    text-transform: uppercase;
+    color: #9b7945
+}
+
+.preference-card:nth-child(4) .question-index {
+    color: #e0c58f
+}
+
+.preference-card h3 {
+    font: 600 31px/1.1 "Playfair Display";
+    margin: 28px 0 23px;
+    max-width: 520px
+}
+
+.option-list {
+    display: grid;
+    gap: 8px
+}
+
+.option-button {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 15px;
+    text-align: left;
+    padding: 14px;
+    border: 1px solid #bbb8ad;
+    background: transparent;
+    color: inherit;
+    cursor: pointer
+}
+
+.option-button[aria-pressed="true"] {
+    border-color: var(--plan-coral);
+    box-shadow: inset 4px 0 var(--plan-coral)
+}
+
+.option-button strong {
+    display: block;
+    font-size: 13px
+}
+
+.option-button small {
+    display: block;
+    margin-top: 5px;
+    line-height: 1.45;
+    color: #687277
+}
+
+.preference-card:nth-child(4) .option-button small {
+    color: #dce7ea
+}
+
+.marker-list {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end
+}
+
+.marker-chip {
+    white-space: nowrap;
+    font: 600 9px "DM Sans"
+}
+
+.marker-chip .profile-mark {
+    font-size: 13px;
+    margin-right: 3px
+}
+
+.result-badge {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 5px 8px;
+    background: #e8e2d5;
+    color: #64563f;
+    font: 600 9px "DM Sans";
+    text-transform: uppercase
+}
+
+.preference-card:nth-child(4) .result-badge {
+    background: #ffffff1f;
+    color: white
+}
+
+.wildcard,
+.sharing {
+    display: grid;
+    grid-template-columns: .75fr 1.25fr;
+    gap: 90px;
+    margin-top: 100px;
+    padding-top: 70px;
+    border-top: 1px solid #c9c5b9
+}
+
+.wildcard h2,
+.sharing h2 {
+    font-size: 58px
+}
+
+.wildcard p,
+.sharing p {
+    color: #5d696e;
+    line-height: 1.6
+}
+
+.wildcard label,
+.sharing-tools label,
+.import-dialog label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font: 600 11px "DM Sans"
+}
+
+.wildcard textarea,
+.sharing textarea,
+.import-dialog textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 13px;
+    border: 1px solid #aaa99f;
+    background: #fffdf8;
+    color: var(--plan-ink);
+    font: 14px/1.5 "DM Sans"
+}
+
+.wildcard-group {
+    display: grid;
+    gap: 8px;
+    margin-top: 15px
+}
+
+.wildcard-idea {
+    padding: 12px;
+    background: #eee8dc;
+    font-size: 13px
+}
+
+.wildcard-idea .marker-chip {
+    display: block;
+    margin-bottom: 5px
+}
+
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px
+}
+
+.action-grid button,
+.dialog-actions button {
+    padding: 12px;
+    border: 1px solid var(--plan-ink);
+    background: var(--plan-ink);
+    color: white;
+    font: 700 11px "DM Sans";
+    cursor: pointer
+}
+
+.action-grid .quiet-action,
+.dialog-actions .quiet-action {
+    background: transparent;
+    color: var(--plan-ink)
+}
+
+.action-feedback {
+    min-height: 22px;
+    font-size: 12px !important;
+    color: #416a5c !important
+}
+
+.booking-board {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap: 90px;
+    background: #e5eeeb
+}
+
+.booking-list {
+    border-top: 1px solid #9eb1ac
+}
+
+.booking-card {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid #9eb1ac;
+    align-items: start
+}
+
+.booking-card>.question-index {
+    padding-top: 7px
+}
+
+.booking-card h3 {
+    margin: 0 0 5px;
+    font: 600 23px "Playfair Display"
+}
+
+.booking-card p {
+    margin: 0;
+    color: #60706c;
+    font-size: 12px;
+    line-height: 1.5
+}
+
+.booking-card details {
+    margin-top: 10px
+}
+
+.booking-card summary {
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700
+}
+
+.booking-card details p {
+    margin-top: 8px
+}
+
+.booking-controls {
+    display: grid;
+    gap: 8px;
+    justify-items: end
+}
+
+.status-control {
+    min-width: 112px;
+    padding: 9px 12px;
+    border: 1px solid var(--plan-ink);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--plan-ink);
+    font: 700 9px "DM Sans";
+    text-transform: uppercase;
+    cursor: pointer
+}
+
+.status-control[data-state="ready"] {
+    background: var(--plan-gold);
+    border-color: var(--plan-gold);
+    color: white
+}
+
+.status-control[data-state="confirmed"] {
+    background: var(--plan-green);
+    border-color: var(--plan-green);
+    color: white
+}
+
+.lead-control label {
+    margin-right: 6px;
+    font: 600 9px "DM Sans";
+    text-transform: uppercase
+}
+
+.lead-control select {
+    padding: 7px;
+    border: 1px solid #82928d;
+    background: #f8fbf9;
+    color: var(--plan-ink);
+    font: 12px "DM Sans"
+}
+
+.status-key {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 28px
+}
+
+.status-key span {
+    padding: 6px 9px;
+    border-radius: 15px;
+    font: 600 9px "DM Sans";
+    text-transform: uppercase;
+    border: 1px solid #89958f
+}
+
+.status-key span[data-state="ready"] {
+    background: var(--plan-gold);
+    border-color: var(--plan-gold);
+    color: white
+}
+
+.status-key span[data-state="confirmed"] {
+    background: var(--plan-green);
+    border-color: var(--plan-green);
+    color: white
+}
+
+.departure-note {
+    margin-top: 20px;
+    padding-left: 13px;
+    border-left: 2px solid var(--plan-gold);
+    font-size: 13px
+}
+
+.planning-close {
+    padding: 120px max(34px, calc((100vw - 1212px)/2 + 34px));
+    background: var(--plan-ink);
+    color: white
+}
+
+.planning-close blockquote {
+    max-width: 1000px;
+    margin: 20px 0 35px;
+    font: 600 clamp(42px, 6vw, 76px)/1.05 "Playfair Display";
+    letter-spacing: -3px
+}
+
+.planning-close a {
+    color: white;
+    font-size: 13px;
+    font-weight: 700
+}
+
+.import-dialog {
+    width: min(620px, calc(100% - 30px));
+    border: 0;
+    background: var(--plan-ivory);
+    color: var(--plan-ink);
+    padding: 0;
+    box-shadow: 0 25px 80px #0008
+}
+
+.import-dialog::backdrop {
+    background: #101d31aa
+}
+
+.import-dialog form {
+    padding: 38px
+}
+
+.import-dialog h2 {
+    font: 600 40px "Playfair Display";
+    margin: 0 0 14px
+}
+
+.dialog-close {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    border: 0;
+    background: none;
+    font-size: 30px;
+    cursor: pointer
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px
+}
+
+.import-dialog #import-feedback {
+    min-height: 22px;
+    color: #416a5c;
+    font-size: 12px
+}
+
+@media(max-width:760px) {
+    .planning-nav {
+        padding-inline: 20px
+    }
+
+    .planning-nav nav {
+        display: none
+    }
+
+    .planning-hero {
+        display: block;
+        min-height: 0;
+        padding: 60px 20px 90px
+    }
+
+    .planning-hero h1 {
+        font-size: 56px
+    }
+
+    .planning-hero-image {
+        height: 350px;
+        margin-top: 48px;
+        box-shadow: 10px 10px 0 #dce8e2
+    }
+
+    .planning-section {
+        padding: 80px 20px
+    }
+
+    .planning-heading {
+        margin-bottom: 40px
+    }
+
+    .profile-panel {
+        display: block
+    }
+
+    .view-controls {
+        text-align: left;
+        margin-top: 20px
+    }
+
+    .preference-grid,
+    .booking-board,
+    .wildcard,
+    .sharing {
+        grid-template-columns: 1fr
+    }
+
+    .preference-card:nth-child(5) {
+        grid-column: auto
+    }
+
+    .wildcard,
+    .sharing {
+        gap: 25px;
+        margin-top: 70px
+    }
+
+    .action-grid {
+        grid-template-columns: 1fr
+    }
+
+    .booking-board {
+        gap: 45px
+    }
+
+    .booking-card {
+        grid-template-columns: 27px 1fr
+    }
+
+    .booking-controls {
+        grid-column: 2;
+        justify-items: start
+    }
+
+    .marker-list {
+        justify-content: flex-start;
+        grid-column: 1/-1
+    }
+
+    .planning-close {
+        padding: 85px 20px
+    }
+
+    .planning-close blockquote {
+        letter-spacing: -2px
+    }
+
+    .planning-page footer {
+        padding-inline: 20px
+    }
+}
