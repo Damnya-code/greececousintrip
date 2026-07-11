@@ -10,3 +10,22 @@
 .hero-art figcaption{position:absolute;z-index:3;left:22px;right:22px;bottom:19px;display:flex;justify-content:space-between;align-items:end;color:white;font:500 10px "DM Mono";letter-spacing:1px}
 .hero-art figcaption strong{text-align:right;font-weight:400;line-height:1.45}
 @media(max-width:760px){.hero-art{height:340px;margin:34px 0 0;box-shadow:10px 10px 0 #dbe8e2}}
+
+/* Editorial journey timeline */
+.journey-itinerary{display:block!important;background:#e5f0ed!important;max-width:none!important;padding-left:max(34px,calc((100vw - 1212px)/2 + 34px))!important;padding-right:max(34px,calc((100vw - 1212px)/2 + 34px))!important}
+.journey-heading{max-width:650px;margin-bottom:85px}
+.journey-timeline{position:relative;max-width:1120px;margin:auto;padding-bottom:10px}
+.journey-timeline:before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(#9ab5af,var(--coral),#9ab5af)}
+.journey-card{position:relative;width:calc(50% - 47px);min-height:520px;margin-bottom:70px;background:var(--cream);overflow:visible;box-shadow:0 18px 50px rgba(23,35,59,.09)}
+.journey-card:last-child{margin-bottom:0}.journey-left{margin-right:auto}.journey-right{margin-left:auto}
+.journey-dot{position:absolute;top:54px;width:13px;height:13px;border-radius:50%;background:var(--coral);border:4px solid #e5f0ed;box-sizing:content-box;z-index:3}
+.journey-left .journey-dot{right:-58px}.journey-right .journey-dot{left:-58px}
+.journey-image{height:285px;overflow:hidden;background:var(--blue)}.journey-image:after{content:"";position:absolute;inset:0 0 auto;height:285px;background:linear-gradient(180deg,transparent 50%,rgba(16,29,49,.48));pointer-events:none}
+.journey-image img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}.journey-card:hover .journey-image img{transform:scale(1.045)}
+.journey-copy{position:relative;padding:25px 30px 30px}.journey-meta{display:flex;justify-content:space-between;gap:16px;font:500 10px "DM Mono";letter-spacing:.7px;text-transform:uppercase;color:#6b7c7a}.journey-meta>span{color:var(--coral)}
+.journey-copy h3{font:600 34px/1.05 "Playfair Display";letter-spacing:-1px;margin:17px 0 10px}.journey-copy h3 em{font-weight:600;color:var(--blue)}.journey-copy p{min-height:62px;margin:0 0 22px;color:#5d6a6d;font-size:14px;line-height:1.55}.journey-copy>a{display:inline-flex;align-items:center;gap:18px;color:var(--ink);font-size:12px;font-weight:700;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:4px}.journey-copy>a span{transition:transform .25s}.journey-copy>a:hover span{transform:translateX(5px)}
+.journey-card:nth-child(even){transform:translateY(105px)}.journey-card:nth-child(2){margin-top:-105px}.journey-card:nth-child(8){margin-bottom:105px}
+.journey-ready .journey-card{opacity:0;transition:opacity .75s ease,transform .75s ease}.journey-ready .journey-card.journey-left{transform:translateX(-24px)}.journey-ready .journey-card.journey-right{transform:translate(24px,105px)}.journey-ready .journey-card.is-visible{opacity:1}.journey-ready .journey-card.journey-left.is-visible{transform:none}.journey-ready .journey-card.journey-right.is-visible{transform:translateY(105px)}
+@media(prefers-reduced-motion:reduce){.journey-image img,.journey-copy>a span,.journey-ready .journey-card{transition:none}.journey-ready .journey-card{opacity:1}.journey-ready .journey-card.journey-left{transform:none}.journey-ready .journey-card.journey-right{transform:translateY(105px)}}
+@media(max-width:760px){.journey-itinerary{padding:80px 20px!important}.journey-heading{margin-bottom:55px}.journey-timeline{padding-left:28px}.journey-timeline:before{left:7px}.journey-card,.journey-card:nth-child(n){width:100%;min-height:0;margin:0 0 35px;transform:none}.journey-dot{top:36px!important;left:-31px!important;right:auto!important;width:9px;height:9px}.journey-image{height:230px}.journey-image:after{height:230px}.journey-copy{padding:22px}.journey-meta{display:block}.journey-meta time{display:block;margin-top:6px}.journey-copy h3{font-size:30px}.journey-copy p{min-height:0}}
+@media(max-width:760px){.journey-ready .journey-card.journey-left,.journey-ready .journey-card.journey-right,.journey-ready .journey-card.is-visible{transform:none}}
