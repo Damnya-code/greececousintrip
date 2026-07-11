@@ -3,6 +3,7 @@
 
 /* Campaign photography */
 .day-guide-link{display:inline-block;margin-left:20px;color:var(--ink);text-decoration:none}
+.planning-lounge-link{display:inline-block;margin-top:20px;color:var(--ink);font-size:13px;font-weight:700;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:4px}
 .hero-art{position:relative;height:440px;margin:-30px 0 0;overflow:hidden;background:var(--blue);box-shadow:24px 24px 0 #dbe8e2}
 .hero-art:before{display:none}
 .hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,#101b2b99)}
