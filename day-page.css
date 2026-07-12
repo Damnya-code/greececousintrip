@@ -4,6 +4,59 @@
     --day-ivory: #f8f4e9
 }
 
+[data-theme="dark"] .day-page {
+    --day-gold: #d2ae70;
+    --day-navy: #e7edf4;
+    --day-ivory: #101923;
+    background: #101923;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .day-intro,
+[data-theme="dark"] .taste,
+[data-theme="dark"] .route-overview,
+[data-theme="dark"] .day-practical,
+[data-theme="dark"] .trip-log-view {
+    background: #101923;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .experience-card,
+[data-theme="dark"] .practical-grid article,
+[data-theme="dark"] .offline-route-map,
+[data-theme="dark"] .trip-log-note-grid article,
+[data-theme="dark"] .trip-log-comparison-grid article {
+    border-color: #344455;
+    background: #182535;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .offline-map-grid path,
+[data-theme="dark"] .editorial-timeline li,
+[data-theme="dark"] .route-list li,
+[data-theme="dark"] .day-pagination {
+    border-color: #394959;
+    stroke: #6c8490
+}
+
+[data-theme="dark"] .editorial-timeline p,
+[data-theme="dark"] .route-overview p,
+[data-theme="dark"] .practical-grid p {
+    color: #aebbc7
+}
+
+[data-theme="dark"] .offline-map-point text,
+[data-theme="dark"] .offline-map-coordinate,
+[data-theme="dark"] .offline-map-scale text {
+    stroke: #182535;
+    color: #dce5ed;
+    fill: #dce5ed
+}
+
+[data-theme="dark"] .trip-view-tabs {
+    background: rgba(16, 25, 35, .95)
+}
+
 .day-page {
     background: var(--day-ivory);
     color: var(--day-navy)
@@ -357,6 +410,33 @@
     color: #58636b
 }
 
+.taste-image {
+    width: min(100%, 560px);
+    margin: 38px 0 34px;
+    aspect-ratio: 3 / 2;
+    max-height: 320px;
+    overflow: hidden;
+    border: 1px solid #cfc8b7;
+    background: #e4ded1
+}
+
+.taste-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .7s cubic-bezier(.2, .7, .2, 1)
+}
+
+.taste-image:hover img {
+    transform: scale(1.025)
+}
+
+[data-theme="dark"] .taste-image {
+    border-color: #3b4b5c;
+    background: #182535
+}
+
 .taste dl {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -648,8 +728,13 @@
         transition: none
     }
 
-    .experience-card {
+    .experience-card,
+    .taste-image img {
         transition: none
+    }
+
+    .taste-image:hover img {
+        transform: none
     }
 }
 
@@ -1353,3 +1438,21 @@
 .trip-log-gallery{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:42px}.trip-log-photo{grid-column:span 6;position:relative;min-height:320px;padding:0;border:0;overflow:hidden;background:#d9dfda;cursor:zoom-in}.trip-log-photo:nth-child(3n){grid-column:span 12}.trip-log-photo img{display:block;width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .5s ease}.trip-log-photo:hover img{transform:scale(1.025)}.trip-log-photo span{position:absolute;left:16px;right:16px;bottom:14px;padding:10px 12px;background:rgba(15,29,43,.78);color:#fff;text-align:left;font-size:12px}
 .trip-log-comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:38px;background:rgba(23,35,59,.16)}.trip-log-lightbox{width:min(1100px,calc(100% - 40px));max-height:calc(100vh - 40px);padding:54px 70px 30px;border:0;background:#101b2b;color:#fff}.trip-log-lightbox::backdrop{background:rgba(7,14,23,.86)}.trip-log-lightbox img{display:block;max-width:100%;max-height:72vh;margin:auto;object-fit:contain}.trip-log-lightbox p{min-height:1.4em;text-align:center;color:rgba(255,255,255,.76)}.trip-log-lightbox button{border:1px solid rgba(255,255,255,.35);background:#101b2b;color:#fff;padding:10px 13px;cursor:pointer}.trip-log-lightbox-close{position:absolute;right:16px;top:14px}.trip-log-lightbox-previous{float:left}.trip-log-lightbox-next{float:right}
 @media(max-width:760px){.trip-view-tabs{grid-template-columns:repeat(2,1fr);padding:12px 20px}.trip-view-tab{padding:11px 8px}.trip-log-view{padding-top:70px}.trip-log-intro{padding-bottom:65px}.trip-log-summary{font-size:17px}.trip-log-section{padding-top:65px;padding-bottom:65px}.trip-log-note-grid,.trip-log-comparison-grid{grid-template-columns:1fr}.trip-log-note-grid article,.trip-log-comparison-grid article{min-height:0;padding:27px 22px}.trip-log-photo,.trip-log-photo:nth-child(3n){grid-column:span 12;min-height:240px}.trip-log-lightbox{width:calc(100% - 20px);padding:54px 16px 20px}}
+
+/* Override each day's light practical palette after its individual theme. */
+[data-theme="dark"] .day-page .practical { background:#162332; color:#e7edf4 }
+[data-theme="dark"] .day-page .practical-list { border-color:#435363 }
+[data-theme="dark"] .day-page .practical-list article { border-color:#354657 }
+[data-theme="dark"] .day-page .practical-list p,
+[data-theme="dark"] .day-page .practical-grid>div>p { color:#aebbc7 }
+[data-theme="dark"] .day-page footer { background:#08111d; color:#e7edf4 }
+
+[data-theme="dark"] .day-page .day-highlights {
+    background:#0b1724;
+    color:#f2f6fa
+}
+
+[data-theme="dark"] .day-page .day-highlights .experience-card {
+    border-color:#3a4c5f;
+    color:#f2f6fa
+}

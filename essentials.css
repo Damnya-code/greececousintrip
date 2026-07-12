@@ -3,6 +3,47 @@
     color: var(--ink)
 }
 
+[data-theme="dark"] .essentials-page {
+    background: #0f1925;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .essentials-nav {
+    background: rgba(15, 25, 37, .95)
+}
+
+[data-theme="dark"] .essentials-home,
+[data-theme="dark"] .essentials-home:hover,
+[data-theme="dark"] .essentials-home:focus-visible {
+    color: #e7edf4
+}
+
+[data-theme="dark"] .pack-section,
+[data-theme="dark"] .before-section,
+[data-theme="dark"] .notes-section {
+    background: #0f1925
+}
+
+[data-theme="dark"] .pack-grid fieldset,
+[data-theme="dark"] .card-grid article,
+[data-theme="dark"] .notes-grid article,
+[data-theme="dark"] .checklist li {
+    border-color: #344455;
+    background: #182535;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .pack-notes,
+[data-theme="dark"] .tool-grid article {
+    background: #152231;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .actions button+button {
+    border-color: #dce5ed;
+    color: #dce5ed
+}
+
 .essentials-page .grain {
     position: fixed;
     inset: 0;
@@ -740,3 +781,13 @@
         transition: none
     }
 }
+
+/* Override the utility section's light component surfaces. */
+[data-theme="dark"] .essentials-page .tools,
+[data-theme="dark"] .essentials-page .notes { background:#101b28; color:#e7edf4 }
+[data-theme="dark"] .essentials-page .tool-grid article,
+[data-theme="dark"] .essentials-page .privacy { border-color:#3c4d5e; background:#182535; color:#e7edf4 }
+[data-theme="dark"] .essentials-page .tool-grid p,
+[data-theme="dark"] .essentials-page .tool-grid article>span,
+[data-theme="dark"] .essentials-page .privacy { color:#afbbc6 }
+[data-theme="dark"] .essentials-page footer { background:#08111d; color:#e7edf4 }

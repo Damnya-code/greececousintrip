@@ -8,6 +8,16 @@
     --line: #d7d7d0
 }
 
+html[data-theme="dark"] {
+    --ink: #e9eef5;
+    --blue: #153b50;
+    --sea: #245d72;
+    --cream: #0d1624;
+    --sand: #8b7a59;
+    --coral: #d47b63;
+    --line: #2b3a4b
+}
+
 * {
     box-sizing: border-box
 }
@@ -483,6 +493,42 @@ body {
     }
 }
 
+/* Final moonlight surfaces override component-level light palettes. */
+[data-theme="dark"] footer { background:#08111d; color:#e8eef5 }
+[data-theme="dark"] .booking { --booking-bg:#172536; background:#172536; color:#e8eef5 }
+[data-theme="dark"] .booking .checklist,
+[data-theme="dark"] .booking .checklist li { border-color:#405061 }
+[data-theme="dark"] .booking .checklist small,
+[data-theme="dark"] .booking-copy p { color:#aebac6 }
+
+[data-theme="dark"] .sun {
+    background:radial-gradient(circle at 34% 28%,#fff 0%,#e2eaf2 46%,#9fb0c2 100%);
+    box-shadow:0 20px 76px rgba(170,207,242,.34),inset 0 0 0 1px rgba(255,255,255,.5)
+}
+[data-theme="dark"] .sun::before {
+    background:
+      radial-gradient(circle at 70% 25%,rgba(72,91,112,.27) 0 3.5%,rgba(244,248,252,.2) 4% 4.8%,rgba(91,109,130,.18) 5.2% 6.8%,transparent 7.2%),
+      radial-gradient(circle at 30% 57%,rgba(78,96,116,.22) 0 5.5%,rgba(248,250,253,.18) 6% 7%,rgba(92,110,130,.14) 7.5% 9.3%,transparent 9.8%),
+      radial-gradient(circle at 49% 38%,rgba(76,94,115,.17) 0 2.2%,rgba(255,255,255,.14) 2.6% 3.4%,transparent 3.8%),
+      radial-gradient(circle at 78% 57%,rgba(72,90,111,.16) 0 2.8%,rgba(255,255,255,.13) 3.2% 4.1%,transparent 4.5%),
+      radial-gradient(circle at 42% 74%,rgba(83,101,121,.13) 0 3.5%,transparent 4.2%),
+      radial-gradient(circle at 62% 70%,rgba(255,255,255,.14),transparent 34%)
+}
+[data-theme="dark"] .sun-ferry,
+[data-theme="dark"] .sun-ferry::before { background:#182638 }
+[data-theme="dark"] .sun-ferry { filter:drop-shadow(0 3px 0 rgba(207,225,239,.18)) }
+[data-theme="dark"] .sun-ferry::after { background:#d9bf7b; box-shadow:7px 0 0 #d9bf7b,14px 0 0 #d9bf7b }
+
+[data-theme="dark"] .cards article:first-child {
+    background:#17283a;
+    color:#eef3f8
+}
+
+[data-theme="dark"] .hero h1 em,
+[data-theme="dark"] .journey-copy h3 em {
+    color:#8fcddd
+}
+
 .nav {
     box-sizing: border-box;
     width: 100%;
@@ -585,6 +631,147 @@ body {
     transform: none;
     background: var(--coral);
     box-shadow: 0 11px 24px rgba(23, 35, 59, .2)
+}
+
+.nav-tools {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-left: auto
+}
+
+.theme-toggle {
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer
+}
+
+.theme-toggle-track {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25px 25px;
+    align-items: center;
+    width: 54px;
+    height: 30px;
+    padding: 2px;
+    border: 1px solid rgba(23, 35, 59, .22);
+    border-radius: 999px;
+    background: rgba(23, 35, 59, .08)
+}
+
+.theme-icon {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    line-height: 1
+}
+
+.theme-toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 7px rgba(23, 35, 59, .2);
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1), background-color .3s ease
+}
+
+[data-theme="dark"] .theme-toggle-thumb {
+    transform: translateX(24px);
+    background: #dce7f1
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--coral);
+    outline-offset: 3px
+}
+
+[data-theme="dark"] .nav {
+    border-bottom-color: rgba(222, 232, 242, .14);
+    background: rgba(13, 22, 36, .95)
+}
+
+[data-theme="dark"] .nav nav a+a::before {
+    color: rgba(232, 238, 245, .3)
+}
+
+[data-theme="dark"] .nav nav a:hover,
+[data-theme="dark"] .nav nav a:focus-visible {
+    background: rgba(232, 238, 245, .1)
+}
+
+[data-theme="dark"] .journey-itinerary {
+    background: #111e2d !important
+}
+
+[data-theme="dark"] .journey-card,
+[data-theme="dark"] .checklist li {
+    background: #172536
+}
+
+[data-theme="dark"] .journey-plane {
+    border-color: #536d78;
+    background: #111e2d
+}
+
+[data-theme="dark"] footer {
+    border-color: #2b3a4b
+}
+
+[data-theme="dark"] .sun {
+    background: radial-gradient(circle at 34% 30%, #f4f7fb 0%, #cbd7e4 48%, #8395aa 100%);
+    box-shadow: 0 20px 72px rgba(151, 190, 231, .28), inset 0 0 0 1px rgba(255, 255, 255, .36);
+    animation: moon-glow-cycle 16s ease-in-out infinite
+}
+
+[data-theme="dark"] .sun::before {
+    background: radial-gradient(circle at 70% 25%, rgba(70, 88, 108, .2) 0 5%, transparent 6%), radial-gradient(circle at 30% 58%, rgba(66, 84, 103, .18) 0 8%, transparent 9%), radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .12), transparent 34%);
+    mix-blend-mode: multiply;
+    animation: moon-shade-cycle 16s ease-in-out infinite
+}
+
+[data-theme="dark"] .sun-sea {
+    background: linear-gradient(180deg, #416f89 0%, #244f69 42%, #142f49 100%);
+    box-shadow: inset 0 10px 22px rgba(188, 221, 243, .1)
+}
+
+[data-theme="dark"] .sun-sea::before {
+    background: radial-gradient(28px 14px at 50% 100%, #416f89 98%, transparent 100%) 0 0 / 54px 28px repeat-x
+}
+
+[data-theme="dark"] .sun-sea::after {
+    background: linear-gradient(90deg, transparent, rgba(187, 217, 240, .1) 45%, rgba(219, 235, 248, .34) 100%);
+    opacity: .75;
+    animation: moon-reflection 16s ease-in-out infinite
+}
+
+[data-theme="dark"] .sun-ferry,
+[data-theme="dark"] .sun-ferry::before {
+    background: #d6e0ea
+}
+
+@keyframes moon-glow-cycle {
+    0%, 100% { opacity: .72; filter: brightness(.82) }
+    48% { opacity: .98; filter: brightness(1.14) }
+    72% { opacity: .9; filter: brightness(1.02) }
+}
+
+@keyframes moon-shade-cycle {
+    0%, 100% { opacity: .7 }
+    48% { opacity: .3 }
+    78% { opacity: .48 }
+}
+
+@keyframes moon-reflection {
+    0%, 100% { opacity: .22 }
+    48% { opacity: .82 }
+    78% { opacity: .56 }
 }
 
 .hero {
@@ -1931,4 +2118,37 @@ footer {
     .nav-button {
         transition: none
     }
+
+    .theme-toggle-thumb {
+        transition: none
+    }
 }
+
+/* Dark-theme surfaces must follow all component palettes. */
+[data-theme="dark"] footer { background:#08111d; color:#e8eef5 }
+[data-theme="dark"] .booking { --booking-bg:#172536; background:#172536; color:#e8eef5 }
+[data-theme="dark"] .booking .checklist,
+[data-theme="dark"] .booking .checklist li { border-color:#405061 }
+[data-theme="dark"] .booking .checklist small,
+[data-theme="dark"] .booking-copy p { color:#aebac6 }
+[data-theme="dark"] .sun {
+    background:radial-gradient(circle at 34% 28%,#fff 0%,#e2eaf2 46%,#9fb0c2 100%);
+    box-shadow:0 20px 76px rgba(170,207,242,.34),inset 0 0 0 1px rgba(255,255,255,.5)
+}
+[data-theme="dark"] .sun::before {
+    background:
+      radial-gradient(circle at 70% 25%,rgba(72,91,112,.27) 0 3.5%,rgba(244,248,252,.2) 4% 4.8%,rgba(91,109,130,.18) 5.2% 6.8%,transparent 7.2%),
+      radial-gradient(circle at 30% 57%,rgba(78,96,116,.22) 0 5.5%,rgba(248,250,253,.18) 6% 7%,rgba(92,110,130,.14) 7.5% 9.3%,transparent 9.8%),
+      radial-gradient(circle at 49% 38%,rgba(76,94,115,.17) 0 2.2%,rgba(255,255,255,.14) 2.6% 3.4%,transparent 3.8%),
+      radial-gradient(circle at 78% 57%,rgba(72,90,111,.16) 0 2.8%,rgba(255,255,255,.13) 3.2% 4.1%,transparent 4.5%),
+      radial-gradient(circle at 42% 74%,rgba(83,101,121,.13) 0 3.5%,transparent 4.2%),
+      radial-gradient(circle at 62% 70%,rgba(255,255,255,.14),transparent 34%)
+}
+[data-theme="dark"] .sun-ferry,
+[data-theme="dark"] .sun-ferry::before { background:#182638 }
+[data-theme="dark"] .sun-ferry { filter:drop-shadow(0 3px 0 rgba(207,225,239,.18)) }
+[data-theme="dark"] .sun-ferry::after { background:#d9bf7b; box-shadow:7px 0 0 #d9bf7b,14px 0 0 #d9bf7b }
+
+[data-theme="dark"] .cards article:first-child { background:#17283a; color:#eef3f8 }
+[data-theme="dark"] .hero h1 em,
+[data-theme="dark"] .journey-copy h3 em { color:#8fcddd }
