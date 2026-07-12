@@ -19,29 +19,33 @@ document.documentElement.classList.add('day-page-ready');
 const dayEnhancements = {
   'day-01': {
     phases: ['After-<br>noon', 'Once<br>settled', 'Late after-<br>noon', 'Before<br>sunset', 'Golden<br>hour', 'Evening'],
-    map: { title: 'Central Athens', points: [['Monastiraki', 120, 150, true], ['Ancient Agora', 275, 205], ['Philopappos', 450, 245], ['Psirri', 610, 125]] }
+    map: { title: 'Central Athens', minimumExtent: 0.75, points: [['Monastiraki', 37.9767, 23.7258, true], ['Ancient Agora', 37.9753, 23.7215], ['Philopappos', 37.9677, 23.7213], ['Psirri', 37.9787, 23.7234]] }
   },
   'day-02': {
     phases: ['Early<br>morning', 'Morning', 'Late<br>morning', 'Early after-<br>noon', 'Late after-<br>noon', 'With<br>buffer', 'Boarding', 'Overnight'],
-    map: { title: 'Athens to Piraeus', points: [['Acropolis', 115, 105, true], ['Museum', 250, 175], ['Central Athens', 410, 125], ['Piraeus', 650, 245]] }
+    map: {
+      title: 'Athens to Piraeus',
+      points: [['Central Athens', 37.9722, 23.7267, true], ['Piraeus Port', 37.9420, 23.6460]],
+      detail: { title: 'Central Athens detail', points: [['Acropolis', 37.9715, 23.7257, true], ['Acropolis Museum', 37.9684, 23.7285], ['Monastiraki', 37.9767, 23.7258]] }
+    }
   },
   'day-03': {
     phases: ['Morning', 'After<br>docking', 'Breakfast', 'Late<br>morning', 'Midday', 'Optional', 'Evening'],
-    map: { title: 'Chania and the nearby coast', points: [['Souda', 145, 190], ['Old Town', 310, 125, true], ['Harbour', 445, 165], ['Marathi', 650, 245]] }
+    map: { title: 'Chania and the nearby coast', points: [['Souda Port', 35.4890, 24.0730], ['Chania Old Town', 35.5150, 24.0180, true], ['Venetian Harbour', 35.5190, 24.0160], ['Marathi Beach', 35.5030, 24.1740]] }
   },
   'day-04': {
     phases: ['Early<br>morning', 'On the<br>road', 'Optional<br>stop', 'Late<br>morning', 'Before<br>midday', 'Midday', 'Return<br>drive', 'Evening'],
-    map: { title: 'Western Crete', points: [['Chania', 125, 85, true], ['Topolia', 310, 155], ['Elafonisi', 490, 260], ['Chania Harbour', 665, 95]] }
+    map: { title: 'Western Crete', points: [['Chania', 35.5138, 24.0180, true], ['Topolia Gorge', 35.4130, 23.6820], ['Elafonisi', 35.2710, 23.5410], ['Chania return', 35.5138, 24.0180]] }
   },
   'day-05': {
     phases: ['Morning', 'Eastbound', 'Late<br>morning', 'Before<br>lunch', 'Lunch', 'After-<br>noon', 'On<br>arrival', 'Late after-<br>noon', 'Evening'],
-    map: { title: 'Crete west to east', points: [['Chania', 110, 180], ['Rethymno', 375, 140], ['Heraklion', 650, 190, true], ['Koules', 705, 105]] }
+    map: { title: 'Crete west to east', points: [['Chania', 35.5138, 24.0180], ['Rethymno', 35.3690, 24.4750], ['Heraklion', 35.3387, 25.1442, true], ['Koules Fortress', 35.3445, 25.1370]] }
   },
   'day-06': {
-    map: { title: 'Santorini', points: [['Athinios', 150, 250], ['Oia', 390, 80, true], ['Fira', 570, 165], ['Athinios return', 680, 255]] }
+    map: { title: 'Santorini', points: [['Athinios Port', 36.3860, 25.4290], ['Oia', 36.4618, 25.3753, true], ['Fira', 36.4167, 25.4320], ['Athinios return', 36.3860, 25.4290]] }
   },
   'day-07': {
-    map: { title: 'Heraklion and Knossos', points: [['Heraklion', 135, 105, true], ['Knossos', 330, 245], ['Lions Square', 510, 130], ['HER Airport', 680, 185]] }
+    map: { title: 'Heraklion and Knossos', points: [['Heraklion centre', 35.3387, 25.1330, true], ['Palace of Knossos', 35.2980, 25.1630], ['Lions Square', 35.3390, 25.1330], ['HER Airport', 35.3397, 25.1803]] }
   }
 };
 
@@ -58,26 +62,102 @@ if (currentEnhancement?.phases) {
 if (currentEnhancement?.map) {
   const routeOverview = document.querySelector('.route-overview');
   if (routeOverview) {
-    const { title, points } = currentEnhancement.map;
-    const pointMarkup = points.map(([label, x, y, current], index) => `
+    const { title, points, minimumExtent = 2.5, detail } = currentEnhancement.map;
+    const centerLat = points.reduce((sum, [, lat]) => sum + lat, 0) / points.length;
+    const kmPerLongitude = 111.32 * Math.cos(centerLat * Math.PI / 180);
+    const rawPoints = points.map(([label, lat, lon, current]) => ({
+      label, lat, lon, current,
+      xKm: lon * kmPerLongitude,
+      yKm: lat * 111.32
+    }));
+    const xValues = rawPoints.map((point) => point.xKm);
+    const yValues = rawPoints.map((point) => point.yKm);
+    const minX = Math.min(...xValues), maxX = Math.max(...xValues);
+    const minY = Math.min(...yValues), maxY = Math.max(...yValues);
+    const spanX = Math.max(maxX - minX, minimumExtent);
+    const spanY = Math.max(maxY - minY, minimumExtent);
+    const mapWidth = 650, mapHeight = 210;
+    const scale = Math.min(mapWidth / spanX, mapHeight / spanY);
+    const usedWidth = (maxX - minX) * scale;
+    const usedHeight = (maxY - minY) * scale;
+    const offsetX = 75 + (mapWidth - usedWidth) / 2;
+    const offsetY = 45 + (mapHeight - usedHeight) / 2;
+    const projectedPoints = rawPoints.map((point) => ({
+      ...point,
+      x: offsetX + (point.xKm - minX) * scale,
+      y: offsetY + usedHeight - (point.yKm - minY) * scale
+    }));
+    const seenCoordinates = new Set();
+    const pointMarkup = projectedPoints.map(({ label, lat, lon, x, y, current }, index) => {
+      const coordinateKey = `${lat.toFixed(4)},${lon.toFixed(4)}`;
+      if (seenCoordinates.has(coordinateKey)) return '';
+      seenCoordinates.add(coordinateKey);
+      const labelOffset = [-20, 30, -34, 30][index % 4];
+      return `
       <g class="offline-map-point${current ? ' is-current' : ''}">
         <circle cx="${x}" cy="${y}" r="${current ? 10 : 7}"></circle>
-        <text x="${x}" y="${y - 18}" text-anchor="middle">${label}</text>
+        <text x="${x}" y="${y + labelOffset}" text-anchor="middle">${label}</text>
         <text class="offline-map-index" x="${x}" y="${y + 4}" text-anchor="middle">${index + 1}</text>
-      </g>`).join('');
-    const routePoints = points.map(([, x, y]) => `${x},${y}`).join(' ');
+      </g>`;
+    }).join('');
+    const routePoints = projectedPoints.map(({ x, y }) => `${x},${y}`).join(' ');
+    const extent = Math.max(spanX, spanY);
+    const scaleOptions = [0.5, 1, 2, 5, 10, 20, 25, 50, 100];
+    const scaleDistance = scaleOptions.filter((value) => value <= extent / 3).pop() || 0.5;
+    const scaleBarWidth = scaleDistance * scale;
+    const minLat = Math.min(...points.map(([, lat]) => lat)).toFixed(3);
+    const maxLat = Math.max(...points.map(([, lat]) => lat)).toFixed(3);
+    const minLon = Math.min(...points.map(([, , lon]) => lon)).toFixed(3);
+    const maxLon = Math.max(...points.map(([, , lon]) => lon)).toFixed(3);
+    let detailMarkup = '';
+    if (detail?.points?.length) {
+      const detailCenterLat = detail.points.reduce((sum, [, lat]) => sum + lat, 0) / detail.points.length;
+      const detailKmPerLongitude = 111.32 * Math.cos(detailCenterLat * Math.PI / 180);
+      const detailRaw = detail.points.map(([label, lat, lon, current]) => ({ label, current, xKm: lon * detailKmPerLongitude, yKm: lat * 111.32 }));
+      const detailMinX = Math.min(...detailRaw.map(({ xKm }) => xKm));
+      const detailMaxX = Math.max(...detailRaw.map(({ xKm }) => xKm));
+      const detailMinY = Math.min(...detailRaw.map(({ yKm }) => yKm));
+      const detailMaxY = Math.max(...detailRaw.map(({ yKm }) => yKm));
+      const detailSpanX = Math.max(detailMaxX - detailMinX, .65);
+      const detailSpanY = Math.max(detailMaxY - detailMinY, .65);
+      const detailScale = Math.min(600 / detailSpanX, 145 / detailSpanY);
+      const detailUsedWidth = (detailMaxX - detailMinX) * detailScale;
+      const detailUsedHeight = (detailMaxY - detailMinY) * detailScale;
+      const detailPoints = detailRaw.map((point) => ({
+        ...point,
+        x: 100 + (600 - detailUsedWidth) / 2 + (point.xKm - detailMinX) * detailScale,
+        y: 55 + detailUsedHeight - (point.yKm - detailMinY) * detailScale
+      }));
+      const detailRoute = detailPoints.map(({ x, y }) => `${x},${y}`).join(' ');
+      const detailLabels = detailPoints.map(({ label, x, y, current }, index) => `
+        <g class="offline-map-point${current ? ' is-current' : ''}">
+          <circle cx="${x}" cy="${y}" r="${current ? 10 : 7}"></circle>
+          <text x="${x + (index % 2 ? 18 : -18)}" y="${y + (index === 1 ? 30 : -18)}" text-anchor="${index % 2 ? 'start' : 'end'}">${label}</text>
+          <text class="offline-map-index" x="${x}" y="${y + 4}" text-anchor="middle">${index + 1}</text>
+        </g>`).join('');
+      detailMarkup = `<div class="offline-map-detail"><span>${detail.title}</span><svg viewBox="0 0 800 230" role="img" aria-label="Detailed map of the closely grouped Central Athens stops"><polyline class="offline-map-route" points="${detailRoute}"></polyline>${detailLabels}</svg></div>`;
+    }
     const figure = document.createElement('figure');
     figure.className = 'offline-route-map';
     figure.innerHTML = `
       <svg viewBox="0 0 800 330" role="img" aria-labelledby="offline-map-${currentDayId}-title offline-map-${currentDayId}-desc">
         <title id="offline-map-${currentDayId}-title">Offline overview of ${title}</title>
-        <desc id="offline-map-${currentDayId}-desc">A schematic route highlighting the day’s main area and attractions. It is not a navigation map and is not to scale.</desc>
-        <path class="offline-map-land" d="M30 235 C120 80 250 55 345 105 C450 160 530 35 765 100 L770 285 C610 305 515 260 390 285 C250 315 120 280 30 235 Z"></path>
-        <path class="offline-map-coast" d="M25 270 C160 230 245 310 375 265 S610 300 775 245"></path>
+        <desc id="offline-map-${currentDayId}-desc">A coordinate-projected map showing the day’s attractions at their correct relative positions and scale. It is a locator map rather than street navigation.</desc>
+        <g class="offline-map-grid" aria-hidden="true">
+          <path d="M75 45V255 M237.5 45V255 M400 45V255 M562.5 45V255 M725 45V255"></path>
+          <path d="M75 45H725 M75 97.5H725 M75 150H725 M75 202.5H725 M75 255H725"></path>
+        </g>
+        <text class="offline-map-coordinate" x="75" y="28">${maxLat}° N</text>
+        <text class="offline-map-coordinate" x="75" y="276">${minLat}° N</text>
+        <text class="offline-map-coordinate" x="725" y="28" text-anchor="end">${maxLon}° E</text>
+        <text class="offline-map-coordinate" x="725" y="276" text-anchor="end">${minLon}° E</text>
         <polyline class="offline-map-route" points="${routePoints}"></polyline>
         ${pointMarkup}
+        <g class="offline-map-north" transform="translate(750 55)" aria-hidden="true"><path d="M0 20 8 0 16 20 8 15Z"></path><text x="8" y="-7" text-anchor="middle">N</text></g>
+        <g class="offline-map-scale" transform="translate(75 305)" aria-hidden="true"><path d="M0 0V-8 M0-4H${scaleBarWidth} M${scaleBarWidth} 0V-8"></path><text x="${scaleBarWidth / 2}" y="15" text-anchor="middle">${scaleDistance} km</text></g>
       </svg>
-      <figcaption><span>Offline area guide</span><small>Schematic · not to scale</small></figcaption>`;
+      ${detailMarkup}
+      <figcaption><span>Offline geographic guide</span><small>Coordinate projected</small></figcaption>`;
     routeOverview.append(figure);
   }
 }

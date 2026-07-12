@@ -463,7 +463,7 @@
     grid-column: 1 / -1;
     margin: 25px 0 0;
     border: 1px solid #cbc6b8;
-    background: #edf1e8;
+    background: #f3efe4;
     overflow: hidden
 }
 
@@ -474,24 +474,22 @@
     min-height: 280px
 }
 
-.offline-map-land {
-    fill: #e2d4b5;
-    stroke: #bca77c;
-    stroke-width: 1.5
+.offline-map-grid path {
+    fill: none;
+    stroke: #8da3a0;
+    stroke-width: 1;
+    opacity: .28
 }
 
-.offline-map-coast {
-    fill: none;
-    stroke: #72b6bd;
-    stroke-width: 34;
-    opacity: .55
+.offline-map-coordinate {
+    fill: #6c7773;
+    font: 500 9px "DM Mono", monospace
 }
 
 .offline-map-route {
     fill: none;
     stroke: var(--day-navy);
     stroke-width: 3;
-    stroke-dasharray: 8 8;
     stroke-linecap: round;
     stroke-linejoin: round
 }
@@ -512,7 +510,7 @@
     fill: var(--day-navy);
     font: 600 15px "DM Sans", sans-serif;
     paint-order: stroke;
-    stroke: #edf1e8;
+    stroke: #f3efe4;
     stroke-width: 5px;
     stroke-linejoin: round
 }
@@ -521,6 +519,22 @@
     fill: #fff;
     stroke: none;
     font: 600 9px "DM Mono", monospace
+}
+
+.offline-map-north path {
+    fill: var(--day-navy)
+}
+
+.offline-map-north text,
+.offline-map-scale text {
+    fill: var(--day-navy);
+    font: 600 10px "DM Mono", monospace
+}
+
+.offline-map-scale path {
+    fill: none;
+    stroke: var(--day-navy);
+    stroke-width: 2
 }
 
 .offline-route-map figcaption {
@@ -533,6 +547,30 @@
     font: 500 10px "DM Mono", monospace;
     text-transform: uppercase;
     letter-spacing: .08em
+}
+
+.offline-map-detail {
+    position: relative;
+    border-top: 1px solid #cbc6b8;
+    background: #ebe6d9
+}
+
+.offline-map-detail>span {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    z-index: 1;
+    color: var(--day-navy);
+    font: 600 10px "DM Mono", monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase
+}
+
+.offline-map-detail svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 190px
 }
 
 .offline-route-map figcaption small {
