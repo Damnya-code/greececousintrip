@@ -126,13 +126,11 @@ body {
     z-index: 2;
 
     background:
-        linear-gradient(
-            90deg,
+        linear-gradient(90deg,
             rgba(255, 146, 61, 0) 0%,
             rgba(255, 141, 55, 0.10) 28%,
             rgba(235, 102, 34, 0.28) 60%,
-            rgba(180, 62, 24, 0.56) 100%
-        );
+            rgba(180, 62, 24, 0.56) 100%);
 
     opacity: 0;
     animation: sea-sunset 14s linear infinite;
@@ -147,21 +145,17 @@ body {
     pointer-events: none;
 
     background:
-        radial-gradient(
-            circle at 32% 26%,
+        radial-gradient(circle at 32% 26%,
             rgba(255, 225, 156, 0) 0%,
             rgba(255, 196, 108, 0.06) 28%,
             rgba(255, 150, 58, 0.30) 58%,
             rgba(228, 92, 30, 0.56) 80%,
-            rgba(158, 48, 20, 0.72) 100%
-        ),
-        linear-gradient(
-            180deg,
+            rgba(158, 48, 20, 0.72) 100%),
+        linear-gradient(180deg,
             rgba(255, 180, 79, 0) 0%,
             rgba(247, 134, 42, 0.15) 42%,
             rgba(221, 83, 25, 0.48) 78%,
-            rgba(170, 53, 18, 0.62) 100%
-        );
+            rgba(170, 53, 18, 0.62) 100%);
 
     mix-blend-mode: multiply;
     opacity: 0;
@@ -367,6 +361,7 @@ body {
 }
 
 @keyframes sea-sunset {
+
     0%,
     34% {
         opacity: 0;
@@ -405,6 +400,7 @@ body {
 }
 
 @keyframes sunset-tint {
+
     0%,
     28% {
         opacity: 0;
@@ -440,6 +436,7 @@ body {
 }
 
 @keyframes sun-glow-cycle {
+
     0%,
     28%,
     100% {
@@ -477,6 +474,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .sun,
     .sun::before,
     .sun-sea,
@@ -494,39 +492,64 @@ body {
 }
 
 /* Final moonlight surfaces override component-level light palettes. */
-[data-theme="dark"] footer { background:#08111d; color:#e8eef5 }
-[data-theme="dark"] .booking { --booking-bg:#172536; background:#172536; color:#e8eef5 }
+[data-theme="dark"] footer {
+    background: #08111d;
+    color: #e8eef5
+}
+
+[data-theme="dark"] .booking {
+    --booking-bg: #172536;
+    background: #172536;
+    color: #e8eef5
+}
+
 [data-theme="dark"] .booking .checklist,
-[data-theme="dark"] .booking .checklist li { border-color:#405061 }
+[data-theme="dark"] .booking .checklist li {
+    border-color: #405061
+}
+
 [data-theme="dark"] .booking .checklist small,
-[data-theme="dark"] .booking-copy p { color:#aebac6 }
+[data-theme="dark"] .booking-copy p {
+    color: #aebac6
+}
 
 [data-theme="dark"] .sun {
-    background:radial-gradient(circle at 34% 28%,#fff 0%,#e2eaf2 46%,#9fb0c2 100%);
-    box-shadow:0 20px 76px rgba(170,207,242,.34),inset 0 0 0 1px rgba(255,255,255,.5)
+    background: radial-gradient(circle at 34% 28%, #fff 0%, #e2eaf2 46%, #9fb0c2 100%);
+    box-shadow: 0 20px 76px rgba(170, 207, 242, .34), inset 0 0 0 1px rgba(255, 255, 255, .5)
 }
+
 [data-theme="dark"] .sun::before {
     background:
-      radial-gradient(circle at 70% 25%,rgba(72,91,112,.27) 0 3.5%,rgba(244,248,252,.2) 4% 4.8%,rgba(91,109,130,.18) 5.2% 6.8%,transparent 7.2%),
-      radial-gradient(circle at 30% 57%,rgba(78,96,116,.22) 0 5.5%,rgba(248,250,253,.18) 6% 7%,rgba(92,110,130,.14) 7.5% 9.3%,transparent 9.8%),
-      radial-gradient(circle at 49% 38%,rgba(76,94,115,.17) 0 2.2%,rgba(255,255,255,.14) 2.6% 3.4%,transparent 3.8%),
-      radial-gradient(circle at 78% 57%,rgba(72,90,111,.16) 0 2.8%,rgba(255,255,255,.13) 3.2% 4.1%,transparent 4.5%),
-      radial-gradient(circle at 42% 74%,rgba(83,101,121,.13) 0 3.5%,transparent 4.2%),
-      radial-gradient(circle at 62% 70%,rgba(255,255,255,.14),transparent 34%)
+        radial-gradient(circle at 70% 25%, rgba(72, 91, 112, .27) 0 3.5%, rgba(244, 248, 252, .2) 4% 4.8%, rgba(91, 109, 130, .18) 5.2% 6.8%, transparent 7.2%),
+        radial-gradient(circle at 30% 57%, rgba(78, 96, 116, .22) 0 5.5%, rgba(248, 250, 253, .18) 6% 7%, rgba(92, 110, 130, .14) 7.5% 9.3%, transparent 9.8%),
+        radial-gradient(circle at 49% 38%, rgba(76, 94, 115, .17) 0 2.2%, rgba(255, 255, 255, .14) 2.6% 3.4%, transparent 3.8%),
+        radial-gradient(circle at 78% 57%, rgba(72, 90, 111, .16) 0 2.8%, rgba(255, 255, 255, .13) 3.2% 4.1%, transparent 4.5%),
+        radial-gradient(circle at 42% 74%, rgba(83, 101, 121, .13) 0 3.5%, transparent 4.2%),
+        radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .14), transparent 34%)
 }
+
 [data-theme="dark"] .sun-ferry,
-[data-theme="dark"] .sun-ferry::before { background:#182638 }
-[data-theme="dark"] .sun-ferry { filter:drop-shadow(0 3px 0 rgba(207,225,239,.18)) }
-[data-theme="dark"] .sun-ferry::after { background:#d9bf7b; box-shadow:7px 0 0 #d9bf7b,14px 0 0 #d9bf7b }
+[data-theme="dark"] .sun-ferry::before {
+    background: #182638
+}
+
+[data-theme="dark"] .sun-ferry {
+    filter: drop-shadow(0 3px 0 rgba(207, 225, 239, .18))
+}
+
+[data-theme="dark"] .sun-ferry::after {
+    background: #d9bf7b;
+    box-shadow: 7px 0 0 #d9bf7b, 14px 0 0 #d9bf7b
+}
 
 [data-theme="dark"] .cards article:first-child {
-    background:#17283a;
-    color:#eef3f8
+    background: #17283a;
+    color: #eef3f8
 }
 
 [data-theme="dark"] .hero h1 em,
 [data-theme="dark"] .journey-copy h3 em {
-    color:#8fcddd
+    color: #8fcddd
 }
 
 .nav {
@@ -757,21 +780,54 @@ body {
 }
 
 @keyframes moon-glow-cycle {
-    0%, 100% { opacity: .72; filter: brightness(.82) }
-    48% { opacity: .98; filter: brightness(1.14) }
-    72% { opacity: .9; filter: brightness(1.02) }
+
+    0%,
+    100% {
+        opacity: .72;
+        filter: brightness(.82)
+    }
+
+    48% {
+        opacity: .98;
+        filter: brightness(1.14)
+    }
+
+    72% {
+        opacity: .9;
+        filter: brightness(1.02)
+    }
 }
 
 @keyframes moon-shade-cycle {
-    0%, 100% { opacity: .7 }
-    48% { opacity: .3 }
-    78% { opacity: .48 }
+
+    0%,
+    100% {
+        opacity: .7
+    }
+
+    48% {
+        opacity: .3
+    }
+
+    78% {
+        opacity: .48
+    }
 }
 
 @keyframes moon-reflection {
-    0%, 100% { opacity: .22 }
-    48% { opacity: .82 }
-    78% { opacity: .56 }
+
+    0%,
+    100% {
+        opacity: .22
+    }
+
+    48% {
+        opacity: .82
+    }
+
+    78% {
+        opacity: .56
+    }
 }
 
 .hero {
@@ -833,8 +889,61 @@ body {
 }
 
 .hero-actions .primary {
-    background: var(--coral);
-    box-shadow: 0 7px 18px rgba(223, 121, 92, .18)
+    position: relative;
+    overflow: hidden;
+
+    min-height: 44px;
+    padding: 11px 15px;
+    gap: 16px;
+
+    background:
+        linear-gradient(135deg,
+            var(--coral) 0%,
+            #ec9670 52%,
+            #e6bd72 100%);
+
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 4px;
+
+    color: white;
+    box-shadow:
+        0 7px 18px rgba(223, 121, 92, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+.hero-actions .primary::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -45%;
+    width: 35%;
+    height: 100%;
+
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.24),
+            transparent);
+
+    transform: skewX(-18deg);
+    transition: left 0.5s ease;
+}
+
+.hero-actions .primary:hover::before {
+    left: 115%;
+}
+
+.hero-actions .primary:hover {
+    transform: translateY(-2px);
+    filter: saturate(1.08) brightness(1.03);
+
+    box-shadow:
+        0 12px 24px rgba(223, 121, 92, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .hero-actions .text-link {
@@ -876,6 +985,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .hero-actions .primary,
     .hero-actions .text-link,
     .trip-essentials-link,
@@ -1733,31 +1843,97 @@ dialog::backdrop {
     z-index: 3;
     top: 14px;
     right: 14px;
+
     display: grid;
     place-items: center;
+
     width: 38px;
     height: 38px;
-    border: 1px solid rgba(255, 255, 255, .62);
+
+    overflow: hidden;
+    isolation: isolate;
+
+    border: 1px solid rgba(255, 255, 255, 0.62);
     border-radius: 50%;
-    background: rgba(16, 29, 49, .72);
+
+    background: rgba(16, 29, 49, 0.72);
     color: white;
-    box-shadow: 0 6px 16px rgba(16, 29, 49, .18);
-    transition: transform .25s ease, background-color .25s ease, box-shadow .25s ease
+
+    box-shadow: 0 6px 16px rgba(16, 29, 49, 0.18);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+.journey-map-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--coral) 0%,
+            #ec9670 52%,
+            #e6bd72 100%
+        );
+
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.journey-map-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -65%;
+
+    width: 45%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.32),
+            transparent
+        );
+
+    transform: skewX(-18deg);
+    transition: left 0.45s ease;
 }
 
 .journey-map-button span {
+    position: relative;
+    z-index: 2;
+
     display: block;
     font-size: 15px;
-    transform: rotate(-45deg)
+    transform: rotate(-45deg);
 }
 
 .journey-map-button:hover,
 .journey-map-button:focus-visible {
-    transform: translateY(-2px) scale(1.05);
-    background: var(--coral);
-    box-shadow: 0 10px 22px rgba(16, 29, 49, .26)
+    transform: translateY(-2px) scale(1.06);
+    filter: saturate(1.08) brightness(1.03);
+
+    box-shadow:
+        0 10px 22px rgba(223, 121, 92, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
+.journey-map-button:hover::before,
+.journey-map-button:focus-visible::before {
+    opacity: 1;
+}
+
+.journey-map-button:hover::after,
+.journey-map-button:focus-visible::after {
+    left: 125%;
+}
 .journey-image:after {
     content: "";
     position: absolute;
@@ -2027,13 +2203,14 @@ footer {
 
 .hero-copy,
 .hero-art,
-.route > *,
-.playbook > *,
-.booking > * {
+.route>*,
+.playbook>*,
+.booking>* {
     min-width: 0;
 }
 
 @media (max-width: 900px) {
+
     .hero,
     .route,
     .playbook,
@@ -2114,6 +2291,7 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .nav nav a,
     .nav-button {
         transition: none
@@ -2125,37 +2303,71 @@ footer {
 }
 
 /* Dark-theme surfaces must follow all component palettes. */
-[data-theme="dark"] footer { background:#08111d; color:#e8eef5 }
-[data-theme="dark"] .booking { --booking-bg:#172536; background:#172536; color:#e8eef5 }
-[data-theme="dark"] .booking .checklist,
-[data-theme="dark"] .booking .checklist li { border-color:#405061 }
-[data-theme="dark"] .booking .checklist small,
-[data-theme="dark"] .booking-copy p { color:#aebac6 }
-[data-theme="dark"] .sun {
-    background:radial-gradient(circle at 34% 28%,#fff 0%,#e2eaf2 46%,#9fb0c2 100%);
-    box-shadow:0 20px 76px rgba(170,207,242,.34),inset 0 0 0 1px rgba(255,255,255,.5)
+[data-theme="dark"] footer {
+    background: #08111d;
+    color: #e8eef5
 }
+
+[data-theme="dark"] .booking {
+    --booking-bg: #172536;
+    background: #172536;
+    color: #e8eef5
+}
+
+[data-theme="dark"] .booking .checklist,
+[data-theme="dark"] .booking .checklist li {
+    border-color: #405061
+}
+
+[data-theme="dark"] .booking .checklist small,
+[data-theme="dark"] .booking-copy p {
+    color: #aebac6
+}
+
+[data-theme="dark"] .sun {
+    background: radial-gradient(circle at 34% 28%, #fff 0%, #e2eaf2 46%, #9fb0c2 100%);
+    box-shadow: 0 20px 76px rgba(170, 207, 242, .34), inset 0 0 0 1px rgba(255, 255, 255, .5)
+}
+
 [data-theme="dark"] .sun::before {
     background:
-      radial-gradient(circle at 70% 25%,rgba(72,91,112,.27) 0 3.5%,rgba(244,248,252,.2) 4% 4.8%,rgba(91,109,130,.18) 5.2% 6.8%,transparent 7.2%),
-      radial-gradient(circle at 30% 57%,rgba(78,96,116,.22) 0 5.5%,rgba(248,250,253,.18) 6% 7%,rgba(92,110,130,.14) 7.5% 9.3%,transparent 9.8%),
-      radial-gradient(circle at 49% 38%,rgba(76,94,115,.17) 0 2.2%,rgba(255,255,255,.14) 2.6% 3.4%,transparent 3.8%),
-      radial-gradient(circle at 78% 57%,rgba(72,90,111,.16) 0 2.8%,rgba(255,255,255,.13) 3.2% 4.1%,transparent 4.5%),
-      radial-gradient(circle at 42% 74%,rgba(83,101,121,.13) 0 3.5%,transparent 4.2%),
-      radial-gradient(circle at 62% 70%,rgba(255,255,255,.14),transparent 34%)
+        radial-gradient(circle at 70% 25%, rgba(72, 91, 112, .27) 0 3.5%, rgba(244, 248, 252, .2) 4% 4.8%, rgba(91, 109, 130, .18) 5.2% 6.8%, transparent 7.2%),
+        radial-gradient(circle at 30% 57%, rgba(78, 96, 116, .22) 0 5.5%, rgba(248, 250, 253, .18) 6% 7%, rgba(92, 110, 130, .14) 7.5% 9.3%, transparent 9.8%),
+        radial-gradient(circle at 49% 38%, rgba(76, 94, 115, .17) 0 2.2%, rgba(255, 255, 255, .14) 2.6% 3.4%, transparent 3.8%),
+        radial-gradient(circle at 78% 57%, rgba(72, 90, 111, .16) 0 2.8%, rgba(255, 255, 255, .13) 3.2% 4.1%, transparent 4.5%),
+        radial-gradient(circle at 42% 74%, rgba(83, 101, 121, .13) 0 3.5%, transparent 4.2%),
+        radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .14), transparent 34%)
 }
-[data-theme="dark"] .sun-ferry,
-[data-theme="dark"] .sun-ferry::before { background:#182638 }
-[data-theme="dark"] .sun-ferry { filter:drop-shadow(0 3px 0 rgba(207,225,239,.18)) }
-[data-theme="dark"] .sun-ferry::after { background:#d9bf7b; box-shadow:7px 0 0 #d9bf7b,14px 0 0 #d9bf7b }
 
-[data-theme="dark"] .cards article:first-child { background:#17283a; color:#eef3f8 }
+[data-theme="dark"] .sun-ferry,
+[data-theme="dark"] .sun-ferry::before {
+    background: #182638
+}
+
+[data-theme="dark"] .sun-ferry {
+    filter: drop-shadow(0 3px 0 rgba(207, 225, 239, .18))
+}
+
+[data-theme="dark"] .sun-ferry::after {
+    background: #d9bf7b;
+    box-shadow: 7px 0 0 #d9bf7b, 14px 0 0 #d9bf7b
+}
+
+[data-theme="dark"] .cards article:first-child {
+    background: #17283a;
+    color: #eef3f8
+}
+
 [data-theme="dark"] .hero h1 em,
-[data-theme="dark"] .journey-copy h3 em { color:#8fcddd }
+[data-theme="dark"] .journey-copy h3 em {
+    color: #8fcddd
+}
+
 [data-theme="dark"] .trip-essentials-link:hover,
 .trip-essentials-link:focus-visible {
     color: #5093a3;
 }
+
 [data-theme="dark"] .booking-order:hover {
     color: #5093a3;
 }
