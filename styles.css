@@ -1416,7 +1416,7 @@ body {
 
 .checklist small {
     font-size: 12px;
-    color: #5d625e
+    color: #a2dfdc
 }
 
 .checklist .index {
@@ -1645,7 +1645,7 @@ dialog::backdrop {
     text-decoration: none;
     border: 1px solid var(--ink);
     padding: 13px 17px;
-    box-shadow: 0 7px 18px rgba(23, 35, 59, .08);
+    box-shadow: 0 7px 18px rgba(28, 45, 78, 0.08);
     transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease
 }
 
@@ -2316,7 +2316,7 @@ footer {
 
 [data-theme="dark"] .booking .checklist,
 [data-theme="dark"] .booking .checklist li {
-    border-color: #405061
+    border-color: #cbd9e9
 }
 
 [data-theme="dark"] .booking .checklist small,
@@ -2383,4 +2383,34 @@ footer {
     transform: translateY(-1px);
     color: #f2d28d;
     border-color: currentColor;
+}
+
+.booking {
+    background:
+        linear-gradient(
+            135deg,
+            #18384a 0%,
+            #3b8fc7 55%,
+            #16486e 100%
+        );
+
+    color: #f7f1e5;
+}
+.booking .primary {
+    background:
+        linear-gradient(
+            135deg,
+            var(--coral),
+            #ec9670 52%,
+            #e6bd72
+        );
+}
+html[data-theme="dark"] .booking {
+    background:
+        linear-gradient(
+            135deg,
+            #1a3043,
+            #0f273f,
+            #1a3043
+        );
 }

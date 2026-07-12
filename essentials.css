@@ -528,55 +528,6 @@
     padding-top: 1rem
 }
 
-.essentials-close {
-    padding: 90px 6vw;
-    background: #d8a557;
-    color: var(--blue);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.75rem
-}
-
-.essentials-close p {
-    font: 600 clamp(2.2rem, 4vw, 4.4rem)/1.05 "Playfair Display";
-    letter-spacing: -.035em;
-    margin: 0
-}
-
-.essentials-close a {
-    display: inline-flex;
-    align-items: center;
-    gap: .75rem;
-    flex: none;
-    padding: 14px 18px;
-    border: 1px solid var(--blue);
-    background: var(--blue);
-    color: #fff;
-    font: 600 .65rem "DM Mono";
-    text-transform: uppercase;
-    text-decoration: none;
-    box-shadow: 0 7px 18px rgba(13, 54, 70, .14);
-    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease
-}
-
-.essentials-close a span {
-    transition: transform .25s ease
-}
-
-.essentials-close a:hover,
-.essentials-close a:focus-visible {
-    transform: translateY(-3px);
-    background: #fff;
-    color: var(--blue);
-    box-shadow: 0 14px 28px rgba(13, 54, 70, .22)
-}
-
-.essentials-close a:hover span,
-.essentials-close a:focus-visible span {
-    transform: translateX(4px)
-}
-
 .sr-only {
     position: absolute;
     width: 1px;
@@ -740,11 +691,6 @@
         grid-template-columns: 1fr
     }
 
-    .essentials-close {
-        padding: 65px 6vw;
-        flex-direction: column;
-        align-items: flex-start
-    }
 }
 
 .planning-close {
@@ -776,7 +722,6 @@
 @media (prefers-reduced-motion: reduce) {
     .actions button,
     .route-list a,
-    .essentials-close a,
     .essentials-close a span {
         transition: none
     }
