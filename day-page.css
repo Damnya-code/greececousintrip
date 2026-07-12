@@ -147,17 +147,22 @@
 }
 
 .day-intro {
-    width: min(920px, calc(100% - 68px));
-    padding: 82px 0;
+    width: min(1000px, calc(100% - 68px));
+    padding: 72px 0;
     display: grid;
-    grid-template-columns: 140px minmax(0, 1fr);
-    gap: 48px;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 64px;
+    align-items: center;
     border-bottom: 1px solid #d7d2c4
 }
 
-.day-intro>div {
-    max-width: 650px
+.day-intro-lead::before {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 2px;
+    margin-bottom: 26px;
+    background: var(--day-gold)
 }
 
 .day-intro p {
@@ -167,10 +172,33 @@
 }
 
 .day-intro .day-intro-lead {
-    font: 600 30px/1.32 "Playfair Display";
+    max-width: 24ch;
+    font: 600 clamp(29px, 3.2vw, 38px)/1.28 "Playfair Display";
     letter-spacing: -.6px;
     color: var(--day-navy);
-    margin-top: 0
+    margin: 0
+}
+
+.intro-chapter {
+    padding-left: 28px;
+    border-left: 1px solid #d7d2c4
+}
+
+.intro-chapter .eyebrow {
+    margin-bottom: 12px
+}
+
+.intro-chapter a {
+    display: inline-block;
+    color: var(--day-navy);
+    font: 600 18px/1.35 "Playfair Display";
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 5px
+}
+
+.intro-chapter a:hover {
+    color: var(--day-gold)
 }
 
 .day-section {
@@ -553,7 +581,6 @@
         width: calc(100% - 40px)
     }
 
-    .day-intro,
     .taste,
     .practical-grid,
     .route-overview {
@@ -561,20 +588,28 @@
         gap: 35px
     }
 
-    .day-intro,
     .day-section {
         padding-top: 80px;
         padding-bottom: 80px
     }
 
     .day-intro {
-        gap: 18px;
-        padding-top: 60px;
-        padding-bottom: 60px
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding-top: 55px;
+        padding-bottom: 55px
     }
 
     .day-intro .day-intro-lead {
+        max-width: none;
         font-size: 28px
+    }
+
+    .intro-chapter {
+        padding-top: 22px;
+        padding-left: 0;
+        border-top: 1px solid #d7d2c4;
+        border-left: 0
     }
 
     .day-section-heading {
