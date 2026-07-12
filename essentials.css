@@ -31,6 +31,21 @@
     backdrop-filter: blur(16px)
 }
 
+.essentials-home,
+.essentials-home:hover,
+.essentials-home:focus-visible {
+    padding: 9px 10px;
+    border: 0;
+    background: transparent;
+    color: var(--blue);
+    box-shadow: none
+}
+
+.essentials-home:hover,
+.essentials-home:focus-visible {
+    background: rgba(13, 54, 70, .08)
+}
+
 .essentials-hero {
     min-height: 760px;
     padding: 150px 6vw 80px;
@@ -211,7 +226,15 @@
     margin: .7rem .7rem 0 0;
     font: 500 .58rem "DM Mono";
     text-transform: uppercase;
-    border-bottom: 1px solid #d6ac5b66
+    border-bottom: 1px solid #d6ac5b66;
+    transition: transform .2s ease, color .2s ease, border-color .2s ease
+}
+
+.route-list a:hover,
+.route-list a:focus-visible {
+    transform: translateY(-1px);
+    color: #f2d28d;
+    border-color: currentColor
 }
 
 .pack-grid {
@@ -307,12 +330,28 @@
     padding: .8rem 1rem;
     font: 500 .63rem "DM Mono";
     text-transform: uppercase;
-    cursor: pointer
+    cursor: pointer;
+    box-shadow: 0 7px 18px rgba(13, 54, 70, .12);
+    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease
 }
 
 .actions button+button {
     background: transparent;
     color: var(--blue)
+}
+
+.actions button:hover,
+.actions button:focus-visible {
+    transform: translateY(-3px);
+    background: #fff;
+    color: var(--blue);
+    box-shadow: 0 14px 28px rgba(13, 54, 70, .2)
+}
+
+.actions button+button:hover,
+.actions button+button:focus-visible {
+    background: var(--blue);
+    color: #fff
 }
 
 #checklist-feedback {
@@ -453,9 +492,9 @@
     background: #d8a557;
     color: var(--blue);
     display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 2rem
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.75rem
 }
 
 .essentials-close p {
@@ -465,10 +504,36 @@
 }
 
 .essentials-close a {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
     flex: none;
-    font: 500 .65rem "DM Mono";
+    padding: 14px 18px;
+    border: 1px solid var(--blue);
+    background: var(--blue);
+    color: #fff;
+    font: 600 .65rem "DM Mono";
     text-transform: uppercase;
-    border-bottom: 1px solid
+    text-decoration: none;
+    box-shadow: 0 7px 18px rgba(13, 54, 70, .14);
+    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease
+}
+
+.essentials-close a span {
+    transition: transform .25s ease
+}
+
+.essentials-close a:hover,
+.essentials-close a:focus-visible {
+    transform: translateY(-3px);
+    background: #fff;
+    color: var(--blue);
+    box-shadow: 0 14px 28px rgba(13, 54, 70, .22)
+}
+
+.essentials-close a:hover span,
+.essentials-close a:focus-visible span {
+    transform: translateX(4px)
 }
 
 .sr-only {
@@ -667,12 +732,11 @@
     }
 }
 
-.essentials-close {
-    padding: 90px 6vw;
-    background: #d8a557;
-    color: var(--blue);
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 2rem
+@media (prefers-reduced-motion: reduce) {
+    .actions button,
+    .route-list a,
+    .essentials-close a,
+    .essentials-close a span {
+        transition: none
+    }
 }

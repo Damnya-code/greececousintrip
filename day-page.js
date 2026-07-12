@@ -25,8 +25,7 @@ const dayEnhancements = {
     phases: ['Early<br>morning', 'Morning', 'Late<br>morning', 'Early after-<br>noon', 'Late after-<br>noon', 'With<br>buffer', 'Boarding', 'Overnight'],
     map: {
       title: 'Athens to Piraeus',
-      points: [['Central Athens', 37.9722, 23.7267, true], ['Piraeus Port', 37.9420, 23.6460]],
-      detail: { title: 'Central Athens detail', points: [['Acropolis', 37.9715, 23.7257, true], ['Acropolis Museum', 37.9684, 23.7285], ['Monastiraki', 37.9767, 23.7258]] }
+      points: [['Central Athens', 37.9722, 23.7267, true], ['Piraeus Port', 37.9420, 23.6460]]
     }
   },
   'day-03': {
@@ -62,7 +61,7 @@ if (currentEnhancement?.phases) {
 if (currentEnhancement?.map) {
   const routeOverview = document.querySelector('.route-overview');
   if (routeOverview) {
-    const { title, points, minimumExtent = 2.5, detail } = currentEnhancement.map;
+    const { title, points, minimumExtent = 2.5 } = currentEnhancement.map;
     const centerLat = points.reduce((sum, [, lat]) => sum + lat, 0) / points.length;
     const kmPerLongitude = 111.32 * Math.cos(centerLat * Math.PI / 180);
     const rawPoints = points.map(([label, lat, lon, current]) => ({
@@ -109,34 +108,6 @@ if (currentEnhancement?.map) {
     const maxLat = Math.max(...points.map(([, lat]) => lat)).toFixed(3);
     const minLon = Math.min(...points.map(([, , lon]) => lon)).toFixed(3);
     const maxLon = Math.max(...points.map(([, , lon]) => lon)).toFixed(3);
-    let detailMarkup = '';
-    if (detail?.points?.length) {
-      const detailCenterLat = detail.points.reduce((sum, [, lat]) => sum + lat, 0) / detail.points.length;
-      const detailKmPerLongitude = 111.32 * Math.cos(detailCenterLat * Math.PI / 180);
-      const detailRaw = detail.points.map(([label, lat, lon, current]) => ({ label, current, xKm: lon * detailKmPerLongitude, yKm: lat * 111.32 }));
-      const detailMinX = Math.min(...detailRaw.map(({ xKm }) => xKm));
-      const detailMaxX = Math.max(...detailRaw.map(({ xKm }) => xKm));
-      const detailMinY = Math.min(...detailRaw.map(({ yKm }) => yKm));
-      const detailMaxY = Math.max(...detailRaw.map(({ yKm }) => yKm));
-      const detailSpanX = Math.max(detailMaxX - detailMinX, .65);
-      const detailSpanY = Math.max(detailMaxY - detailMinY, .65);
-      const detailScale = Math.min(600 / detailSpanX, 145 / detailSpanY);
-      const detailUsedWidth = (detailMaxX - detailMinX) * detailScale;
-      const detailUsedHeight = (detailMaxY - detailMinY) * detailScale;
-      const detailPoints = detailRaw.map((point) => ({
-        ...point,
-        x: 100 + (600 - detailUsedWidth) / 2 + (point.xKm - detailMinX) * detailScale,
-        y: 55 + detailUsedHeight - (point.yKm - detailMinY) * detailScale
-      }));
-      const detailRoute = detailPoints.map(({ x, y }) => `${x},${y}`).join(' ');
-      const detailLabels = detailPoints.map(({ label, x, y, current }, index) => `
-        <g class="offline-map-point${current ? ' is-current' : ''}">
-          <circle cx="${x}" cy="${y}" r="${current ? 10 : 7}"></circle>
-          <text x="${x + (index % 2 ? 18 : -18)}" y="${y + (index === 1 ? 30 : -18)}" text-anchor="${index % 2 ? 'start' : 'end'}">${label}</text>
-          <text class="offline-map-index" x="${x}" y="${y + 4}" text-anchor="middle">${index + 1}</text>
-        </g>`).join('');
-      detailMarkup = `<div class="offline-map-detail"><span>${detail.title}</span><svg viewBox="0 0 800 230" role="img" aria-label="Detailed map of the closely grouped Central Athens stops"><polyline class="offline-map-route" points="${detailRoute}"></polyline>${detailLabels}</svg></div>`;
-    }
     const figure = document.createElement('figure');
     figure.className = 'offline-route-map';
     figure.innerHTML = `
@@ -156,7 +127,6 @@ if (currentEnhancement?.map) {
         <g class="offline-map-north" transform="translate(750 55)" aria-hidden="true"><path d="M0 20 8 0 16 20 8 15Z"></path><text x="8" y="-7" text-anchor="middle">N</text></g>
         <g class="offline-map-scale" transform="translate(75 305)" aria-hidden="true"><path d="M0 0V-8 M0-4H${scaleBarWidth} M${scaleBarWidth} 0V-8"></path><text x="${scaleBarWidth / 2}" y="15" text-anchor="middle">${scaleDistance} km</text></g>
       </svg>
-      ${detailMarkup}
       <figcaption><span>Offline geographic guide</span><small>Coordinate projected</small></figcaption>`;
     routeOverview.append(figure);
   }
