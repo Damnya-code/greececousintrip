@@ -2372,6 +2372,8 @@ footer {
     color: #5093a3;
 }
 
+[data-theme="dark"] .darkmode-text { color:#3a92c5 } 
+
 .next-day a {
     display: inline-block;
     transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
