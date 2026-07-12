@@ -459,6 +459,87 @@
     font: 500 10px "DM Mono"
 }
 
+.offline-route-map {
+    grid-column: 1 / -1;
+    margin: 25px 0 0;
+    border: 1px solid #cbc6b8;
+    background: #edf1e8;
+    overflow: hidden
+}
+
+.offline-route-map svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 280px
+}
+
+.offline-map-land {
+    fill: #e2d4b5;
+    stroke: #bca77c;
+    stroke-width: 1.5
+}
+
+.offline-map-coast {
+    fill: none;
+    stroke: #72b6bd;
+    stroke-width: 34;
+    opacity: .55
+}
+
+.offline-map-route {
+    fill: none;
+    stroke: var(--day-navy);
+    stroke-width: 3;
+    stroke-dasharray: 8 8;
+    stroke-linecap: round;
+    stroke-linejoin: round
+}
+
+.offline-map-point circle {
+    fill: var(--day-gold);
+    stroke: var(--day-navy);
+    stroke-width: 2
+}
+
+.offline-map-point.is-current circle {
+    fill: var(--day-navy);
+    stroke: #fff;
+    stroke-width: 4
+}
+
+.offline-map-point text {
+    fill: var(--day-navy);
+    font: 600 15px "DM Sans", sans-serif;
+    paint-order: stroke;
+    stroke: #edf1e8;
+    stroke-width: 5px;
+    stroke-linejoin: round
+}
+
+.offline-map-point .offline-map-index {
+    fill: #fff;
+    stroke: none;
+    font: 600 9px "DM Mono", monospace
+}
+
+.offline-route-map figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 18px;
+    border-top: 1px solid #cbc6b8;
+    color: var(--day-navy);
+    font: 500 10px "DM Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: .08em
+}
+
+.offline-route-map figcaption small {
+    color: #67716f;
+    font: inherit
+}
+
 .day-pagination {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -612,6 +693,18 @@
         border-left: 0
     }
 
+    .offline-route-map {
+        margin-top: 5px
+    }
+
+    .offline-route-map svg {
+        min-height: 220px
+    }
+
+    .offline-map-point text {
+        font-size: 12px
+    }
+
     .day-section-heading {
         margin-bottom: 35px
     }
@@ -679,19 +772,6 @@
     }
 }
 
-/* Four-card day highlights and chapter teaser */
-.highlight-grid-four {
-    grid-template-columns: repeat(4, 1fr)
-}
-
-.highlight-grid-four .experience-card {
-    min-height: 380px
-}
-
-.highlight-grid-four .experience-card h3 {
-    font-size: 29px
-}
-
 .next-chapter {
     padding-top: 10px;
     padding-bottom: 110px
@@ -712,14 +792,6 @@
 }
 
 @media(max-width:760px) {
-    .highlight-grid-four {
-        grid-template-columns: 1fr
-    }
-
-    .highlight-grid-four .experience-card {
-        min-height: 290px
-    }
-
     .next-chapter {
         padding-bottom: 80px
     }

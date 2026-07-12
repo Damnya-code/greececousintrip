@@ -296,7 +296,8 @@
 .actions {
     display: flex;
     gap: .7rem;
-    flex-wrap: wrap
+    flex-wrap: wrap;
+    margin-top: 28px
 }
 
 .actions button {
@@ -675,4 +676,3 @@
     align-items: end;
     gap: 2rem
 }
-

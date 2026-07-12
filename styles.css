@@ -750,11 +750,27 @@ body {
 }
 
 .route-stops article {
+    position: relative;
     display: grid;
     grid-template-columns: 54px 1fr 1.3fr;
     align-items: center;
     padding: 17px 0;
     border-bottom: 1px solid var(--line)
+}
+
+.route-stop-hit {
+    position: absolute;
+    inset: 0;
+    z-index: 2
+}
+
+.route-stop-hit:focus-visible {
+    outline: 3px solid var(--coral);
+    outline-offset: -3px
+}
+
+.route-stops article:has(.route-stop-hit):hover {
+    background: rgba(25, 90, 112, .06)
 }
 
 .route-stops span,
@@ -1312,7 +1328,8 @@ dialog::backdrop {
     margin-bottom: 70px;
     background: var(--cream);
     overflow: visible;
-    box-shadow: 0 18px 50px rgba(23, 35, 59, .09)
+    box-shadow: 0 18px 50px rgba(23, 35, 59, .09);
+    scroll-margin-top: 32px
 }
 
 .journey-card:last-child {
@@ -1430,6 +1447,12 @@ dialog::backdrop {
 
 .journey-copy>a:hover span {
     transform: translateX(5px)
+}
+
+.journey-copy>.journey-log-link {
+    margin-left: 16px;
+    color: var(--coral);
+    border-bottom-color: var(--coral)
 }
 
 .journey-card:nth-child(even) {

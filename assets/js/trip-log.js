@@ -24,6 +24,18 @@
       link.textContent = "Travel Log";
       nav.append(link);
     }
+    document.querySelectorAll(".journey-card[data-trip-day]").forEach((card) => {
+      const cardDayId = card.dataset.tripDay;
+      if (!index.days[cardDayId]?.published || card.querySelector("[data-card-travel-log]")) return;
+      const exploreLink = card.querySelector(".journey-copy > a");
+      if (!exploreLink || !paths[cardDayId]) return;
+      const logLink = document.createElement("a");
+      logLink.dataset.cardTravelLog = "";
+      logLink.className = "journey-log-link";
+      logLink.href = `days/${paths[cardDayId]}#travel-log`;
+      logLink.innerHTML = "Travel Log <span>→</span>";
+      exploreLink.after(logLink);
+    });
     return;
   }
 
@@ -66,7 +78,7 @@
     button.id = index ? "travel-log-tab" : "plan-tab";
     button.setAttribute("role", "tab");
     button.setAttribute("aria-controls", index ? "travel-log-view" : "plan-view");
-    button.innerHTML += `<small>${index ? "What actually happened" : "What we expected"}</small>`;
+    //button.innerHTML += `<small>${index ? "What actually happened" : "What we expected"}</small>`;
   });
   tabs.append(planButton, logButton);
 
