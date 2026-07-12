@@ -513,11 +513,6 @@ html[data-theme="dark"] {
     background: #e5eeeb
 }
 
-.practical-grid {
-    display: grid;
-    grid-template-columns: .75fr 1.25fr;
-    gap: 100px
-}
 
 .practical-list {
     display: grid;
@@ -558,136 +553,6 @@ html[data-theme="dark"] {
     margin: 0
 }
 
-.day-section:has(>.day-disclosure),
-.night-crossing:has(>.day-disclosure),
-.island-route:has(>.day-disclosure),
-.santorini-gallery:has(>.day-disclosure) {
-    padding-top: 0;
-    padding-bottom: 0
-}
-
-.day-disclosure {
-    border-top: 1px solid color-mix(in srgb, var(--day-navy) 24%, transparent)
-}
-
-.day-disclosure>summary {
-    position: relative;
-    display: grid;
-    grid-template-columns: 160px minmax(0, 1fr) 34px;
-    align-items: center;
-    gap: 24px;
-    width: min(100%, 1180px);
-    margin: auto;
-    padding: 30px 34px;
-    cursor: pointer;
-    list-style: none
-}
-
-.day-disclosure>summary::-webkit-details-marker,
-.stop-disclosure>summary::-webkit-details-marker {
-    display: none
-}
-
-.day-disclosure>summary span,
-.stop-disclosure>summary {
-    color: var(--day-gold);
-    font: 500 10px "DM Mono";
-    letter-spacing: .1em;
-    text-transform: uppercase
-}
-
-.day-disclosure>summary strong {
-    overflow: hidden;
-    font: 600 clamp(24px, 3vw, 38px)/1.05 "Playfair Display";
-    text-overflow: ellipsis;
-    white-space: nowrap
-}
-
-.day-disclosure>summary i {
-    position: relative;
-    width: 28px;
-    height: 28px;
-    border: 1px solid color-mix(in srgb, var(--day-navy) 30%, transparent);
-    border-radius: 50%
-}
-
-.day-disclosure>summary i::before,
-.day-disclosure>summary i::after {
-    content: "";
-    position: absolute;
-    left: 8px;
-    right: 8px;
-    top: 13px;
-    height: 1px;
-    background: currentColor;
-    transition: transform .25s ease
-}
-
-.day-disclosure>summary i::after {
-    transform: rotate(90deg)
-}
-
-.day-disclosure[open]>summary i::after {
-    transform: rotate(0)
-}
-
-.day-disclosure>summary:hover,
-.day-disclosure>summary:focus-visible {
-    background: color-mix(in srgb, var(--day-gold) 10%, transparent)
-}
-
-.day-disclosure>summary:focus,
-.day-disclosure>summary:focus-visible,
-.day-disclosure>summary.has-focus,
-.stop-disclosure>summary:focus,
-.stop-disclosure>summary:focus-visible,
-.stop-disclosure>summary.has-focus {
-    outline: 3px solid var(--day-gold);
-    outline-offset: -3px;
-    box-shadow: inset 0 0 0 3px var(--day-gold)
-}
-
-.day-disclosure-content {
-    animation: disclosure-in .3s ease both
-}
-
-.taste .day-disclosure-content {
-    display: grid;
-    grid-template-columns: .55fr 1.45fr;
-    gap: 80px;
-    width: min(100%, 1180px);
-    margin: auto;
-    padding: 70px 34px 95px
-}
-
-.stop-disclosure {
-    margin-top: 11px
-}
-
-.stop-disclosure>summary {
-    width: max-content;
-    cursor: pointer;
-    list-style: none;
-    border-bottom: 1px solid currentColor
-}
-
-.stop-disclosure>summary::after {
-    content: "+";
-    margin-left: 7px
-}
-
-.stop-disclosure[open]>summary::after {
-    content: "−"
-}
-
-.stop-disclosure>p {
-    margin-top: 10px
-}
-
-@keyframes disclosure-in {
-    from { opacity: 0; transform: translateY(-6px) }
-    to { opacity: 1; transform: none }
-}
 
 .route-overview {
     display: grid;
@@ -925,10 +790,10 @@ html[data-theme="dark"] {
         animation: none
     }
 
-    .day-disclosure>summary i::before,
+  /*   .day-disclosure>summary i::before,
     .day-disclosure>summary i::after {
         transition: none
-    }
+    } */
 }
 
 @media(max-width:760px) {
@@ -1010,11 +875,9 @@ html[data-theme="dark"] {
         font-size: 12px
     }
 
-    .day-section-heading {
-        margin-bottom: 35px
-    }
+   
 
-    .day-disclosure>summary {
+  /*   .day-disclosure>summary {
         grid-template-columns: 1fr 30px;
         gap: 12px;
         padding: 23px 20px
@@ -1040,7 +903,7 @@ html[data-theme="dark"] {
         gap: 30px;
         padding: 50px 20px 65px
     }
-
+ */
     .editorial-timeline li {
         grid-template-columns: 62px 1fr;
         gap: 14px;
@@ -1991,4 +1854,595 @@ html[data-theme="dark"] {
 [data-theme="dark"] .day-page .day-highlights .experience-card {
     border-color: #3a4c5f;
     color: #f2f6fa
+}
+
+/* =========================================================
+   DAY GUIDE CAPSULES
+   ========================================================= */
+
+:root {
+    --day-tabs-surface: rgba(248, 244, 233, 0.94);
+    --day-tab-surface: rgba(255, 250, 240, 0.82);
+    --day-tab-border: rgba(16, 29, 49, 0.18);
+    --day-tab-text: var(--day-navy);
+    --day-tab-muted: #716f68;
+    --day-tab-hover: #eee3d2;
+}
+
+html[data-theme="dark"] {
+    --day-tabs-surface: rgba(16, 25, 35, 0.95);
+    --day-tab-surface: rgba(24, 37, 53, 0.9);
+    --day-tab-border: rgba(231, 237, 244, 0.16);
+    --day-tab-text: #e7edf4;
+    --day-tab-muted: #aebbc7;
+    --day-tab-hover: #213244;
+}
+
+.day-switcher {
+    position: relative;
+    background: var(--day-ivory);
+}
+
+.day-tabbar-wrap {
+    position: sticky;
+    top: 58px;
+    z-index: 24;
+
+    padding:
+        15px
+        max(34px, calc((100vw - 1212px) / 2 + 34px));
+
+    border-top: 1px solid var(--day-tab-border);
+    border-bottom: 1px solid var(--day-tab-border);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--day-tabs-surface),
+            color-mix(
+                in srgb,
+                var(--day-tabs-surface) 88%,
+                transparent
+            )
+        );
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 12px 30px rgba(16, 29, 49, 0.07);
+}
+
+.day-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+
+    width: min(1120px, 100%);
+    margin: 0 auto;
+}
+
+.day-tab {
+    position: relative;
+    isolation: isolate;
+
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 3px;
+
+    min-width: 0;
+    min-height: 64px;
+    padding: 10px 18px 11px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--day-tab-border);
+    border-radius: 999px;
+
+    background: var(--day-tab-surface);
+    color: var(--day-tab-text);
+
+    text-align: left;
+    cursor: pointer;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+    transition:
+        transform 0.24s ease,
+        border-color 0.24s ease,
+        background-color 0.24s ease,
+        color 0.24s ease,
+        box-shadow 0.24s ease;
+}
+
+.day-tab::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background:
+        radial-gradient(
+            circle at 18% 10%,
+            rgba(255, 255, 255, 0.34),
+            transparent 38%
+        ),
+        linear-gradient(
+            135deg,
+            var(--coral) 0%,
+            #ec9670 48%,
+            #e6bd72 100%
+        );
+
+    opacity: 0;
+
+    transition: opacity 0.25s ease;
+}
+
+.day-tab::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -55%;
+
+    width: 34%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.34),
+            transparent
+        );
+
+    opacity: 0;
+    transform: skewX(-18deg);
+
+    transition:
+        left 0.52s ease,
+        opacity 0.18s ease;
+}
+
+.day-tab small,
+.day-tab strong {
+    position: relative;
+    z-index: 2;
+}
+
+.day-tab small {
+    color: var(--day-tab-muted);
+
+    font: 500 9px "DM Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    transition: color 0.24s ease;
+}
+
+.day-tab strong {
+    overflow: hidden;
+
+    max-width: 100%;
+
+    font: 600 16px "Playfair Display", serif;
+    line-height: 1.1;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.day-tab:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--day-gold) 68%,
+            transparent
+        );
+
+    background: var(--day-tab-hover);
+
+    box-shadow:
+        0 9px 20px rgba(16, 29, 49, 0.11),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.day-tab[aria-selected="true"] {
+    transform: translateY(-1px);
+
+    border-color: transparent;
+    color: white;
+
+    box-shadow:
+        0 10px 25px rgba(223, 121, 92, 0.27),
+        0 3px 8px rgba(16, 29, 49, 0.13),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.day-tab[aria-selected="true"]::before {
+    opacity: 1;
+}
+
+.day-tab[aria-selected="true"] small {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.day-tab[aria-selected="true"]:hover::after,
+.day-tab[aria-selected="true"]:focus-visible::after {
+    left: 125%;
+    opacity: 1;
+}
+
+.day-tab:focus-visible {
+    outline: 3px solid var(--day-gold);
+    outline-offset: 3px;
+}
+
+.day-panel[hidden] {
+    display: none !important;
+}
+
+.day-panel:not([hidden]) {
+    animation: day-panel-enter 0.38s cubic-bezier(.2, .7, .2, 1) both;
+}
+
+.day-panel {
+    scroll-margin-top: 150px;
+}
+
+/* Keep the itinerary visually connected. */
+.day-panel-itinerary .route-overview {
+    padding-top: 30px;
+}
+
+/* Prevent anchor targets from hiding beneath both sticky bars. */
+.day-switcher section[id],
+.day-switcher .day-panel[id] {
+    scroll-margin-top: 150px;
+}
+
+@keyframes day-panel-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .day-tabbar-wrap {
+        top: 58px;
+        padding: 11px 20px;
+    }
+
+    .day-tabs {
+        display: flex;
+        gap: 8px;
+
+        width: 100%;
+        overflow-x: auto;
+
+        padding: 2px 1px 5px;
+
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+        overscroll-behavior-inline: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .day-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .day-tab {
+        flex: 0 0 auto;
+
+        min-width: 142px;
+        min-height: 58px;
+        padding: 9px 16px;
+
+        scroll-snap-align: start;
+    }
+
+    .day-tab strong {
+        font-size: 15px;
+    }
+
+    .day-tab small {
+        font-size: 8px;
+    }
+
+    .day-panel,
+    .day-switcher section[id] {
+        scroll-margin-top: 138px;
+    }
+
+    .day-panel-itinerary .route-overview {
+        padding-top: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .day-tab,
+    .day-tab::before,
+    .day-tab::after {
+        transition: none;
+    }
+
+    .day-panel:not([hidden]) {
+        animation: none;
+    }
+}
+
+/* Compact day panels after removing the visible headings */
+
+.day-panel .day-section {
+    padding-top: 70px;
+    padding-bottom: 82px;
+}
+
+/* Remove spacing from headings whose content was deleted. */
+.day-panel .day-section-heading:not(:has(*)) {
+    display: none;
+}
+
+/* Keep a small gap when only an eyebrow remains. */
+.day-panel .day-section-heading:not(:has(h2)) {
+    margin-bottom: 22px;
+}
+
+/* The route is the second part of the itinerary panel. */
+.day-panel-itinerary .route-overview {
+    padding-top: 24px;
+}
+
+
+/* Centre and enlarge the Essentials content. */
+
+.day-panel-essentials .practical-grid {
+    display: block;
+    width: min(960px, calc(100% - 68px));
+    margin-inline: auto;
+}
+
+.day-panel-essentials .practical-list {
+    width: 100%;
+}
+
+/* With an odd number of cards, let the final card use the full row. */
+.day-panel-essentials .practical-list article:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    border-right: 0;
+}
+
+
+@media (max-width: 760px) {
+    .day-tabbar-wrap {
+        top: 58px;
+        padding: 10px 20px 12px;
+    }
+
+    .day-tabs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+
+        width: 100%;
+        overflow: visible;
+        padding: 0;
+    }
+
+    .day-tab {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 9px 12px;
+
+        justify-items: center;
+        text-align: center;
+    }
+
+    .day-tab strong {
+        max-width: 100%;
+        font-size: 14px;
+        line-height: 1.15;
+        white-space: normal;
+        text-overflow: initial;
+    }
+}
+
+/* Keep the page width stable while switching panels. */
+
+html {
+    scrollbar-gutter: stable;
+}
+
+@supports not (scrollbar-gutter: stable) {
+    html {
+        overflow-y: scroll;
+    }
+}
+
+.day-panels,
+.day-panel {
+    width: 100%;
+    min-width: 0;
+}
+
+.day-panel {
+    overflow-x: clip;
+}
+
+/* More compact highlight cards */
+
+.highlight-grid {
+    gap: 12px;
+}
+
+.experience-card {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 10px;
+
+    min-height: 230px;
+    padding: 24px;
+
+    border-radius: 4px;
+}
+
+.experience-card > span {
+    margin: 0;
+
+    font-size: 9px;
+    letter-spacing: 0.09em;
+}
+
+.experience-card h3 {
+    margin: 0;
+
+    font-size: clamp(24px, 2.4vw, 30px);
+    line-height: 1.08;
+}
+
+.experience-card p {
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.experience-card a {
+    margin-top: 8px;
+
+    font-size: 12px;
+}
+
+@media (max-width: 760px) {
+    .highlight-grid {
+        gap: 10px;
+    }
+
+    .experience-card {
+        min-height: 0;
+        padding: 20px;
+        gap: 8px;
+    }
+
+    .experience-card h3 {
+        font-size: 24px;
+    }
+
+    .experience-card p {
+        font-size: 13px;
+    }
+
+    .experience-card a {
+        margin-top: 6px;
+    }
+}
+
+/* Compact static route overview */
+
+.route-overview {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.75fr);
+    gap: 56px;
+
+    padding-top: 64px;
+    padding-bottom: 68px;
+}
+
+.route-overview h2.eyebrow {
+    margin: 0 0 14px;
+
+    color: var(--day-gold);
+    font: 500 10px/1.4 "DM Mono", monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.route-overview > div > p:not(.eyebrow) {
+    max-width: 520px;
+    margin: 0;
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.route-action {
+    margin-top: 16px;
+    font-size: 12px;
+}
+
+.route-list {
+    align-self: center;
+    margin: 0;
+}
+
+.route-list li {
+    padding: 13px 0;
+
+    font-size: 19px;
+    line-height: 1.2;
+}
+
+.route-list span {
+    width: 40px;
+    font-size: 9px;
+}
+
+@media (max-width: 760px) {
+    .route-overview {
+        grid-template-columns: 1fr;
+        gap: 28px;
+
+        padding-top: 48px;
+        padding-bottom: 52px;
+    }
+
+    .route-overview h2.eyebrow {
+        margin-bottom: 10px;
+    }
+
+    .route-overview > div > p:not(.eyebrow) {
+        font-size: 14px;
+        line-height: 1.55;
+    }
+
+    .route-action {
+        margin-top: 13px;
+    }
+
+    .route-list li {
+        padding: 11px 0;
+        font-size: 18px;
+    }
+}
+
+/* Hide the fixed topic links while the actual capsule bar is visible. */
+.day-nav > nav {
+    transition:
+        opacity 0.22s ease,
+        visibility 0.22s ease,
+        transform 0.22s ease;
+}
+
+.day-nav.day-tabs-in-view > nav {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .day-nav > nav {
+        transition: none;
+    }
 }

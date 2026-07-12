@@ -23,9 +23,10 @@
   <header class="nav day-nav">
     <a class="logo" href="../index.html">Aegean <i>Odyssey</i></a>
     <nav aria-label="Day page navigation">
-      <a href="#schedule">Timeline</a>
-      <a href="#highlights">Highlights</a>
-      <a href="#practical">Practical</a>
+      <a href="#panel-itinerary">Itinerary</a>
+      <a href="#panel-highlights">Highlights</a>
+      <a href="#panel-food">Food</a>
+      <a href="#panel-essentials">Essentials</a>
     </nav>
     <a class="nav-button nav-link-button" href="../index.html#itinerary">All days</a>
   </header>
@@ -51,11 +52,16 @@
       </div>
     </section>
 
-    <section id="schedule" class="day-section day-container" aria-labelledby="schedule-title">
-      <header class="day-section-heading reveal">
-
-        <h2 id="schedule-title">One island.<br>Two bases.</h2>
-      </header>
+    <section class="day-switcher" aria-label="Explore this day">
+      <div class="day-tabbar-wrap"><div class="day-tabs" role="tablist" aria-label="Day guide sections" aria-orientation="horizontal">
+        <button id="day-tab-itinerary" class="day-tab" type="button" role="tab" aria-selected="true" aria-controls="panel-itinerary" tabindex="0"><strong>Itinerary</strong></button>
+        <button id="day-tab-highlights" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-highlights" tabindex="-1"><strong>Highlights</strong></button>
+        <button id="day-tab-food" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-food" tabindex="-1"><strong>Food recommendation</strong></button>
+        <button id="day-tab-essentials" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-essentials" tabindex="-1"><strong>Essentials</strong></button>
+      </div></div>
+      <div class="day-panels">
+        <div id="panel-itinerary" class="day-panel day-panel-itinerary" role="tabpanel" aria-labelledby="day-tab-itinerary">
+    <section id="schedule" class="day-section day-container" aria-label="Itinerary">
       <ol class="editorial-timeline">
         <li class="reveal"><time datetime="2026-10-14T09:00">09:00</time>
           <div><span>01 / Check out</span>
@@ -129,11 +135,10 @@
       </ol>
     </section>
 
-    <section id="highlights" class="day-section day-highlights" aria-labelledby="highlights-title">
+        </div>
+        <div id="panel-highlights" class="day-panel day-panel-highlights" role="tabpanel" aria-labelledby="day-tab-highlights" hidden>
+    <section id="highlights" class="day-section day-highlights" aria-label="Highlights">
       <div class="day-container">
-        <header class="day-section-heading reveal">
-          <h2 id="highlights-title">Highlights.</h2>
-        </header>
         <div class="highlight-grid">
           <article class="experience-card experience-card-featured reveal"><span>Rethymno</span>
             <h3>Venetian alleys</h3>
@@ -155,12 +160,24 @@
       </div>
     </section>
 
-    <section class="day-section taste day-container reveal" aria-labelledby="taste-title">
+    <section class="island-route day-container reveal" aria-labelledby="island-route-title">
+      <p class="eyebrow">West to east</p>
+      <h2 id="island-route-title" class="sr-only">Route across Crete</h2>
+      <div class="island-route-track" aria-hidden="true"><span></span></div>
+      <ol>
+        <li><strong>Chania</strong><small>Morning</small></li>
+        <li><strong>Rethymno</strong><small>Midday</small></li>
+        <li><strong>Heraklion</strong><small>Evening</small></li>
+      </ol>
+    </section>
+
+        </div>
+        <div id="panel-food" class="day-panel day-panel-food" role="tabpanel" aria-labelledby="day-tab-food" hidden>
+    <section class="day-section taste day-container reveal" aria-label="Food recommendation">
       <div class="taste-label">
-        <p class="eyebrow">Taste of the day</p><span>ΚΡΗΤΗ</span>
+        <span>ΚΡΗΤΗ</span>
       </div>
       <div class="taste-copy">
-        <h2 id="taste-title">Crete,<br><em>from the farm.</em></h2>
         <figure class="taste-image"><img src="../assets/days/food/day-05-farm-table.png"
             alt="Cretan farm-to-table spread with vegetables, pulses, cheeses, herbs and slow-cooked meat"
             loading="lazy" width="1536" height="1024"></figure>
@@ -184,12 +201,10 @@
       </div>
     </section>
 
-    <section id="practical" class="day-section practical" aria-labelledby="practical-title">
+        </div>
+        <div id="panel-essentials" class="day-panel day-panel-essentials" role="tabpanel" aria-labelledby="day-tab-essentials" hidden>
+    <section id="practical" class="day-section practical" aria-label="Essentials">
       <div class="day-container practical-grid">
-        <header class="day-section-heading reveal">
-          <p class="eyebrow">Know before you go</p>
-          <h2 id="practical-title">Essentials.</h2>
-        </header>
         <div class="practical-list reveal">
           <article><span>Rental car</span><strong>Confirm one-way return</strong>
             <p>Verify the Heraklion Airport drop-off location, opening procedure and any one-way fee in writing.</p>
@@ -204,10 +219,13 @@
       </div>
     </section>
 
+        </div>
+      </div>
+    </section>
+
     <section class="day-section route-overview day-container reveal" aria-labelledby="route-title">
       <div>
-        <p class="eyebrow">Location overview</p>
-        <h2 id="route-title">The island,<br>west to east.</h2>
+        <h2 id="route-title" class="eyebrow">Location overview</h2>
         <p>Chania and Heraklion are connected by the north-coast road, with Rethymno almost exactly where a good lunch
           stop should be. Driving times remain traffic-dependent.</p><a class="route-action"
           href="https://www.google.com/maps/dir/?api=1&origin=Chania&destination=Heraklion&waypoints=Rethymno">Open the
@@ -217,17 +235,6 @@
         <li><span>01</span>Chania · Morning</li>
         <li><span>02</span>Rethymno · Midday</li>
         <li><span>03</span>Heraklion · Evening</li>
-      </ol>
-    </section>
-
-    <section class="island-route day-container reveal" aria-labelledby="island-route-title">
-      <p class="eyebrow">West to east</p>
-      <h2 id="island-route-title" class="sr-only">Route across Crete</h2>
-      <div class="island-route-track" aria-hidden="true"><span></span></div>
-      <ol>
-        <li><strong>Chania</strong><small>Morning</small></li>
-        <li><strong>Rethymno</strong><small>Midday</small></li>
-        <li><strong>Heraklion</strong><small>Evening</small></li>
       </ol>
     </section>
 

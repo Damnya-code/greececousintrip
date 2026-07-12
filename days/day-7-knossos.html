@@ -24,9 +24,10 @@
   <header class="nav day-nav">
     <a class="logo" href="../index.html">Aegean <i>Odyssey</i></a>
     <nav aria-label="Day page navigation">
-      <a href="#schedule">Timeline</a>
-      <a href="#highlights">Highlights</a>
-      <a href="#practical">Practical</a>
+      <a href="#panel-itinerary">Itinerary</a>
+      <a href="#panel-highlights">Highlights</a>
+      <a href="#panel-food">Food</a>
+      <a href="#panel-essentials">Essentials</a>
     </nav>
     <a class="nav-button nav-link-button" href="../index.html#itinerary">All days</a>
   </header>
@@ -53,11 +54,18 @@
       </div>
     </section>
 
-    <section id="schedule" class="day-section day-container" aria-labelledby="schedule-title">
-      <header class="day-section-heading reveal">
-
-        <h2 id="schedule-title">Knossos first.<br>Home by evening.</h2>
-      </header>
+    <section class="day-switcher" aria-label="Explore this day">
+      <div class="day-tabbar-wrap">
+        <div class="day-tabs" role="tablist" aria-label="Day guide sections" aria-orientation="horizontal">
+          <button id="day-tab-itinerary" class="day-tab" type="button" role="tab" aria-selected="true" aria-controls="panel-itinerary" tabindex="0"><strong>Itinerary</strong></button>
+          <button id="day-tab-highlights" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-highlights" tabindex="-1"><strong>Highlights</strong></button>
+          <button id="day-tab-food" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-food" tabindex="-1"><strong>Food recommendation</strong></button>
+          <button id="day-tab-essentials" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-essentials" tabindex="-1"><strong>Essentials</strong></button>
+        </div>
+      </div>
+      <div class="day-panels">
+        <div id="panel-itinerary" class="day-panel day-panel-itinerary" role="tabpanel" aria-labelledby="day-tab-itinerary">
+    <section id="schedule" class="day-section day-container" aria-label="Itinerary">
       <ol class="editorial-timeline">
         <li class="reveal"><time datetime="2026-10-16T09:00">Morning</time>
           <div><span>01 / South of town</span>
@@ -110,11 +118,11 @@
       </ol>
     </section>
 
-    <section id="highlights" class="day-section day-highlights" aria-labelledby="highlights-title">
+        </div>
+
+        <div id="panel-highlights" class="day-panel day-panel-highlights" role="tabpanel" aria-labelledby="day-tab-highlights" hidden>
+    <section id="highlights" class="day-section day-highlights" aria-label="Highlights">
       <div class="day-container">
-        <header class="day-section-heading reveal">
-          <h2 id="highlights-title">Highlights.</h2>
-        </header>
         <div class="highlight-grid">
           <article class="experience-card experience-card-featured reveal"><span>The site</span>
             <h3>Palace of Knossos</h3>
@@ -137,13 +145,14 @@
         </div>
       </div>
     </section>
+        </div>
 
-    <section class="day-section taste day-container reveal" aria-labelledby="taste-title">
+        <div id="panel-food" class="day-panel day-panel-food" role="tabpanel" aria-labelledby="day-tab-food" hidden>
+    <section class="day-section taste day-container reveal" aria-label="Food recommendation">
       <div class="taste-label">
-        <p class="eyebrow">Taste of the day</p><span>ΗΡΑΚΛΕΙΟ</span>
+        <span>ΗΡΑΚΛΕΙΟ</span>
       </div>
       <div class="taste-copy">
-        <h2 id="taste-title">Dakos for the table.<br><em>Greek coffee to finish.</em></h2>
         <figure class="taste-image"><img src="../assets/days/food/day-07-dakos.png"
             alt="Cretan dakos with tomato and mizithra beside grilled fish, vegetables and Greek coffee" loading="lazy"
             width="1536" height="1024"></figure>
@@ -166,13 +175,11 @@
         </dl>
       </div>
     </section>
+        </div>
 
-    <section id="practical" class="day-section practical" aria-labelledby="practical-title">
+        <div id="panel-essentials" class="day-panel day-panel-essentials" role="tabpanel" aria-labelledby="day-tab-essentials" hidden>
+    <section id="practical" class="day-section practical" aria-label="Essentials">
       <div class="day-container practical-grid">
-        <header class="day-section-heading reveal">
-          <p class="eyebrow">Know before you go</p>
-          <h2 id="practical-title">Essentials.</h2>
-        </header>
         <div class="practical-list reveal">
           <article><span>Car return</span><strong>Finish it on Friday</strong>
             <p>Confirm the return location, fuel policy and registered driver requirements before leaving for Knossos.
@@ -189,11 +196,13 @@
         </div>
       </div>
     </section>
+        </div>
+      </div>
+    </section>
 
     <section class="day-section route-overview day-container reveal" aria-labelledby="route-title">
       <div>
-        <p class="eyebrow">Location overview</p>
-        <h2 id="route-title">Knossos, lunch,<br>then the airport.</h2>
+        <h2 id="route-title" class="eyebrow">Location overview</h2>
         <p>Knossos lies south of central Heraklion; Lions Square brings the group back into town for lunch before the
           final drive east to the airport.</p><a class="route-action"
           href="https://www.google.com/maps/dir/?api=1&origin=Heraklion&destination=Heraklion+International+Airport&waypoints=Palace+of+Knossos%7CLions+Square+Heraklion">Open

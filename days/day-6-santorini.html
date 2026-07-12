@@ -23,9 +23,10 @@
   <header class="nav day-nav">
     <a class="logo" href="../index.html">Aegean <i>Odyssey</i></a>
     <nav aria-label="Day page navigation">
-      <a href="#schedule">Timeline</a>
-      <a href="#highlights">Highlights</a>
-      <a href="#practical">Practical</a>
+      <a href="#panel-itinerary">Itinerary</a>
+      <a href="#panel-highlights">Highlights</a>
+      <a href="#panel-food">Food</a>
+      <a href="#panel-essentials">Essentials</a>
     </nav>
     <a class="nav-button nav-link-button" href="../index.html#itinerary">All days</a>
   </header>
@@ -52,11 +53,18 @@
       </div>
     </section>
 
-    <section id="schedule" class="day-section day-container" aria-labelledby="schedule-title">
-      <header class="day-section-heading reveal">
-
-        <h2 id="schedule-title">Across the caldera.<br>Back to Crete.</h2>
-      </header>
+    <section class="day-switcher" aria-label="Explore this day">
+      <div class="day-tabbar-wrap">
+        <div class="day-tabs" role="tablist" aria-label="Day guide sections" aria-orientation="horizontal">
+          <button id="day-tab-itinerary" class="day-tab" type="button" role="tab" aria-selected="true" aria-controls="panel-itinerary" tabindex="0"><strong>Itinerary</strong></button>
+          <button id="day-tab-highlights" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-highlights" tabindex="-1"><strong>Highlights</strong></button>
+          <button id="day-tab-food" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-food" tabindex="-1"><strong>Food recommendation</strong></button>
+          <button id="day-tab-essentials" class="day-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-essentials" tabindex="-1"><strong>Essentials</strong></button>
+        </div>
+      </div>
+      <div class="day-panels">
+        <div id="panel-itinerary" class="day-panel day-panel-itinerary" role="tabpanel" aria-labelledby="day-tab-itinerary">
+    <section id="schedule" class="day-section day-container" aria-label="Itinerary">
       <ol class="editorial-timeline">
         <li class="reveal"><time>Early morning</time>
           <div><span>01 / Check in</span>
@@ -140,11 +148,11 @@
       </ol>
     </section>
 
-    <section id="highlights" class="day-section day-highlights" aria-labelledby="highlights-title">
+        </div>
+
+        <div id="panel-highlights" class="day-panel day-panel-highlights" role="tabpanel" aria-labelledby="day-tab-highlights" hidden>
+    <section id="highlights" class="day-section day-highlights" aria-label="Highlights">
       <div class="day-container">
-        <header class="day-section-heading reveal">
-          <h2 id="highlights-title">Highlights.</h2>
-        </header>
         <div class="highlight-grid">
           <article class="experience-card experience-card-featured reveal"><span>Oia</span>
             <h3>The blue domes</h3>
@@ -165,12 +173,34 @@
       </div>
     </section>
 
-    <section class="day-section taste day-container reveal" aria-labelledby="taste-title">
+    <section class="santorini-gallery day-container" aria-labelledby="gallery-title">
+      <header class="day-section-heading reveal">
+        <p class="eyebrow">Three perspectives</p>
+        <h2 id="gallery-title">Cliff, caldera<br>and table.</h2>
+      </header>
+      <div class="gallery-grid">
+        <figure class="gallery-tall reveal"><img src="../assets/days/day-06-santorini.webp"
+            alt="Blue-domed churches and white buildings overlooking Santorini’s caldera" loading="lazy">
+          <figcaption>Oia · Caldera rim</figcaption>
+        </figure>
+        <figure class="reveal"><img src="../assets/days/santorini-athinios.webp"
+            alt="A small ferry approaching Santorini beneath steep dark volcanic cliffs" loading="lazy">
+          <figcaption>Athinios · Sea level</figcaption>
+        </figure>
+        <figure class="reveal"><img src="../assets/days/santorini-fira.webp"
+            alt="A terrace lunch of local dishes overlooking the caldera near Fira" loading="lazy">
+          <figcaption>Fira · Lunch view</figcaption>
+        </figure>
+      </div>
+    </section>
+        </div>
+
+        <div id="panel-food" class="day-panel day-panel-food" role="tabpanel" aria-labelledby="day-tab-food" hidden>
+    <section class="day-section taste day-container reveal" aria-label="Food recommendation">
       <div class="taste-label">
-        <p class="eyebrow">Taste of the day</p><span>ΣΑΝΤΟΡΙΝΗ</span>
+        <span>ΣΑΝΤΟΡΙΝΗ</span>
       </div>
       <div class="taste-copy">
-        <h2 id="taste-title">Volcanic soil,<br><em>very good lunch.</em></h2>
         <figure class="taste-image"><img src="../assets/days/food/day-06-santorini-lunch.png"
             alt="Santorini lunch of tomato fritters, yellow fava, grilled seafood and Assyrtiko overlooking the caldera"
             loading="lazy" width="1536" height="1024"></figure>
@@ -193,13 +223,11 @@
         </dl>
       </div>
     </section>
+        </div>
 
-    <section id="practical" class="day-section practical" aria-labelledby="practical-title">
+        <div id="panel-essentials" class="day-panel day-panel-essentials" role="tabpanel" aria-labelledby="day-tab-essentials" hidden>
+    <section id="practical" class="day-section practical" aria-label="Essentials">
       <div class="day-container practical-grid">
-        <header class="day-section-heading reveal">
-          <p class="eyebrow">Know before you go</p>
-          <h2 id="practical-title">Essentials.</h2>
-        </header>
         <div class="practical-list reveal">
           <article class="status-note"><span>Schedule status</span><strong>Provisional</strong>
             <p>The day trip is part of the core plan. Exact ferry times, vessel and island transfers await the final
@@ -214,11 +242,13 @@
         </div>
       </div>
     </section>
+        </div>
+      </div>
+    </section>
 
     <section class="day-section route-overview day-container reveal" aria-labelledby="route-title">
       <div>
-        <p class="eyebrow">Location overview</p>
-        <h2 id="route-title">Port to Oia.<br>Oia to Fira.</h2>
+        <h2 id="route-title" class="eyebrow">Location overview</h2>
         <p>The island route starts below the cliffs at Athinios, climbs north to Oia, then returns south to Fira and the
           port. Transfer timings must work backward from the confirmed ferry.</p><a class="route-action"
           href="https://www.google.com/maps/dir/?api=1&origin=Athinios+Port+Santorini&destination=Athinios+Port+Santorini&waypoints=Oia+Santorini%7CFira+Santorini">Open
@@ -230,27 +260,6 @@
         <li><span>03</span>Fira</li>
         <li><span>04</span>Athinios Port</li>
       </ol>
-    </section>
-
-    <section class="santorini-gallery day-container" aria-labelledby="gallery-title">
-      <header class="day-section-heading reveal">
-        <p class="eyebrow">Three perspectives</p>
-        <h2 id="gallery-title">Cliff, caldera<br>and table.</h2>
-      </header>
-      <div class="gallery-grid">
-        <figure class="gallery-tall reveal"><img src="../assets/days/day-06-santorini.webp"
-            alt="Blue-domed churches and white buildings overlooking Santorini’s caldera" loading="lazy">
-          <figcaption>Oia · Caldera rim</figcaption>
-        </figure>
-        <figure class="reveal"><img src="../assets/days/santorini-athinios.webp"
-            alt="A small ferry approaching Santorini beneath steep dark volcanic cliffs" loading="lazy">
-          <figcaption>Athinios · Sea level</figcaption>
-        </figure>
-        <figure class="reveal"><img src="../assets/days/santorini-fira.webp"
-            alt="A terrace lunch of local dishes overlooking the caldera near Fira" loading="lazy">
-          <figcaption>Fira · Lunch view</figcaption>
-        </figure>
-      </div>
     </section>
 
     <nav class="day-pagination" aria-label="Day navigation">
