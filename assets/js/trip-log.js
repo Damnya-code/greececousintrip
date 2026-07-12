@@ -21,7 +21,7 @@
       const link = document.createElement("a");
       link.dataset.travelLogLink = "";
       link.href = `days/${paths[publishedDays[0][0]]}#travel-log`;
-      link.textContent = "Travel Log";
+      link.textContent = "Memories";
       nav.append(link);
     }
     document.querySelectorAll(".journey-card[data-trip-day]").forEach((card) => {
@@ -33,7 +33,7 @@
       logLink.dataset.cardTravelLog = "";
       logLink.className = "journey-log-link";
       logLink.href = `days/${paths[cardDayId]}#travel-log`;
-      logLink.innerHTML = "Travel Log <span>→</span>";
+      logLink.innerHTML = "Memories <span>→</span>";
       exploreLink.after(logLink);
     });
     return;
@@ -72,7 +72,7 @@
   tabs.setAttribute("role", "tablist");
   tabs.setAttribute("aria-label", "Choose day view");
   const planButton = make("button", "trip-view-tab", "The Plan");
-  const logButton = make("button", "trip-view-tab", "Travel Log");
+  const logButton = make("button", "trip-view-tab", "Memories");
   [planButton, logButton].forEach((button, index) => {
     button.type = "button";
     button.id = index ? "travel-log-tab" : "plan-tab";
@@ -95,7 +95,7 @@
   logView.tabIndex = 0;
 
   const intro = make("header", "trip-log-intro day-container");
-  intro.append(make("p", "eyebrow", "Travel log"));
+  intro.append(make("p", "eyebrow", "Memories"));
   if (hasText(day.actualTitle)) intro.append(make("h2", "", day.actualTitle));
   if (hasText(day.actualSubtitle)) intro.append(make("p", "trip-log-subtitle", day.actualSubtitle));
   if (hasText(day.actualSummary)) intro.append(make("p", "trip-log-summary", day.actualSummary));

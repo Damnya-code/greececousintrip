@@ -2152,3 +2152,21 @@ footer {
 [data-theme="dark"] .cards article:first-child { background:#17283a; color:#eef3f8 }
 [data-theme="dark"] .hero h1 em,
 [data-theme="dark"] .journey-copy h3 em { color:#8fcddd }
+[data-theme="dark"] .trip-essentials-link:hover,
+.trip-essentials-link:focus-visible {
+    color: #5093a3;
+}
+[data-theme="dark"] .booking-order:hover {
+    color: #5093a3;
+}
+
+.next-day a {
+    display: inline-block;
+    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.next-day a:hover {
+    transform: translateY(-1px);
+    color: #f2d28d;
+    border-color: currentColor;
+}
