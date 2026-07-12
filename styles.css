@@ -491,67 +491,6 @@ body {
     }
 }
 
-/* Final moonlight surfaces override component-level light palettes. */
-[data-theme="dark"] footer {
-    background: #08111d;
-    color: #e8eef5
-}
-
-[data-theme="dark"] .booking {
-    --booking-bg: #172536;
-    background: #172536;
-    color: #e8eef5
-}
-
-[data-theme="dark"] .booking .checklist,
-[data-theme="dark"] .booking .checklist li {
-    border-color: #405061
-}
-
-[data-theme="dark"] .booking .checklist small,
-[data-theme="dark"] .booking-copy p {
-    color: #aebac6
-}
-
-[data-theme="dark"] .sun {
-    background: radial-gradient(circle at 34% 28%, #fff 0%, #e2eaf2 46%, #9fb0c2 100%);
-    box-shadow: 0 20px 76px rgba(170, 207, 242, .34), inset 0 0 0 1px rgba(255, 255, 255, .5)
-}
-
-[data-theme="dark"] .sun::before {
-    background:
-        radial-gradient(circle at 70% 25%, rgba(72, 91, 112, .27) 0 3.5%, rgba(244, 248, 252, .2) 4% 4.8%, rgba(91, 109, 130, .18) 5.2% 6.8%, transparent 7.2%),
-        radial-gradient(circle at 30% 57%, rgba(78, 96, 116, .22) 0 5.5%, rgba(248, 250, 253, .18) 6% 7%, rgba(92, 110, 130, .14) 7.5% 9.3%, transparent 9.8%),
-        radial-gradient(circle at 49% 38%, rgba(76, 94, 115, .17) 0 2.2%, rgba(255, 255, 255, .14) 2.6% 3.4%, transparent 3.8%),
-        radial-gradient(circle at 78% 57%, rgba(72, 90, 111, .16) 0 2.8%, rgba(255, 255, 255, .13) 3.2% 4.1%, transparent 4.5%),
-        radial-gradient(circle at 42% 74%, rgba(83, 101, 121, .13) 0 3.5%, transparent 4.2%),
-        radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .14), transparent 34%)
-}
-
-[data-theme="dark"] .sun-ferry,
-[data-theme="dark"] .sun-ferry::before {
-    background: #182638
-}
-
-[data-theme="dark"] .sun-ferry {
-    filter: drop-shadow(0 3px 0 rgba(207, 225, 239, .18))
-}
-
-[data-theme="dark"] .sun-ferry::after {
-    background: #d9bf7b;
-    box-shadow: 7px 0 0 #d9bf7b, 14px 0 0 #d9bf7b
-}
-
-[data-theme="dark"] .cards article:first-child {
-    background: #17283a;
-    color: #eef3f8
-}
-
-[data-theme="dark"] .hero h1 em,
-[data-theme="dark"] .journey-copy h3 em {
-    color: #8fcddd
-}
-
 .nav {
     box-sizing: border-box;
     width: 100%;
@@ -743,18 +682,20 @@ body {
     background: #111e2d
 }
 
-[data-theme="dark"] footer {
-    border-color: #2b3a4b
-}
-
 [data-theme="dark"] .sun {
-    background: radial-gradient(circle at 34% 30%, #f4f7fb 0%, #cbd7e4 48%, #8395aa 100%);
-    box-shadow: 0 20px 72px rgba(151, 190, 231, .28), inset 0 0 0 1px rgba(255, 255, 255, .36);
+    background: radial-gradient(circle at 34% 28%, #fff 0%, #e2eaf2 46%, #9fb0c2 100%);
+    box-shadow: 0 20px 76px rgba(170, 207, 242, .34), inset 0 0 0 1px rgba(255, 255, 255, .5);
     animation: moon-glow-cycle 16s ease-in-out infinite
 }
 
 [data-theme="dark"] .sun::before {
-    background: radial-gradient(circle at 70% 25%, rgba(70, 88, 108, .2) 0 5%, transparent 6%), radial-gradient(circle at 30% 58%, rgba(66, 84, 103, .18) 0 8%, transparent 9%), radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .12), transparent 34%);
+    background:
+        radial-gradient(circle at 70% 25%, rgba(72, 91, 112, .27) 0 3.5%, rgba(244, 248, 252, .2) 4% 4.8%, rgba(91, 109, 130, .18) 5.2% 6.8%, transparent 7.2%),
+        radial-gradient(circle at 30% 57%, rgba(78, 96, 116, .22) 0 5.5%, rgba(248, 250, 253, .18) 6% 7%, rgba(92, 110, 130, .14) 7.5% 9.3%, transparent 9.8%),
+        radial-gradient(circle at 49% 38%, rgba(76, 94, 115, .17) 0 2.2%, rgba(255, 255, 255, .14) 2.6% 3.4%, transparent 3.8%),
+        radial-gradient(circle at 78% 57%, rgba(72, 90, 111, .16) 0 2.8%, rgba(255, 255, 255, .13) 3.2% 4.1%, transparent 4.5%),
+        radial-gradient(circle at 42% 74%, rgba(83, 101, 121, .13) 0 3.5%, transparent 4.2%),
+        radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .14), transparent 34%);
     mix-blend-mode: multiply;
     animation: moon-shade-cycle 16s ease-in-out infinite
 }
@@ -776,7 +717,16 @@ body {
 
 [data-theme="dark"] .sun-ferry,
 [data-theme="dark"] .sun-ferry::before {
-    background: #d6e0ea
+    background: #182638
+}
+
+[data-theme="dark"] .sun-ferry {
+    filter: drop-shadow(0 3px 0 rgba(207, 225, 239, .18))
+}
+
+[data-theme="dark"] .sun-ferry::after {
+    background: #d9bf7b;
+    box-shadow: 7px 0 0 #d9bf7b, 14px 0 0 #d9bf7b
 }
 
 @keyframes moon-glow-cycle {
@@ -1188,8 +1138,7 @@ body {
     background: rgba(25, 90, 112, .06)
 }
 
-.route-stops span,
-.card-number {
+.route-stops span {
     font: 500 11px "DM Mono";
     color: var(--coral)
 }
@@ -1318,57 +1267,6 @@ body {
     cursor: pointer
 }
 
-.playbook {
-    display: grid;
-    grid-template-columns: .75fr 1.25fr;
-    gap: 120px
-}
-
-.playbook-copy p:not(.eyebrow) {
-    line-height: 1.6;
-    max-width: 380px
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    align-items: start
-}
-
-.cards article {
-    min-height: 280px;
-    padding: 22px;
-    background: var(--ink);
-    color: white
-}
-
-.cards article:nth-child(2) {
-    background: var(--coral);
-    margin-top: 35px
-}
-
-.cards article:nth-child(3) {
-    background: var(--blue);
-    margin-top: 70px
-}
-
-.cards h3 {
-    font: 600 26px "Playfair Display";
-    margin: 47px 0 10px
-}
-
-.cards p {
-    font-size: 13px;
-    line-height: 1.55;
-    margin: 0;
-    opacity: .9
-}
-
-.cards .card-number {
-    color: var(--sand)
-}
-
 .booking {
     --booking-bg: #f3e8d1;
     display: grid;
@@ -1487,18 +1385,6 @@ dialog::backdrop {
 }
 
 @media(max-width:760px) {
-    .nav {
-        padding: 0 20px
-    }
-
-    .nav nav {
-        /* display: none */
-    }
-
-    .nav-button {
-        /* display: none */
-    }
-
     .hero {
         padding: 20px;
         margin: 15px auto 40px;
@@ -1541,7 +1427,6 @@ dialog::backdrop {
 
     .route,
     .itinerary,
-    .playbook,
     .booking {
         display: block
     }
@@ -1577,20 +1462,6 @@ dialog::backdrop {
 
     .map-link {
         grid-column: 2
-    }
-
-    .cards {
-        grid-template-columns: 1fr
-    }
-
-    .cards article,
-    .cards article:nth-child(n) {
-        min-height: 0;
-        margin: 0
-    }
-
-    .cards h3 {
-        margin-top: 25px
     }
 
     .checklist {
@@ -2155,31 +2026,6 @@ dialog::backdrop {
 }
 
 
-/* Mobile itinerary: one clean vertical sequence */
-/* @media (max-width: 760px) {
-    .journey-timeline {
-        display: flex;
-        flex-direction: column;
-        gap: 36px;
-        padding-left: 28px;
-    }
-
-    .journey-card,
-    .journey-card:nth-child(n) {
-        width: 100%;
-        min-height: 0;
-        margin: 0 !important;
-        transform: none !important;
-    }
-
-    .journey-ready .journey-card.journey-left,
-    .journey-ready .journey-card.journey-right,
-    .journey-ready .journey-card.journey-left.is-visible,
-    .journey-ready .journey-card.journey-right.is-visible {
-        transform: none !important;
-    }
-} */
-
 /* Responsive layout corrections */
 html,
 body {
@@ -2204,7 +2050,6 @@ footer {
 .hero-copy,
 .hero-art,
 .route>*,
-.playbook>*,
 .booking>* {
     min-width: 0;
 }
@@ -2213,7 +2058,6 @@ footer {
 
     .hero,
     .route,
-    .playbook,
     .booking {
         grid-template-columns: minmax(0, 1fr);
         gap: 48px;
@@ -2310,7 +2154,7 @@ footer {
 
 [data-theme="dark"] .booking {
     --booking-bg: #172536;
-    background: #172536;
+    background: linear-gradient(135deg, #1a3043, #0f273f, #1a3043);
     color: #e8eef5
 }
 
@@ -2322,40 +2166,6 @@ footer {
 [data-theme="dark"] .booking .checklist small,
 [data-theme="dark"] .booking-copy p {
     color: #aebac6
-}
-
-[data-theme="dark"] .sun {
-    background: radial-gradient(circle at 34% 28%, #fff 0%, #e2eaf2 46%, #9fb0c2 100%);
-    box-shadow: 0 20px 76px rgba(170, 207, 242, .34), inset 0 0 0 1px rgba(255, 255, 255, .5)
-}
-
-[data-theme="dark"] .sun::before {
-    background:
-        radial-gradient(circle at 70% 25%, rgba(72, 91, 112, .27) 0 3.5%, rgba(244, 248, 252, .2) 4% 4.8%, rgba(91, 109, 130, .18) 5.2% 6.8%, transparent 7.2%),
-        radial-gradient(circle at 30% 57%, rgba(78, 96, 116, .22) 0 5.5%, rgba(248, 250, 253, .18) 6% 7%, rgba(92, 110, 130, .14) 7.5% 9.3%, transparent 9.8%),
-        radial-gradient(circle at 49% 38%, rgba(76, 94, 115, .17) 0 2.2%, rgba(255, 255, 255, .14) 2.6% 3.4%, transparent 3.8%),
-        radial-gradient(circle at 78% 57%, rgba(72, 90, 111, .16) 0 2.8%, rgba(255, 255, 255, .13) 3.2% 4.1%, transparent 4.5%),
-        radial-gradient(circle at 42% 74%, rgba(83, 101, 121, .13) 0 3.5%, transparent 4.2%),
-        radial-gradient(circle at 62% 70%, rgba(255, 255, 255, .14), transparent 34%)
-}
-
-[data-theme="dark"] .sun-ferry,
-[data-theme="dark"] .sun-ferry::before {
-    background: #182638
-}
-
-[data-theme="dark"] .sun-ferry {
-    filter: drop-shadow(0 3px 0 rgba(207, 225, 239, .18))
-}
-
-[data-theme="dark"] .sun-ferry::after {
-    background: #d9bf7b;
-    box-shadow: 7px 0 0 #d9bf7b, 14px 0 0 #d9bf7b
-}
-
-[data-theme="dark"] .cards article:first-child {
-    background: #17283a;
-    color: #eef3f8
 }
 
 [data-theme="dark"] .hero h1 em,
@@ -2373,17 +2183,6 @@ footer {
 }
 
 [data-theme="dark"] .darkmode-text { color:#3a92c5 } 
-
-.next-day a {
-    display: inline-block;
-    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.next-day a:hover {
-    transform: translateY(-1px);
-    color: #f2d28d;
-    border-color: currentColor;
-}
 
 .booking {
     background:
@@ -2403,14 +2202,5 @@ footer {
             var(--coral),
             #ec9670 52%,
             #e6bd72
-        );
-}
-html[data-theme="dark"] .booking {
-    background:
-        linear-gradient(
-            135deg,
-            #1a3043,
-            #0f273f,
-            #1a3043
         );
 }
