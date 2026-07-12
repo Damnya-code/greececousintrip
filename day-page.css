@@ -112,8 +112,10 @@ html[data-theme="dark"] {
     color: white;
     top: 0;
     border-bottom-color: rgba(255, 255, 255, .2);
-    background: rgba(10, 23, 39, .72);
-    box-shadow: none
+    background: linear-gradient(135deg, rgba(5, 11, 18, .9), rgba(15, 31, 44, .84));
+    box-shadow: 0 8px 28px rgba(5, 14, 22, .16), inset 0 -1px rgba(255, 255, 255, .04);
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%)
 }
 
 .day-nav .logo,
@@ -123,7 +125,9 @@ html[data-theme="dark"] {
 
 .day-nav nav a:hover,
 .day-nav nav a:focus-visible {
-    background: rgba(255, 255, 255, .13)
+    border-color: rgba(255, 255, 255, .12);
+    background: linear-gradient(135deg, rgba(0, 0, 0, .14), rgba(255, 255, 255, .065));
+    box-shadow: 0 2px 7px rgba(0, 0, 0, .11)
 }
 
 .day-nav nav a+a::before {

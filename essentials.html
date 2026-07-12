@@ -29,7 +29,8 @@
                 <h1 style="scale: 0.5; margin: auto; margin-top: -100px  ">Trip essentials.</h1>
             </div>
             <figure><img src="assets/essentials-hero.webp"
-                    alt="Travel notebook, folded map, sunglasses, coffee, camera and car keys arranged on a light table" style="scale: 0.7; margin-bottom: -100px; margin-top: -100px  ">
+                    alt="Travel notebook, folded map, sunglasses, coffee, camera and car keys arranged on a light table"
+                    style="scale: 0.7; margin-bottom: -100px; margin-top: -100px  ">
             </figure>
         </section>
 
@@ -58,37 +59,62 @@
             <div class="essentials-panels">
                 <section id="tools" class="essentials-section tools essentials-panel" role="tabpanel"
                     aria-labelledby="tab-tools">
-                    <header class="section-heading">
-                        <p class="eyebrow darkmode-text">Useful on the road</p>
-                    </header>
-                    <div class="tool-grid">
-                        <article>
-                            <h3>Maps</h3>
-                            <p>Directions, saved places and downloaded areas.</p><a href="https://www.google.com/maps"
-                                target="_blank" rel="noopener">Open Maps<span class="sr-only">, new tab</span></a>
-                        </article>
-                        <article>
-                            <h3>Weather</h3>
-                            <p>Use the final official forecast before coastal drives and ferry days.</p><span>Link added
-                                during
-                                final travel check</span>
-                        </article>
-                        <article>
-                            <h3>Ferry operator</h3>
-                            <p>Schedules, check-in and disruption updates.</p><span>Link added after booking</span>
-                        </article>
-                        <article>
-                            <h3>Airlines</h3>
-                            <p>Check-in, baggage and flight status.</p><span>Link added after booking</span>
-                        </article>
-                        <article>
-                            <h3>Rental-car company</h3>
-                            <p>Pickup, return and roadside assistance.</p><span>Link added after booking</span>
-                        </article>
-                        <article>
-                            <h3>Accommodation details</h3>
-                            <p>Addresses, check-in notes and host contact.</p><span>Link added after booking</span>
-                        </article>
+                    <div class="trip-toolkit" data-trip-toolkit>
+                        <header class="toolkit-intro">
+                            <div><p class="eyebrow">Trip toolkit</p></div>
+                        </header>
+
+                        <div class="toolkit-tabs" role="tablist" aria-label="Trip toolkit modes">
+                            <button id="tool-tab-maps" type="button" role="tab" aria-selected="true" aria-controls="tool-panel-maps" tabindex="0">Maps</button>
+                            <button id="tool-tab-weather" type="button" role="tab" aria-selected="false" aria-controls="tool-panel-weather" tabindex="-1">Weather</button>
+                            <button id="tool-tab-translate" type="button" role="tab" aria-selected="false" aria-controls="tool-panel-translate" tabindex="-1">Translate</button>
+                            <button id="tool-tab-scanner" type="button" role="tab" aria-selected="false" aria-controls="tool-panel-scanner" tabindex="-1">Photo scan</button>
+                        </div>
+
+                        <section id="tool-panel-maps" class="toolkit-panel" role="tabpanel" aria-labelledby="tool-tab-maps">
+                            <div class="toolkit-panel-head"><div><p class="eyebrow">Routes and places</p></div></div>
+                            <div class="toolkit-filter" id="map-filters" aria-label="Filter map routes"></div>
+                            <div class="map-tool-layout"><div id="map-results" class="map-tool-grid" aria-live="polite"></div><div class="map-preview"><iframe id="map-preview-frame" title="Map preview" src="https://www.google.com/maps?q=Athens%2C%20Greece&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe><p id="map-preview-caption">Athens · Day 1</p></div></div>
+                        </section>
+
+                        <section id="tool-panel-weather" class="toolkit-panel" role="tabpanel" aria-labelledby="tool-tab-weather" hidden>
+                            <div class="toolkit-panel-head"><div><p class="eyebrow">Live conditions</p></div></div>
+                            <div class="toolkit-filter" id="weather-locations" aria-label="Choose a weather location"></div>
+                            <div id="weather-status" class="tool-status" role="status" aria-live="polite"></div>
+                            <div id="weather-result" class="weather-result"></div>
+                        </section>
+
+                        <section id="tool-panel-translate" class="toolkit-panel" role="tabpanel" aria-labelledby="tool-tab-translate" hidden>
+                            <div class="toolkit-panel-head"><div><p class="eyebrow">Greek, quickly</p></div></div>
+                            <div class="translate-compose">
+                                <label class="sr-only" for="translate-source-language">Source language</label>
+                                <select id="translate-source-language"><option value="en">English</option><option value="de">German</option></select>
+                                <label class="sr-only" for="translate-input">Text to translate</label>
+                                <div class="translate-input-row"><textarea id="translate-input" rows="3" maxlength="500" placeholder="Type what you want to translate…"></textarea><button id="voice-input" class="icon-action" type="button" aria-label="Speak text" hidden>Mic</button></div>
+                                <p id="voice-status" class="tool-hint" aria-live="polite"></p>
+                                <div class="tool-actions"><a id="translate-external" class="tool-primary-action" href="https://translate.google.com/" target="_blank" rel="noopener">Open in Google Translate <span aria-hidden="true">↗</span><span class="sr-only">, new tab</span></a><button id="clear-translate" type="button">Clear</button></div>
+                            </div>
+
+                            <div class="phrasebook">
+                                <div class="phrasebook-controls"><label for="phrase-search">Search the phrasebook</label><input id="phrase-search" type="search" placeholder="Restaurant, ferry, thank you…"><div id="phrase-categories" class="toolkit-filter" aria-label="Phrase categories"></div></div>
+                                <div id="phrase-results" class="phrase-list" aria-live="polite"></div>
+                            </div>
+
+                        </section>
+
+                        <section id="tool-panel-scanner" class="toolkit-panel" role="tabpanel" aria-labelledby="tool-tab-scanner" hidden>
+                            <div class="toolkit-panel-head"><div><p class="eyebrow">Camera OCR</p></div></div>
+                            <div class="scanner-content">
+                                <label class="file-action" for="scanner-file">Choose or take a photo</label><input id="scanner-file" type="file" accept="image/*" capture="environment">
+                                <div id="scanner-preview-wrap" hidden><div class="scanner-workspace"><img id="scanner-preview" alt="Selected image preview"><div><label for="scanner-output">Detected text</label><textarea id="scanner-output" rows="8" placeholder="Detected text will appear here"></textarea></div></div><div class="tool-actions"><button id="scan-image" type="button">Read and prepare translation</button><button id="scanner-open-translate" type="button" hidden>Continue in Translate</button><button id="remove-image" type="button">Remove image</button></div></div>
+                                <p id="scanner-status" class="tool-hint" aria-live="polite"></p>
+                            </div>
+                        </section>
+
+                        <aside class="booking-tools" aria-label="Links added after booking">
+                            <div><p class="eyebrow">After booking</p></div>
+                            <ul><li><strong>Ferry operator</strong><span>Added after booking</span></li><li><strong>Airlines</strong><span>Added after booking</span></li><li><strong>Rental-car company</strong><span>Added after booking</span></li><li><strong>Accommodation details</strong><span>Added after booking</span></li></ul>
+                        </aside>
                     </div>
                 </section>
 
@@ -237,6 +263,7 @@
         <p>The practical stuff<br></p>
     </footer>
     <script src="essentials.js"></script>
+    <script src="assets/js/trip-toolkit.js"></script>
 </body>
 
 </html>

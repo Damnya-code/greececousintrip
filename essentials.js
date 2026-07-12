@@ -6,11 +6,11 @@
      */
     if (switcher) {
         const tabs = Array.from(
-            switcher.querySelectorAll('[role="tab"]')
+            switcher.querySelectorAll('.essentials-tabs > [role="tab"]')
         );
 
         const panels = Array.from(
-            switcher.querySelectorAll('[role="tabpanel"]')
+            switcher.querySelectorAll('.essentials-panels > [role="tabpanel"]')
         );
 
         const prefersReducedMotion = window.matchMedia(

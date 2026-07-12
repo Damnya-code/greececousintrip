@@ -505,12 +505,12 @@ body {
     top: 0;
     z-index: 20;
     border: 0;
-    border-bottom: 1px solid rgba(23, 35, 59, .12);
+    border-bottom: 1px solid rgba(255, 255, 255, .14);
     border-radius: 0;
-    background: rgba(247, 241, 229, .95);
-    box-shadow: none;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px)
+    background: linear-gradient(135deg, rgba(8, 14, 21, .9), rgba(20, 37, 49, .84));
+    box-shadow: 0 8px 28px rgba(5, 14, 22, .16), inset 0 -1px rgba(255, 255, 255, .04);
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%)
 }
 
 .logo {
@@ -518,7 +518,7 @@ body {
     font-weight: 700;
     letter-spacing: -1px;
     text-decoration: none;
-    color: var(--ink)
+    color: #f3f6f8
 }
 
 .logo i {
@@ -536,17 +536,31 @@ body {
 }
 
 .nav nav a,
-.text-link {
-    color: var(--ink);
+.nav .text-link {
+    color: #edf2f5;
     font-size: 14px;
     text-decoration: none
 }
 
 .nav nav a {
     position: relative;
+    isolation: isolate;
+    overflow: hidden;
     padding: 9px 13px;
+    border: 1px solid transparent;
     border-radius: 3px;
-    transition: transform .2s ease, background-color .2s ease, color .2s ease
+    transition: transform .22s ease, background-color .22s ease, border-color .22s ease, color .22s ease, box-shadow .22s ease
+}
+
+.nav nav a::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0 auto 0 -50%;
+    width: 34%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .045), transparent);
+    transform: skewX(-18deg);
+    transition: left .45s ease;
 }
 
 .nav nav a+a {
@@ -558,7 +572,7 @@ body {
     position: absolute;
     left: -7px;
     top: 50%;
-    color: rgba(23, 35, 59, .3);
+    color: rgba(237, 242, 245, .32);
     transform: translateY(-52%);
     pointer-events: none
 }
@@ -566,7 +580,14 @@ body {
 .nav nav a:hover,
 .nav nav a:focus-visible {
     transform: none;
-    background: rgba(23, 35, 59, .08)
+    border-color: rgba(255, 255, 255, .12);
+    background: linear-gradient(135deg, rgba(0, 0, 0, .12), rgba(255, 255, 255, .055));
+    box-shadow: 0 2px 7px rgba(0, 0, 0, .1)
+}
+
+.nav nav a:hover::after,
+.nav nav a:focus-visible::after {
+    left: 120%
 }
 
 .nav a:focus-visible {
@@ -618,9 +639,9 @@ body {
     width: 54px;
     height: 30px;
     padding: 2px;
-    border: 1px solid rgba(23, 35, 59, .22);
+    border: 1px solid rgba(255, 255, 255, .22);
     border-radius: 999px;
-    background: rgba(23, 35, 59, .08)
+    background: rgba(255, 255, 255, .08)
 }
 
 .theme-icon {
@@ -656,7 +677,7 @@ body {
 
 [data-theme="dark"] .nav {
     border-bottom-color: rgba(222, 232, 242, .14);
-    background: rgba(13, 22, 36, .95)
+    background: linear-gradient(135deg, rgba(5, 11, 18, .94), rgba(15, 31, 44, .9))
 }
 
 [data-theme="dark"] .nav nav a+a::before {
@@ -665,7 +686,7 @@ body {
 
 [data-theme="dark"] .nav nav a:hover,
 [data-theme="dark"] .nav nav a:focus-visible {
-    background: rgba(232, 238, 245, .1)
+    background: linear-gradient(135deg, rgba(0, 0, 0, .14), rgba(118, 165, 186, .07))
 }
 
 [data-theme="dark"] .journey-itinerary {
@@ -2137,6 +2158,7 @@ footer {
 @media (prefers-reduced-motion: reduce) {
 
     .nav nav a,
+    .nav nav a::after,
     .nav-button {
         transition: none
     }
