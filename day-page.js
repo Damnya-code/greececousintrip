@@ -37,7 +37,7 @@ const dayEnhancements = {
     map: { title: 'Western Crete', points: [['Chania', 35.5138, 24.0180, true], ['Topolia Gorge', 35.4130, 23.6820], ['Elafonisi', 35.2710, 23.5410], ['Chania return', 35.5138, 24.0180]] }
   },
   'day-05': {
-    phases: ['Morning', 'Eastbound', 'Late<br>morning', 'Before<br>lunch', 'Lunch', 'After-<br>noon', 'On<br>arrival', 'Late after-<br>noon', 'Evening'],
+    phases: ['Morning', 'East-<br>bound', 'Late<br>morning', 'Before<br>lunch', 'Lunch', 'After-<br>noon', 'On<br>arrival', 'Late after-<br>noon', 'Evening'],
     map: { title: 'Crete west to east', points: [['Chania', 35.5138, 24.0180], ['Rethymno', 35.3690, 24.4750], ['Heraklion', 35.3387, 25.1442, true], ['Koules Fortress', 35.3445, 25.1370]] }
   },
   'day-06': {
@@ -50,7 +50,6 @@ const dayEnhancements = {
 
 const currentDayId = document.body.dataset.tripDay;
 const currentEnhancement = dayEnhancements[currentDayId];
-
 if (currentEnhancement?.phases) {
   document.querySelectorAll('.editorial-timeline time').forEach((time, index) => {
     const label = currentEnhancement.phases[index];

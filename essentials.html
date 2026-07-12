@@ -20,8 +20,8 @@
     <div class="grain" aria-hidden="true"></div>
     <header class="nav essentials-nav"><a class="logo" href="index.html">Aegean <i>Odyssey</i></a>
         <nav aria-label="Main navigation"><a href="index.html#route">Route</a><a href="index.html#itinerary">Days</a><a
-                href="index.html#book">Plan</a><a href="#checklist">Essentials</a></nav><a
-            class="nav-button essentials-home" href="index.html">← Back</a>
+                href="index.html#book">Plan</a> <a class="nav-button essentials-home" href="index.html">← Return</a>
+        </nav>
     </header>
     <main>
         <section class="essentials-hero">
@@ -36,160 +36,208 @@
             </figure>
         </section>
 
-        <section class="essentials-section route-section" aria-labelledby="route-title">
-            <header class="section-heading">
-                <p class="eyebrow">Route at a glance</p>
-                <h2 id="route-title">One line through the trip.</h2>
-            </header>
-            <ol class="route-list">
-                <li><b>01</b>
-                    <div>
-                        <h3>Athens</h3>
-                        <p>Arrival, old-city walk and the Acropolis.</p><a href="days/day-1-athens-arrival.html">View
-                            Day 1</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Athens%2C%20Greece"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
+        <section class="essentials-switcher" aria-label="Trip essentials">
+            <div class="essentials-tabbar-wrap">
+                <div class="essentials-tabs" role="tablist" aria-label="Essentials categories">
+
+                    <button id="tab-tools" class="essentials-tab" type="button" role="tab" aria-selected="true"
+                        aria-controls="tools" tabindex="0">
+                        <span>Tools</span>
+                    </button>
+
+                    <button id="tab-checklist" class="essentials-tab" type="button" role="tab" aria-selected="false"
+                        aria-controls="checklist" tabindex="-1">
+                        <span>Checklist</span>
+                    </button>
+
+                    <button id="tab-route" class="essentials-tab" type="button" role="tab" aria-selected="false"
+                        aria-controls="route-overview" tabindex="-1">
+                        <span>Route overview</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="essentials-panels">
+                <section id="tools" class="essentials-section tools essentials-panel" role="tabpanel"
+                    aria-labelledby="tab-tools">
+                    <header class="section-heading">
+                        <p class="eyebrow darkmode-text">Useful on the road</p>
+                    </header>
+                    <div class="tool-grid">
+                        <article>
+                            <h3>Maps</h3>
+                            <p>Directions, saved places and downloaded areas.</p><a href="https://www.google.com/maps"
+                                target="_blank" rel="noopener">Open Maps<span class="sr-only">, new tab</span></a>
+                        </article>
+                        <article>
+                            <h3>Weather</h3>
+                            <p>Use the final official forecast before coastal drives and ferry days.</p><span>Link added
+                                during
+                                final travel check</span>
+                        </article>
+                        <article>
+                            <h3>Ferry operator</h3>
+                            <p>Schedules, check-in and disruption updates.</p><span>Link added after booking</span>
+                        </article>
+                        <article>
+                            <h3>Airlines</h3>
+                            <p>Check-in, baggage and flight status.</p><span>Link added after booking</span>
+                        </article>
+                        <article>
+                            <h3>Rental-car company</h3>
+                            <p>Pickup, return and roadside assistance.</p><span>Link added after booking</span>
+                        </article>
+                        <article>
+                            <h3>Accommodation details</h3>
+                            <p>Addresses, check-in notes and host contact.</p><span>Link added after booking</span>
+                        </article>
                     </div>
-                </li>
-                <li><b>02</b>
-                    <div>
-                        <h3>Piraeus / overnight ferry</h3>
-                        <p>Port connection and cabin crossing to Souda.</p><a
-                            href="days/day-2-acropolis-ferry.html">View Day 2</a><a
-                            href="https://www.google.com/maps/search/?api=1&amp;query=Port%20of%20Piraeus%2C%20Piraeus%2C%20Greece"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
+                </section>
+
+                <section id="route-overview" class="essentials-section route-section essentials-panel" role="tabpanel"
+                    aria-labelledby="tab-route">
+                    <header class="section-heading">
+                        <p class="eyebrow">Route at a glance</p>
+                    </header>
+                    <ol class="route-list">
+                        <li><b>01</b>
+                            <div>
+                                <h3>Athens</h3>
+                                <p>Arrival, old-city walk and the Acropolis.</p><a
+                                    href="days/day-1-athens-arrival.html">View
+                                    Day 1</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Athens%2C%20Greece"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>02</b>
+                            <div>
+                                <h3>Piraeus / overnight ferry</h3>
+                                <p>Port connection and cabin crossing to Souda.</p><a
+                                    href="days/day-2-acropolis-ferry.html">View Day 2</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Port%20of%20Piraeus%2C%20Piraeus%2C%20Greece"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>03</b>
+                            <div>
+                                <h3>Souda / Chania</h3>
+                                <p>Ferry arrival, car collection and Venetian harbour.</p><a
+                                    href="days/day-3-chania.html">View
+                                    Day 3</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Chania%2C%20Crete"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>04</b>
+                            <div>
+                                <h3>Elafonisi</h3>
+                                <p>West-coast excursion, returning to Chania.</p><a
+                                    href="days/day-4-elafonisi.html">View Day
+                                    4</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Elafonisi%2C%20Crete"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>05</b>
+                            <div>
+                                <h3>Rethymno</h3>
+                                <p>Fortezza stop on the drive east.</p><a href="days/day-5-rethymno-heraklion.html">View
+                                    Day
+                                    5</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Rethymno%2C%20Crete"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>06</b>
+                            <div>
+                                <h3>Heraklion</h3>
+                                <p>Central base for the final part of the trip.</p><a
+                                    href="days/day-5-rethymno-heraklion.html">View Day 5</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion%2C%20Crete"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>06</b>
+                            <div>
+                                <h3>Santorini</h3>
+                                <p>Provisional ferry day for Oia, Fira and the caldera.</p><a
+                                    href="days/day-6-santorini.html">View Day 6</a><a
+                                    href="https://www.google.com/maps/search/?api=1&amp;query=Santorini%2C%20Greece"
+                                    target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new
+                                        tab</span></a>
+                            </div>
+                        </li>
+                        <li><b>07</b>
+                            <div>
+                                <h3>Knossos / airport</h3>
+                                <p>Minoan history, a shared farewell and departures from Heraklion.</p><a
+                                    href="days/day-7-knossos.html">View Day 7</a>
+                            </div>
+                        </li>
+                    </ol>
+                </section>
+
+
+                <section id="checklist" class="essentials-section pack essentials-panel" role="tabpanel"
+                    aria-labelledby="tab-checklist">
+                    <header class="section-heading">
+                        <p class="eyebrow darkmode-text">Bring the essentials</p>
+                    </header>
+                    <div class="pack-grid">
+                        <fieldset>
+                            <legend class="legend-text">Documents</legend><label><input type="checkbox"
+                                    data-item="id">Passport or accepted travel
+                                ID</label><label><input type="checkbox" data-item="licence">Driving licence
+                            </label><label><input type="checkbox" data-item="stays">Flight
+                                confirmations & Accommodation details </label>
+                        </fieldset>
+                        <fieldset>
+                            <legend class="legend-text">Carry-on</legend><label><input type="checkbox"
+                                    data-item="phone">Phone and
+                                charger</label><label><input type="checkbox" data-item="power">Power
+                                bank</label><label><input type="checkbox" data-item="payment">Payment card and
+                                some cash</label>
+                        </fieldset>
+                        <fieldset>
+                            <legend class="legend-text">Clothing</legend><label><input type="checkbox"
+                                    data-item="swimwear">Swimwear</label><label><input type="checkbox"
+                                    data-item="warm">One warmer layer for evenings</label><label><input type="checkbox"
+                                    data-item="sun">Sun protection</label>
+                        </fieldset>
+                        <fieldset>
+                            <legend class="legend-text">Useful extras</legend><label><input type="checkbox"
+                                    data-item="car-charger">Car
+                                charger</label><label><input type="checkbox" data-item="first-aid">Basic first-aid
+                                items</label><label><input type="checkbox" data-item="adapter">Plug adapter where
+                                required</label>
+                        </fieldset>
                     </div>
-                </li>
-                <li><b>03</b>
-                    <div>
-                        <h3>Souda / Chania</h3>
-                        <p>Ferry arrival, car collection and Venetian harbour.</p><a href="days/day-3-chania.html">View
-                            Day 3</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Chania%2C%20Crete"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
+                    <div class="actions"><button id="clear-completed" type="button">Clear completed
+                            items</button><button id="reset-checklist" type="button">Reset checklist</button>
+                        <p id="checklist-feedback" aria-live="polite"></p>
                     </div>
-                </li>
-                <li><b>04</b>
-                    <div>
-                        <h3>Elafonisi</h3>
-                        <p>West-coast excursion, returning to Chania.</p><a href="days/day-4-elafonisi.html">View Day
-                            4</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Elafonisi%2C%20Crete"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
-                    </div>
-                </li>
-                <li><b>05</b>
-                    <div>
-                        <h3>Rethymno</h3>
-                        <p>Fortezza stop on the drive east.</p><a href="days/day-5-rethymno-heraklion.html">View Day
-                            5</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Rethymno%2C%20Crete"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
-                    </div>
-                </li>
-                <li><b>06</b>
-                    <div>
-                        <h3>Heraklion</h3>
-                        <p>Central base for the final part of the trip.</p><a
-                            href="days/day-5-rethymno-heraklion.html">View Day 5</a><a
-                            href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion%2C%20Crete"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
-                    </div>
-                </li>
-                <li><b>06</b>
-                    <div>
-                        <h3>Santorini</h3>
-                        <p>Provisional ferry day for Oia, Fira and the caldera.</p><a
-                            href="days/day-6-santorini.html">View Day 6</a><a
-                            href="https://www.google.com/maps/search/?api=1&amp;query=Santorini%2C%20Greece"
-                            target="_blank" rel="noopener">Open in Maps<span class="sr-only">, new tab</span></a>
-                    </div>
-                </li>
-                <li><b>07</b>
-                    <div>
-                        <h3>Knossos / airport</h3>
-                        <p>Minoan history, a shared farewell and departures from Heraklion.</p><a
-                            href="days/day-7-knossos.html">View Day 7</a>
-                    </div>
-                </li>
-            </ol>
+                </section>
+
+
+
+            </div>
         </section>
 
-        <section id="checklist" class="essentials-section pack" aria-labelledby="pack-title">
-            <header class="section-heading">
-                <p class="eyebrow darkmode-text">Bring the essentials</p>
-                <h2 id="pack-title">Pack the useful things.</h2>
-            </header>
-            <div class="pack-grid">
-                <fieldset>
-                    <legend class="legend-text">Documents</legend><label><input type="checkbox" data-item="id">Passport or accepted travel
-                        ID</label><label><input type="checkbox" data-item="confirmations">Flight and ferry
-                        confirmations</label><label><input type="checkbox" data-item="licence">Driving licence
-                        </label><label><input type="checkbox" data-item="stays">Accommodation details
-                        saved offline</label>
-                </fieldset>
-                <fieldset>
-                    <legend class="legend-text">Carry-on</legend><label><input type="checkbox" data-item="phone">Phone and
-                        charger</label><label><input type="checkbox" data-item="power">Power bank</label><label><input
-                            type="checkbox" data-item="medication">Required medication</label><label><input
-                            type="checkbox" data-item="payment">Payment card and some cash</label>
-                </fieldset>
-                <fieldset>
-                    <legend class="legend-text">Clothing</legend><label><input type="checkbox" data-item="shoes">Comfortable walking
-                        shoes</label><label><input type="checkbox" data-item="swimwear">Swimwear</label><label><input
-                            type="checkbox" data-item="warm">One warmer layer for evenings</label><label><input
-                            type="checkbox" data-item="sun">Sun protection</label>
-                </fieldset>
-                <fieldset>
-                    <legend class="legend-text">Useful extras</legend><label><input type="checkbox" data-item="car-charger">Car
-                        charger</label><label><input type="checkbox" data-item="first-aid">Basic first-aid
-                        items</label><label><input type="checkbox" data-item="umbrella">Compact
-                        bottle</label><label><input type="checkbox" data-item="adapter">Plug adapter where
-                        required</label>
-                </fieldset>
-            </div>
-            <div class="actions"><button id="clear-completed" type="button">Clear completed items</button><button
-                    id="reset-checklist" type="button">Reset checklist</button>
-                <p id="checklist-feedback" aria-live="polite"></p>
-            </div>
-        </section>
 
-        <section class="essentials-section tools" aria-labelledby="tools-title">
-            <header class="section-heading">
-                <p class="eyebrow darkmode-text">Useful on the road</p>
-                <h2 id="tools-title">Useful when plans meet reality.</h2>
-            </header>
-            <div class="tool-grid">
-                <article>
-                    <h3>Maps</h3>
-                    <p>Directions, saved places and downloaded areas.</p><a href="https://www.google.com/maps"
-                        target="_blank" rel="noopener">Open Maps<span class="sr-only">, new tab</span></a>
-                </article>
-                <article>
-                    <h3>Weather</h3>
-                    <p>Use the final official forecast before coastal drives and ferry days.</p><span>Link added during
-                        final travel check</span>
-                </article>
-                <article>
-                    <h3>Ferry operator</h3>
-                    <p>Schedules, check-in and disruption updates.</p><span>Link added after booking</span>
-                </article>
-                <article>
-                    <h3>Airlines</h3>
-                    <p>Check-in, baggage and flight status.</p><span>Link added after booking</span>
-                </article>
-                <article>
-                    <h3>Rental-car company</h3>
-                    <p>Pickup, return and roadside assistance.</p><span>Link added after booking</span>
-                </article>
-                <article>
-                    <h3>Accommodation details</h3>
-                    <p>Addresses, check-in notes and host contact.</p><span>Link added after booking</span>
-                </article>
-            </div>
-        </section>
     </main>
     <footer>
         <div><a class="logo" href="index.html">Aegean <i>Odyssey</i></a>
             <p>Greece, 10–16 October 2026</p>
         </div>
-        <p>The practical stuff<br><span>Saved locally. Packed sensibly.</span></p>
+        <p>The practical stuff<br></p>
     </footer>
     <script src="essentials.js"></script>
 </body>
