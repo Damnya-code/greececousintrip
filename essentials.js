@@ -81,11 +81,11 @@
                 activeTab.focus();
             }
 
-            activeTab.scrollIntoView({
-                behavior: prefersReducedMotion ? "auto" : "smooth",
-                block: "nearest",
-                inline: "center"
-            });
+            /*    activeTab.scrollIntoView({
+                   behavior: prefersReducedMotion ? "auto" : "smooth",
+                   block: "nearest",
+                   inline: "center"
+               }); */
 
             if (updateHash) {
                 history.replaceState(
@@ -95,11 +95,49 @@
                 );
             }
 
+            /*
+ * Centre the capsule horizontally without allowing
+ * scrollIntoView() to move the page vertically.
+ */
+            const tabList = activeTab.closest(".essentials-tabs");
+
+            if (
+                tabList &&
+                tabList.scrollWidth > tabList.clientWidth
+            ) {
+                const tabRect = activeTab.getBoundingClientRect();
+                const listRect = tabList.getBoundingClientRect();
+
+                const left =
+                    tabList.scrollLeft +
+                    tabRect.left -
+                    listRect.left -
+                    (listRect.width - tabRect.width) / 2;
+
+                tabList.scrollTo({
+                    left,
+                    behavior: prefersReducedMotion ? "auto" : "smooth"
+                });
+            }
+
             if (scrollToPanel) {
                 requestAnimationFrame(() => {
-                    activePanel.scrollIntoView({
-                        behavior: prefersReducedMotion ? "auto" : "smooth",
-                        block: "start"
+                    const nav =
+                        document.querySelector(".essentials-nav");
+
+                    const navHeight =
+                        nav?.getBoundingClientRect().height || 58;
+
+                    const switcherTop =
+                        switcher.getBoundingClientRect().top +
+                        window.scrollY -
+                        navHeight;
+
+                    window.scrollTo({
+                        top: switcherTop,
+                        behavior: prefersReducedMotion
+                            ? "auto"
+                            : "smooth"
                     });
                 });
             }
@@ -202,7 +240,7 @@
         }
 
         feedback.textContent = "";
-          /*   `${checkedCount()} of ${boxes.length} essentials checked.`; */
+        /*   `${checkedCount()} of ${boxes.length} essentials checked.`; */
     };
 
     const saveChecklist = () => {

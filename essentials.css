@@ -1057,3 +1057,25 @@
     color: #e2bc78;
     border-color: rgba(226, 188, 120, 0.5);
 }
+
+/* Stabilise vertical positioning between Essentials panels */
+
+.essentials-page {
+    --essentials-sticky-stack: 118px;
+}
+
+.essentials-panels {
+    min-height: calc(100svh - var(--essentials-sticky-stack));
+    overflow-anchor: none;
+}
+
+.essentials-panel {
+    box-sizing: border-box;
+    min-height: calc(100svh - var(--essentials-sticky-stack));
+}
+
+@media (max-width: 720px) {
+    .essentials-page {
+        --essentials-sticky-stack: 108px;
+    }
+}
