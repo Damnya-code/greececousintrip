@@ -158,7 +158,7 @@
     const renderMaps = () => {
         mapFilters.innerHTML = mapGroups.map(group => `<button type="button" aria-pressed="${group === activeMapGroup}" data-map-group="${group}">${group}</button>`).join("");
         const visible = mapItems.filter(item => activeMapGroup === "All" || item.group === activeMapGroup);
-        mapResults.innerHTML = visible.map((item, index) => `<article><span>${item.day}</span><h4>${item.title}</h4><p>${item.description}</p><div><button type="button" data-map-preview="${mapItems.indexOf(item)}" aria-pressed="${index === 0}">Preview</button><a href="${item.url}" target="_blank" rel="noopener">Open Maps <span aria-hidden="true">↗</span><span class="sr-only">, new tab</span></a></div></article>`).join("");
+        mapResults.innerHTML = visible.map((item, index) => `<article><span>${item.day}</span><h4>${item.title}</h4><p>${item.description}</p><div><button type="button" data-map-preview="${mapItems.indexOf(item)}" aria-pressed="${index === 0}">Preview</button><a href="${item.url}" target="_blank" rel="noopener">Open Maps<svg class="external-link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7ZM14 3v2h3.59L7.76 14.83l1.41 1.41L19 6.41V10h2V3h-7Z"/></svg><span class="sr-only">, new tab</span></a></div></article>`).join("");
         if (visible[0]) showMapPreview(visible[0]);
     };
     mapFilters.addEventListener("click", event => {

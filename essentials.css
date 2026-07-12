@@ -1393,12 +1393,18 @@
 .toolkit-fallback a {
     color: #80551d;
     font: 600 .58rem "DM Mono", monospace;
-    text-transform: uppercase;
 }
 .map-tool-grid button {
     color: var(--tool-text);
     font: 600 .58rem "DM Mono", monospace;
-    text-transform: uppercase;
+}
+.external-link-icon {
+    display: block;
+    flex: 0 0 auto;
+    width: .82rem;
+    height: .82rem;
+    margin-left: .38rem;
+    fill: currentColor;
 }
 .map-tool-grid button[aria-pressed="true"] {
     border-color: #39738d;
@@ -1571,7 +1577,6 @@
     background: linear-gradient(135deg, #24536a 0%, #327088 54%, #438ba0 100%);
     color: #fff;
     font: 600 .64rem "DM Mono", monospace;
-    text-transform: uppercase;
     cursor: pointer;
     text-shadow: 0 1px 1px rgba(4, 20, 29, .32);
     box-shadow: 0 4px 11px rgba(10, 39, 54, .18), inset 0 1px rgba(255,255,255,.22);
