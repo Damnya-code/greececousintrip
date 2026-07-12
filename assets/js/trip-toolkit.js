@@ -75,13 +75,10 @@
     const updateOuterNavigation = () => {
         if (!page || !outerTabbar || root.offsetParent === null) return;
         const currentY = window.scrollY;
-        const scrollingUp = currentY < lastScrollY - 2;
         const barsTouching = page.classList.contains("toolkit-nav-condensed")
             ? currentY + visibleStack() >= toolkitAnchor
             : toolkitTabs.getBoundingClientRect().top <= outerTabbar.getBoundingClientRect().bottom + 1;
-        if (!programmaticScroll && scrollingUp) {
-            page.classList.remove("toolkit-nav-condensed");
-        } else if (barsTouching && (currentY > lastScrollY + 2 || programmaticScroll)) {
+        if (barsTouching && (currentY > lastScrollY + 2 || programmaticScroll)) {
             page.classList.add("toolkit-nav-condensed");
         } else if (!barsTouching) {
             page.classList.remove("toolkit-nav-condensed");
