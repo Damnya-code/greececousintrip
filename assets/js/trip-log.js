@@ -11,7 +11,7 @@
     "day-01": "day-1-athens-arrival.html", "day-02": "day-2-acropolis-ferry.html",
     "day-03": "day-3-chania.html", "day-04": "day-4-elafonisi.html",
     "day-05": "day-5-rethymno-heraklion.html", "day-06": "day-6-santorini.html",
-    "day-07": "day-7-knossos.html", "day-08": "day-8-farewell.html"
+    "day-07": "day-7-knossos.html"
   };
 
   const dayId = document.body.dataset.tripDay;

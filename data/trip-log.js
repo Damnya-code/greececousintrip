@@ -73,8 +73,7 @@
       "day-04": emptyDay(),
       "day-05": emptyDay(),
       "day-06": emptyDay(),
-      "day-07": emptyDay(),
-      "day-08": emptyDay()
+      "day-07": emptyDay()
     }
   };
 })();

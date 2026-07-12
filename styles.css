@@ -1193,7 +1193,7 @@ dialog::backdrop {
     text-decoration: none
 }
 
-.planning-lounge-link {
+.trip-essentials-link {
     display: inline-block;
     margin-top: 20px;
     color: var(--ink);
@@ -1202,18 +1202,6 @@ dialog::backdrop {
     text-decoration: none;
     border-bottom: 1px solid var(--ink);
     padding-bottom: 4px
-}
-
-.planning-lounge-link + .planning-lounge-link {
-    margin-left: 20px
-}
-
-@media (max-width: 760px) {
-    .planning-lounge-link + .planning-lounge-link {
-        display: table;
-        margin-top: 12px;
-        margin-left: 0
-    }
 }
 
 .hero-art {
