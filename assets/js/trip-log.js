@@ -1,10 +1,10 @@
 (function () {
   "use strict";
 
-  const data = window.TRIP_LOG_DATA;
-  if (!data || data.version !== 1 || !data.days || typeof data.days !== "object") return;
+  const index = window.TRIP_LOG_INDEX;
+  if (!index || index.version !== 1 || !index.days || typeof index.days !== "object") return;
 
-  const publishedDays = Object.entries(data.days).filter(([, day]) => day && day.published === true);
+  const publishedDays = Object.entries(index.days).filter(([, day]) => day && day.published === true);
   if (!publishedDays.length) return;
 
   const paths = {
@@ -27,8 +27,22 @@
     return;
   }
 
-  const day = data.days[dayId];
-  if (!day || day.published !== true) return;
+  const publication = index.days[dayId];
+  if (!publication || publication.published !== true || !/^day-0[1-7]$/.test(dayId)) return;
+
+  const dayScript = document.createElement("script");
+  dayScript.src = new URL(`../data/trip-log/${dayId}.js`, document.baseURI).href;
+  dayScript.async = true;
+  dayScript.addEventListener("load", () => {
+    const payload = window.TRIP_LOG_DAY;
+    delete window.TRIP_LOG_DAY;
+    if (!payload || payload.version !== 1 || payload.dayId !== dayId || !payload.content || typeof payload.content !== "object") return;
+    renderDay(payload.content);
+  });
+  dayScript.addEventListener("error", () => { delete window.TRIP_LOG_DAY; });
+  document.head.append(dayScript);
+
+  function renderDay(day) {
 
   const main = document.querySelector("main");
   const hero = main && main.querySelector(":scope > .day-hero");
@@ -159,5 +173,6 @@
     dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
     dialog.addEventListener("keydown", (event) => { if (event.key === "ArrowLeft") show(current - 1); if (event.key === "ArrowRight") show(current + 1); });
     dialog.addEventListener("close", () => { if (opener) opener.focus(); });
+  }
   }
 })();
