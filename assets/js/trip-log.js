@@ -5,8 +5,26 @@
   const manifest = window.TRIP_LOG_INDEX;
   const pageIsLog = document.body.hasAttribute("data-travel-log-page");
   const localHost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-  const preview = localHost && new URLSearchParams(location.search).get("preview") === "travel-log";
+  const previewMode = new URLSearchParams(location.search).get("preview");
+  const preview = localHost && previewMode === "travel-log";
+  const editorPreview = localHost && previewMode === "editor" && window.parent !== window;
   const featureEnabled = config?.features?.travelLog === true;
+  const blockRenderers = {
+    photo: renderPhoto,
+    collage: renderCollage,
+    sequence: renderSequence,
+    caption: renderCaption,
+    note: renderNote,
+    quote: renderQuote,
+    video: renderVideo,
+    pause: renderPause,
+    place: renderPlace
+  };
+
+  if (editorPreview) {
+    setupEditorPreview();
+    return;
+  }
 
   if (!validManifest(config, manifest)) {
     if (pageIsLog) returnToItinerary();
@@ -131,10 +149,12 @@
     );
   }
 
-  function renderPage(logEntries) {
+  function renderPage(logEntries, { editor = false } = {}) {
     const main = document.getElementById("travel-log-main");
     const feed = document.getElementById("travel-log-feed");
     if (!main || !feed) return;
+
+    if (editor) feed.replaceChildren();
 
     if (preview) document.getElementById("travel-log-preview-note").hidden = false;
 
@@ -162,6 +182,8 @@
         });
         if (!rendered) return;
         rendered.classList.add("log-block");
+        const spacing = ["tight", "normal", "spacious"].includes(block.spacing) ? block.spacing : "normal";
+        rendered.classList.add(`log-block--spacing-${spacing}`);
         rendered.dataset.blockType = block.type;
         rendered.dataset.blockIndex = String(blockIndex);
         const generatedId = `${entry.dayId}-block-${String(blockIndex + 1).padStart(2, "0")}`;
@@ -181,28 +203,16 @@
 
     const renderedEntries = renderedChapters.map(({ entry }) => entry);
     renderedChapters.forEach(({ chapter, entry }, index) => {
-      chapter.append(renderChapterNavigation(entry, renderedEntries, index));
+      if (!editor) chapter.append(renderChapterNavigation(entry, renderedEntries, index));
       feed.append(chapter);
     });
 
     main.hidden = false;
-    setupDayNavigation(renderedEntries);
+    if (!editor) setupDayNavigation(renderedEntries);
     document.body.classList.add("travel-log-ready");
     setupRevealMotion();
-    activateHashTarget();
+    if (!editor) activateHashTarget();
   }
-
-  const blockRenderers = {
-    photo: renderPhoto,
-    collage: renderCollage,
-    sequence: renderSequence,
-    caption: renderCaption,
-    note: renderNote,
-    quote: renderQuote,
-    video: renderVideo,
-    pause: renderPause,
-    place: renderPlace
-  };
 
   function renderPhoto(block, context) {
     const figure = renderFigure(block, context);
@@ -211,6 +221,8 @@
       ? block.presentation
       : "contained";
     figure.classList.add("log-photo", `log-photo--${presentation}`);
+    const width = ["full", "wide", "normal", "narrow"].includes(block.width) ? block.width : "";
+    if (width) figure.classList.add(`log-photo--width-${width}`);
     return figure;
   }
 
@@ -359,7 +371,11 @@
     if (positiveNumber(media.height)) image.height = media.height;
     image.sizes = text(media.sizes) || (compact ? "(max-width: 700px) 100vw, 50vw" : "100vw");
     if (text(media.focalPoint)) image.style.objectPosition = media.focalPoint;
-    if (media.crop === true) figure.classList.add("log-media--crop");
+    const cropMode = ["landscape", "square", "portrait"].includes(media.cropMode)
+      ? media.cropMode
+      : "";
+    if (media.crop === true || cropMode) figure.classList.add("log-media--crop");
+    if (cropMode) figure.classList.add(`log-media--crop-${cropMode}`);
     picture.append(image);
     figure.append(picture);
     appendCaption(figure, media);
@@ -548,6 +564,44 @@
     candidates.forEach((element) => observer.observe(element));
   }
 
+  function setupEditorPreview() {
+    const main = document.getElementById("travel-log-main");
+    const feed = document.getElementById("travel-log-feed");
+    if (!main || !feed || !Array.isArray(config?.days)) return;
+
+    main.hidden = false;
+    document.body.classList.add("travel-log-editor-preview");
+    document.body.dataset.editorPreviewStatus = "ready";
+    const configuredDays = new Map(config.days.map((day) => [day.id, day]));
+
+    window.addEventListener("message", (event) => {
+      if (event.origin !== location.origin || event.source !== window.parent) return;
+      if (event.data?.type !== "travel-log-editor:render") return;
+
+      const entry = event.data.entry;
+      const day = configuredDays.get(entry?.dayId);
+      const valid = day && validEntry(entry, { state: entry?.state }, entry?.dayId);
+      document.body.dataset.editorPreviewStatus = valid ? "rendering" : "invalid";
+      document.documentElement.dataset.theme = event.data.theme === "dark" ? "dark" : "light";
+      document.documentElement.style.colorScheme = document.documentElement.dataset.theme;
+      document.body.classList.remove("travel-log-ready");
+      feed.replaceChildren();
+
+      if (valid && entry.blocks.length) {
+        renderPage([{ ...entry, day }], { editor: true });
+        document.body.dataset.editorPreviewStatus = "rendered";
+      } else {
+        const empty = create("p", "travel-log-editor-empty", "Add content to see the Travel Log preview.");
+        feed.append(empty);
+        document.body.dataset.editorPreviewStatus = "empty";
+      }
+
+      window.parent.postMessage({ type: "travel-log-editor:rendered", dayId: entry?.dayId || "" }, event.origin);
+    });
+
+    window.parent.postMessage({ type: "travel-log-editor:ready" }, location.origin);
+  }
+
   function activateHashTarget() {
     if (!location.hash) return;
     const target = document.querySelector(location.hash);
@@ -581,6 +635,14 @@
   }
 
   function mediaUrl(value) {
+    if (editorPreview && text(value).startsWith("blob:")) {
+      try {
+        const blobUrl = new URL(value);
+        return blobUrl.protocol === "blob:" && blobUrl.origin === location.origin ? blobUrl.href : "";
+      } catch {
+        return "";
+      }
+    }
     const url = safeHttpUrl(value);
     if (!url) return "";
     return new URL(url).origin === location.origin ? url : "";

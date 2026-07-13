@@ -26,8 +26,12 @@ Additional Travel Log entry points:
 
 - `travel-log.html` - hidden photo-first Travel Log feed
 - `docs/TRAVEL_LOG_GUIDE.md` - copyable editing examples
+- `editor/index.html` - local no-code Travel Log editor
+- `docs/TRAVEL_LOG_EDITOR_GUIDE.md` - non-technical editor instructions
 
 The Travel Log remains publicly disabled. To inspect its temporary draft prototype locally, open `http://127.0.0.1:5500/travel-log.html?preview=travel-log` after starting the preview server.
+
+To author a local draft visually, open `http://127.0.0.1:5500/editor/index.html`. The editor is not linked from the public site, saves drafts only in the current browser, and does not publish or upload media.
 
 ## Deployment
 
@@ -51,6 +55,6 @@ npm.cmd test
 npm.cmd run test:smoke
 ```
 
-Playwright starts and stops the repository's lightweight Node static server automatically on `http://127.0.0.1:4173`; do not start a preview server first. The suite covers core page loading, local assets, homepage persistence and theme switching, daily capsules and navigation, Essentials and Toolkit behavior, mocked weather responses, accessibility-oriented state, and four responsive viewport sizes.
+Playwright starts and stops the repository's lightweight Node static server automatically on `http://127.0.0.1:4173`; do not start a preview server first. The suite covers core page loading, local assets, homepage persistence and theme switching, daily capsules and navigation, Essentials and Toolkit behavior, mocked weather responses, Travel Log editor authoring and persistence, accessibility-oriented state, and responsive viewport sizes.
 
 The suite intentionally does not test decorative animation timing, external Google Maps or Translate behavior, speech recognition, OCR accuracy, live weather availability, pixel-perfect screenshots, or the disabled Travel Log interface.

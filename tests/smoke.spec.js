@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const fs = require("node:fs/promises");
 
 const DAY_PAGES = [
   "day-1-athens-arrival.html",
@@ -219,8 +220,9 @@ test("Travel Log day navigation follows the active chapter", async ({ page }) =>
   await mockThreeChapterPreview(page);
   await page.goto("/travel-log.html?preview=travel-log#day-03");
 
-  const chooser = page.getByRole("button", { name: "Choose Travel Log day. Current: Day 3, Chania" });
+  const chooser = page.locator("#travel-log-day-button");
   await expect(chooser).toBeVisible();
+  await expect(chooser).toHaveAttribute("aria-label", "Choose Travel Log day. Current: Day 3, Chania");
   await expect(chooser).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator('[data-log-day="day-03"]')).toHaveAttribute("aria-current", "page");
   await expect(page.locator("#day-03 .travel-log-chapter-nav")).toContainText("Continue to Day 4");
@@ -531,5 +533,160 @@ test("representative pages remain usable at supported viewport sizes", async ({ 
     }
   }
 
+  assertNoFailures();
+});
+
+async function openEditor(page, dayId = "day-03") {
+  await page.goto("/editor/index.html");
+  await page.getByLabel("Trip day", { exact: true }).selectOption(dayId);
+  await expect(page.locator("[data-entry-summary]")).toContainText(`Day ${Number(dayId.slice(-2))}`);
+}
+
+test("Travel Log editor loads without exposing itself on the public site", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  const response = await page.goto("/editor/index.html");
+  expect(response?.ok()).toBeTruthy();
+  await expect(page).toHaveTitle(/Travel Log Editor/);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, nofollow, noarchive");
+  await expect(page.getByText("Local editor", { exact: false })).toBeVisible();
+
+  await page.goto("/index.html");
+  await expect(page.getByRole("link", { name: "Travel Log editor" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /Memories|Travel Log/i })).toHaveCount(0);
+  assertNoFailures();
+});
+
+test("editor templates, block authoring and keyboard reorder controls work", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await openEditor(page);
+  await page.getByRole("button", { name: /Photo Story A paced visual chapter/ }).click();
+  await expect(page.locator("[data-block-id]")).toHaveCount(6);
+
+  await page.getByRole("button", { name: "Caption", exact: true }).click();
+  const settings = page.locator("[data-settings-form]");
+  await settings.locator('[data-editor-field="caption"]').fill("First coffee after leaving the ferry.");
+  await expect(page.locator("[data-block-list]")).toContainText("First coffee after leaving the ferry.");
+
+  await page.getByRole("button", { name: "Note", exact: true }).click();
+  await settings.locator('[data-editor-field="note"]').fill("A brief editor test note.");
+  await page.getByRole("button", { name: "Journal", exact: true }).click();
+  await settings.locator('[data-editor-field="paragraph-1"]').fill("The first journal paragraph.");
+  await settings.getByRole("button", { name: "Add paragraph" }).click();
+  await settings.locator('[data-editor-field="paragraph-2"]').fill("The second journal paragraph.");
+
+  const items = page.locator("[data-block-id]");
+  const beforeDuplicate = await items.count();
+  const selected = page.locator('[data-block-id][aria-current="true"]');
+  await selected.getByRole("button", { name: "Move up" }).click();
+  await selected.getByRole("button", { name: "Duplicate" }).click();
+  await expect(items).toHaveCount(beforeDuplicate + 1);
+  page.once("dialog", (dialog) => dialog.accept());
+  await selected.getByRole("button", { name: "Delete" }).click();
+  await expect(items).toHaveCount(beforeDuplicate);
+  assertNoFailures();
+});
+
+test("editor media, collage, presentation, focal point and preview controls work", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await openEditor(page);
+  await page.getByRole("button", { name: /Minimal Four deliberate moments/ }).click();
+
+  const settings = page.locator("[data-settings-form]");
+  const imageInput = settings.locator('[data-editor-field="choose-image"]');
+  await imageInput.setInputFiles({
+    name: "phone-test.png",
+    mimeType: "image/png",
+    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFElEQVR42mNkYGD4z8DAwMDAAAAEAQEBAF9SAQAAAABJRU5ErkJggg==", "base64")
+  });
+  await settings.locator('[data-editor-field="alt-text"]').fill("Small non-private editor test image");
+  await settings.locator('[data-editor-field="presentation"]').selectOption("portrait");
+  await settings.locator('[data-editor-field="width"]').selectOption("narrow");
+  await settings.locator('[data-editor-field="crop"]').selectOption("square");
+  await expect(settings.locator(".focal-editor")).toBeVisible();
+  await settings.locator(".focal-editor").click({ position: { x: 35, y: 45 } });
+  await expect(settings.locator(".focal-marker")).not.toHaveAttribute("style", /--focal-x: 50%/);
+
+  await page.getByRole("button", { name: /Collage Two Up/ }).click();
+  await settings.locator('[data-collage-layout="feature-left"]').click();
+  await expect(settings.locator('[data-collage-layout="feature-left"]')).toHaveAttribute("aria-pressed", "true");
+
+  await page.getByRole("button", { name: "Mobile", exact: true }).click();
+  await expect(page.locator("[data-preview-stage]")).toHaveAttribute("data-preview-stage", "mobile");
+  await page.getByRole("button", { name: "Dark", exact: true }).click();
+  await expect(page.frameLocator("#travel-log-editor-preview").locator("html")).toHaveAttribute("data-theme", "dark");
+  assertNoFailures();
+});
+
+test("editor autosaves, restores and exports clean data without object URLs", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await openEditor(page, "day-04");
+  await page.getByRole("button", { name: /Blank Start with an empty entry/ }).click();
+  await page.getByRole("button", { name: "Caption", exact: true }).click();
+  await page.locator('[data-settings-form] [data-editor-field="caption"]').fill("Autosaved editor caption.");
+  await expect(page.locator("[data-save-state]")).toHaveText("Saved locally");
+
+  await page.reload();
+  await expect(page.getByLabel("Trip day", { exact: true })).toHaveValue("day-04");
+  await expect(page.locator("[data-block-list]")).toContainText("Autosaved editor caption.");
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export JSON", exact: true }).click();
+  const download = await downloadPromise;
+  const exported = JSON.parse(await fs.readFile(await download.path(), "utf8"));
+  expect(exported.editorVersion).toBe(1);
+  expect(exported.entry.dayId).toBe("day-04");
+  expect(JSON.stringify(exported)).not.toContain("blob:");
+  assertNoFailures();
+});
+
+test("editor imports safe JSON and reports invalid or unsupported content", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await page.goto("/editor/index.html");
+  const importInput = page.locator("#editor-import-file");
+  const validProject = {
+    editorVersion: 1,
+    schemaVersion: 2,
+    entry: {
+      version: 2,
+      dayId: "day-05",
+      state: "draft",
+      date: "2026-10-14",
+      place: "Across Crete",
+      blocks: [
+        { type: "caption", text: "Imported safe caption." },
+        { type: "comparison", planned: "Unsupported", actual: "Ignored" }
+      ]
+    },
+    mediaManifest: []
+  };
+  await importInput.setInputFiles({ name: "valid-editor.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(validProject)) });
+  await expect(page.getByLabel("Trip day", { exact: true })).toHaveValue("day-05");
+  await expect(page.locator("[data-block-list]")).toContainText("Imported safe caption.");
+  await expect(page.locator("[data-editor-status]")).toContainText("Unsupported content was ignored");
+  await expect(page.locator("[data-block-list]")).not.toContainText("Comparison");
+
+  await importInput.setInputFiles({ name: "invalid.json", mimeType: "application/json", buffer: Buffer.from("{not-json") });
+  await expect(page.locator("[data-editor-status]")).toContainText("Import failed");
+  assertNoFailures();
+});
+
+test("Travel Log editor remains usable without horizontal overflow", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  for (const viewport of VIEWPORTS) {
+    await page.setViewportSize(viewport);
+    await page.goto("/editor/index.html");
+    const widths = await page.evaluate(() => ({
+      client: document.documentElement.clientWidth,
+      scroll: document.documentElement.scrollWidth
+    }));
+    expect(widths.scroll).toBeLessThanOrEqual(widths.client);
+    await expect(page.getByLabel("Trip day", { exact: true })).toBeVisible();
+    if (viewport.width <= 760) {
+      await page.getByRole("tab", { name: "Preview", exact: true }).click();
+      await expect(page.locator('[data-editor-panel="preview"]')).toBeVisible();
+    } else {
+      await expect(page.locator("#travel-log-editor-preview")).toBeVisible();
+    }
+  }
   assertNoFailures();
 });
