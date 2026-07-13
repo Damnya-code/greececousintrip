@@ -22,6 +22,13 @@ Opening files directly with `file://` is not recommended because browser securit
 - `data/trip-config.js` — shared trip, day, map, weather and feature configuration
 - `docs/ARCHITECTURE.md` — maintenance and extension guide
 
+Additional Travel Log entry points:
+
+- `travel-log.html` - hidden photo-first Travel Log feed
+- `docs/TRAVEL_LOG_GUIDE.md` - copyable editing examples
+
+The Travel Log remains publicly disabled. To inspect its temporary draft prototype locally, open `http://127.0.0.1:5500/travel-log.html?preview=travel-log` after starting the preview server.
+
 ## Deployment
 
 The site is designed for GitHub Pages. Publish the repository root from the chosen branch in **Settings → Pages**. All internal links are relative, so the site works beneath the repository path as well as on a custom domain.

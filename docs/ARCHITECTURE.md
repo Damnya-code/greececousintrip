@@ -11,6 +11,7 @@ There is no bundler, framework, database or server-side application.
 ```text
 index.html                         Homepage
 essentials.html                    Essentials and Trip Toolkit
+travel-log.html                    Hidden chronological Travel Log feed
 day-template.html                  Reference markup for another day
 
 days/
@@ -25,7 +26,7 @@ assets/
     day-page.css                   Daily-guide layout, capsules and route maps
     essentials.css                 Essentials layout and outer capsules
     trip-toolkit.css               Toolkit-only components
-    trip-log.css                   Published Travel Log interface only
+    trip-log.css                   Travel Log feed and block presentations only
   js/
     theme.js                       Theme initialization and toggle
     home.js                        Homepage scrolling and journey reveals
@@ -36,12 +37,16 @@ assets/
     essentials.js                  Essentials outer capsules and hashes
     essentials-checklist.js        Essentials checklist persistence
     trip-toolkit.js                Maps, weather, translate, speech and OCR
-    trip-log.js                    Conditional Travel Log loader and renderer
+    trip-log.js                    Travel Log visibility, loading and block rendering
+
+  log/
+    README.md                      Media naming and preparation guidance
+    day-0X/                        Future per-day Travel Log media
 
 data/
   trip-config.js                   Shared trip metadata and feature flags
   trip-log-index.js                Publication manifest
-  trip-log/day-03.js               Unpublished Travel Log schema example
+  trip-log/day-03.js               Temporary draft block-model prototype
 ```
 
 ## CSS responsibilities and loading order
@@ -52,7 +57,8 @@ Daily pages then load:
 
 1. `assets/css/site.css`
 2. `assets/css/day-page.css`
-3. `assets/css/trip-log.css`
+
+The dedicated Travel Log page loads `site.css` followed by `trip-log.css`. Daily pages do not load Travel Log presentation styles while the feature is disabled.
 
 Essentials loads:
 
@@ -90,7 +96,13 @@ Essentials scripts:
 3. `assets/js/essentials-checklist.js`
 4. `assets/js/trip-toolkit.js`
 
-All behavior scripts use private function scopes. The deliberate public configuration objects are `window.TRIP_CONFIG`, `window.TRIP_LOG_INDEX` and, only while a published entry is loading, `window.TRIP_LOG_DAY`.
+Travel Log scripts:
+
+1. `data/trip-config.js`
+2. `data/trip-log-index.js`
+3. `assets/js/trip-log.js`
+
+All behavior scripts use private function scopes. The deliberate public configuration objects are `window.TRIP_CONFIG`, `window.TRIP_LOG_INDEX` and the temporary `window.TRIP_LOG_ENTRIES` registry while eligible day files load.
 
 ## Shared trip data
 
@@ -148,22 +160,71 @@ Route and weather data come from `data/trip-config.js`. Phrase data stays in the
 
 ## Travel Log
 
-The Travel Log is disabled in two layers:
+The Travel Log is a dedicated chronological feed at `travel-log.html`. It is intentionally separate from the itinerary capsule system: itinerary pages remain the permanent plan, while the log renders photo-first chapters from ordered blocks.
 
-1. `data/trip-config.js` has `features.travelLog: false`.
-2. Every day in `data/trip-log-index.js` has `published: false`.
+### Visibility and entry states
 
-While the feature flag is false, `trip-log.js` returns immediately and does not alter visible navigation or day pages. Per-day content is never loaded unless the global feature is enabled and that exact day is published.
+The central switch remains `features.travelLog` in `data/trip-config.js`. Each manifest entry in `data/trip-log-index.js` also has one state:
 
-To publish a future entry:
+- `hidden`: never loaded or rendered, including local preview.
+- `draft`: loaded only through the documented local preview.
+- `published`: eligible for the public feed when the central feature is enabled.
 
-1. Add `data/trip-log/day-0X.js` using the Day 3 schema.
-2. Add optimized images under `assets/images/trip-log/`.
-3. Set that day to `published: true` in `data/trip-log-index.js`.
-4. Set `features.travelLog` to `true` in `data/trip-config.js`.
-5. Test the day normally and with `#travel-log`.
+With the central flag false, normal homepage and daily-page navigation remains unchanged and `travel-log.html` returns to the itinerary. Day content files are loaded only when their state is eligible for the current mode.
 
-This is exposure reduction, not access control. Anything committed to the public repository can be requested directly.
+For local draft review, serve the repository and open:
+
+```text
+http://127.0.0.1:5500/travel-log.html?preview=travel-log
+```
+
+The preview query is accepted only on `localhost` and `127.0.0.1`. It is a workflow guard, not authentication. Static files committed to a public repository remain directly requestable.
+
+Do not commit a sensitive draft merely because its manifest state is `draft`. Keep genuinely private writing and media outside the public repository until it is ready for publication.
+
+### Content model
+
+Each `data/trip-log/day-0X.js` file registers one versioned entry containing minimal metadata and an ordered `blocks` array. The renderer validates the entry and block type, skips malformed or unsupported blocks and creates content with DOM APIs rather than injecting uncontrolled HTML.
+
+Supported blocks:
+
+- `photo`: one photograph using `full`, `contained`, `portrait` or `quiet` presentation.
+- `collage`: one to five images using a named editorial preset.
+- `sequence`: a contained touch-scrollable photographic sequence.
+- `caption`: a short standalone line.
+- `note`: a short note or optional heading plus an array of journal paragraphs.
+- `quote`: quoted text and optional attribution.
+- `video`: user-controlled video with optional poster and caption; no autoplay.
+- `pause`: a restrained divider and optional label.
+- `comparison`: optional planned and actual text.
+- `place`: optional place name, note and external map link.
+
+Collage presets are `two-up`, `feature-left`, `feature-right`, `film-strip` and `scrapbook`. Mobile reduces these to logical single-column reading order rather than preserving fragile desktop geometry.
+
+All fields beyond `dayId`, `state`, `date`, `place` and at least one valid block are optional. Empty fields do not create headings or containers.
+
+### Loading and navigation
+
+`trip-log.js` has two responsibilities within one feature boundary:
+
+1. On normal pages, add Travel Log navigation only when the central flag is enabled and at least one manifest entry is published.
+2. On `travel-log.html`, load only eligible per-day files and render their blocks in shared trip-day order.
+
+The feed provides a compact chapter index, anchors such as `#day-03`, a link back to each planned day and next-chapter or end-state navigation. Ordinary log editing never requires editing HTML.
+
+### Media and performance
+
+Future media belongs in `assets/log/day-0X/`. Recommended names start with their sequence number, for example `01-arrival.webp`. Prefer WebP or AVIF, use 1600–2400 pixels on the long edge for major images, provide actual width and height, and add responsive `sources` for image-heavy chapters.
+
+Only the first opening image receives eager loading and high fetch priority. Later photographs use lazy loading and asynchronous decoding. Videos use `preload="metadata"`; optional heavy media is not initialized globally. The renderer skips media marked `private: true`, but genuinely private files must never be committed.
+
+### Accessibility
+
+Non-decorative photographs require alt text or are skipped. Captions use `figure` and `figcaption`, collages retain source reading order and expose a group label, and visual overlap never changes DOM order. Focus styles use the shared coral accent, video controls remain native, text over imagery is avoided for long copy, and reveal motion is disabled under `prefers-reduced-motion`.
+
+The content-focused editing workflow and copyable examples are in `docs/TRAVEL_LOG_GUIDE.md`.
+
+Deferred work includes real trip media, an image-optimization command, video caption tracks, richer multi-day navigation once several entries exist and any authenticated/private distribution approach. No upload system, editor, database or social interaction is planned in this static phase.
 
 ## Adding another trip day
 
@@ -173,7 +234,7 @@ This is exposure reduction, not access control. Anything committed to the public
 4. Add the day to `data/trip-config.js`, including its page path and route information.
 5. Update previous/next links on the neighboring daily pages.
 6. Add the homepage journey card and any route-overview link.
-7. Add a `published: false` entry to `data/trip-log-index.js`.
+7. Add a `state: "hidden"` entry to `data/trip-log-index.js`.
 8. Test the fallback All Days link with JavaScript disabled, then test the enhanced chooser.
 
 ## Updating destination and route data
@@ -226,7 +287,7 @@ npm.cmd test
 
 `npm.cmd run test:smoke` runs the same suite explicitly. Tests cover the homepage, Essentials, all seven daily pages, the representative Day 1 capsule and Days-menu flows, persistence, deterministic mocked weather, ARIA state, and responsive overflow at 320, 390, 768 and 1440 pixels wide.
 
-External map embeds, Google Translate, live internet availability, decorative animation timing, OCR accuracy, speech recognition, pixel-level appearance and the disabled Travel Log are intentionally outside this smoke suite. Manual visual review remains appropriate after CSS changes.
+External map embeds, Google Translate, live internet availability, decorative animation timing, OCR accuracy, speech recognition and pixel-level appearance are intentionally outside this smoke suite. Travel Log tests use the local-only draft preview and do not publish the feature. Manual visual review remains appropriate after CSS changes.
 
 When adding a trip day, add its current page filename to `DAY_PAGES` in `tests/smoke.spec.js`. Keep the deeper interaction scenario on one representative page unless the new day introduces unique behavior that warrants its own test.
 

@@ -2,187 +2,467 @@
   "use strict";
 
   const config = window.TRIP_CONFIG;
-  if (!config?.features?.travelLog) return;
+  const manifest = window.TRIP_LOG_INDEX;
+  const pageIsLog = document.body.hasAttribute("data-travel-log-page");
+  const localHost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  const preview = localHost && new URLSearchParams(location.search).get("preview") === "travel-log";
+  const featureEnabled = config?.features?.travelLog === true;
 
-  const index = window.TRIP_LOG_INDEX;
-  if (!index || index.version !== 1 || !index.days || typeof index.days !== "object") return;
+  if (!validManifest(config, manifest)) {
+    if (pageIsLog) returnToItinerary();
+    return;
+  }
 
-  const publishedDays = Object.entries(index.days).filter(([, day]) => day && day.published === true);
-  if (!publishedDays.length) return;
+  const configuredDays = new Map(config.days.map((day) => [day.id, day]));
+  const entries = Object.entries(manifest.days)
+    .map(([dayId, publication]) => ({ dayId, publication, day: configuredDays.get(dayId) }))
+    .filter(({ publication, day }) => day && validPublication(publication));
+  const visibleEntries = entries.filter(({ publication }) => publication.state === "published" || (preview && publication.state === "draft"));
 
-  const paths = Object.fromEntries(config.days.map((day) => [day.id, day.path]));
+  if (!pageIsLog) {
+    if (!featureEnabled) return;
+    enhancePublicNavigation(entries.filter(({ publication }) => publication.state === "published"));
+    return;
+  }
 
-  const dayId = document.body.dataset.tripDay;
-  if (!dayId) {
+  if ((!featureEnabled && !preview) || !visibleEntries.length) {
+    returnToItinerary();
+    return;
+  }
+
+  loadAndRender(visibleEntries);
+
+  function validManifest(sharedConfig, index) {
+    return Boolean(
+      sharedConfig &&
+      Array.isArray(sharedConfig.days) &&
+      index?.version === 2 &&
+      index.days &&
+      typeof index.days === "object"
+    );
+  }
+
+  function validPublication(publication) {
+    return Boolean(
+      publication &&
+      ["hidden", "draft", "published"].includes(publication.state) &&
+      (publication.state === "hidden" || /^trip-log\/day-0[1-7]\.js$/.test(publication.file || ""))
+    );
+  }
+
+  function returnToItinerary() {
+    location.replace(new URL("index.html#itinerary", document.baseURI));
+  }
+
+  function pagePrefix() {
+    return document.body.classList.contains("day-page") ? "../" : "";
+  }
+
+  function travelLogUrl(dayId = "") {
+    const query = preview ? "?preview=travel-log" : "";
+    return `${pagePrefix()}travel-log.html${query}${dayId ? `#${dayId}` : ""}`;
+  }
+
+  function enhancePublicNavigation(publications) {
+    if (!publications.length) return;
+
     const nav = document.querySelector(".nav nav");
     if (nav && !nav.querySelector("[data-travel-log-link]")) {
       const link = document.createElement("a");
       link.dataset.travelLogLink = "";
-      link.href = `days/${paths[publishedDays[0][0]]}#travel-log`;
-      link.textContent = "Memories";
+      link.href = travelLogUrl();
+      link.textContent = "Travel Log";
       nav.append(link);
     }
+
+    if (document.body.classList.contains("day-page")) return;
+
+    const publishedIds = new Set(publications.map(({ dayId }) => dayId));
     document.querySelectorAll(".journey-card[data-trip-day]").forEach((card) => {
-      const cardDayId = card.dataset.tripDay;
-      if (!index.days[cardDayId]?.published || card.querySelector("[data-card-travel-log]")) return;
-      const exploreLink = card.querySelector(".journey-copy > a");
-      if (!exploreLink || !paths[cardDayId]) return;
+      if (!publishedIds.has(card.dataset.tripDay) || card.querySelector("[data-card-travel-log]")) return;
+      const planLink = card.querySelector(".journey-copy > a");
+      if (!planLink) return;
       const logLink = document.createElement("a");
       logLink.dataset.cardTravelLog = "";
       logLink.className = "journey-log-link";
-      logLink.href = `days/${paths[cardDayId]}#travel-log`;
-      logLink.innerHTML = "Memories <span>→</span>";
-      exploreLink.after(logLink);
+      logLink.href = travelLogUrl(card.dataset.tripDay);
+      logLink.innerHTML = "View the log <span aria-hidden=\"true\">→</span>";
+      planLink.after(logLink);
     });
-    return;
   }
 
-  const publication = index.days[dayId];
-  if (!publication || publication.published !== true || !/^day-0[1-7]$/.test(dayId)) return;
+  async function loadAndRender(publications) {
+    window.TRIP_LOG_ENTRIES = Object.create(null);
 
-  const dayScript = document.createElement("script");
-  dayScript.src = new URL(`../data/trip-log/${dayId}.js`, document.baseURI).href;
-  dayScript.async = true;
-  dayScript.addEventListener("load", () => {
-    const payload = window.TRIP_LOG_DAY;
-    delete window.TRIP_LOG_DAY;
-    if (!payload || payload.version !== 1 || payload.dayId !== dayId || !payload.content || typeof payload.content !== "object") return;
-    renderDay(payload.content);
-  });
-  dayScript.addEventListener("error", () => { delete window.TRIP_LOG_DAY; });
-  document.head.append(dayScript);
+    const loaded = await Promise.all(publications.map(loadEntry));
+    const validEntries = loaded.filter(Boolean);
+    delete window.TRIP_LOG_ENTRIES;
 
-  function renderDay(day) {
+    if (!validEntries.length) {
+      returnToItinerary();
+      return;
+    }
 
-  const main = document.querySelector("main");
-  const hero = main && main.querySelector(":scope > .day-hero");
-  if (!main || !hero) return;
+    renderPage(validEntries);
+  }
 
-  const hasText = (value) => typeof value === "string" && value.trim().length > 0;
-  const make = (tag, className, text) => {
+  function loadEntry({ dayId, publication, day }) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = new URL(`data/${publication.file}`, document.baseURI).href;
+      script.async = true;
+      script.addEventListener("load", () => {
+        const entry = window.TRIP_LOG_ENTRIES?.[dayId];
+        resolve(validEntry(entry, publication, dayId) ? { ...entry, day } : null);
+      });
+      script.addEventListener("error", () => resolve(null));
+      document.head.append(script);
+    });
+  }
+
+  function validEntry(entry, publication, dayId) {
+    return Boolean(
+      entry?.version === 2 &&
+      entry.dayId === dayId &&
+      entry.state === publication.state &&
+      typeof entry.date === "string" &&
+      typeof entry.place === "string" &&
+      Array.isArray(entry.blocks)
+    );
+  }
+
+  function renderPage(logEntries) {
+    const main = document.getElementById("travel-log-main");
+    const feed = document.getElementById("travel-log-feed");
+    const dayIndex = document.getElementById("travel-log-index");
+    if (!main || !feed || !dayIndex) return;
+
+    if (preview) document.getElementById("travel-log-preview-note").hidden = false;
+
+    logEntries.forEach((entry, entryIndex) => {
+      const chapter = create("article", "travel-log-chapter");
+      chapter.id = entry.dayId;
+      chapter.dataset.tripDay = entry.dayId;
+
+      const marker = create("header", "travel-log-chapter-marker");
+      marker.append(
+        create("time", "", formatDate(entry.date)),
+        create("p", "", entry.place)
+      );
+      marker.querySelector("time").dateTime = entry.date;
+      if (entry.prototype === true) marker.append(create("small", "", "Temporary prototype · replace after the trip"));
+      chapter.append(marker);
+
+      const renderedBlocks = [];
+      entry.blocks.forEach((block, blockIndex) => {
+        const renderer = block && blockRenderers[block.type];
+        if (!renderer) return;
+        const rendered = renderer(block, {
+          priority: entryIndex === 0 && blockIndex === 0,
+          blockIndex
+        });
+        if (!rendered) return;
+        rendered.classList.add("log-block");
+        rendered.dataset.blockType = block.type;
+        rendered.dataset.blockIndex = String(blockIndex);
+        if (/^moment-[a-z0-9-]+$/.test(block.id || "") && !document.getElementById(block.id)) {
+          rendered.id = block.id;
+        }
+        renderedBlocks.push(rendered);
+        chapter.append(rendered);
+      });
+
+      if (!renderedBlocks.length) return;
+
+      const indexLink = create("a", "", `${formatDate(entry.date, { short: true })} · ${entry.place}`);
+      indexLink.href = `#${entry.dayId}`;
+      dayIndex.append(indexLink);
+      chapter.append(renderChapterNavigation(entry, logEntries, entryIndex));
+      feed.append(chapter);
+    });
+
+    main.hidden = false;
+    document.body.classList.add("travel-log-ready");
+    setupRevealMotion();
+    activateHashTarget();
+  }
+
+  const blockRenderers = {
+    photo: renderPhoto,
+    collage: renderCollage,
+    sequence: renderSequence,
+    caption: renderCaption,
+    note: renderNote,
+    quote: renderQuote,
+    video: renderVideo,
+    pause: renderPause,
+    comparison: renderComparison,
+    place: renderPlace
+  };
+
+  function renderPhoto(block, context) {
+    const figure = renderFigure(block, context);
+    if (!figure) return null;
+    const presentation = ["full", "contained", "portrait", "quiet"].includes(block.presentation)
+      ? block.presentation
+      : "contained";
+    figure.classList.add("log-photo", `log-photo--${presentation}`);
+    return figure;
+  }
+
+  function renderCollage(block) {
+    const layouts = ["two-up", "feature-left", "feature-right", "film-strip", "scrapbook"];
+    const layout = layouts.includes(block.layout) ? block.layout : "two-up";
+    const images = Array.isArray(block.images) ? block.images.slice(0, 5) : [];
+    const collage = create("section", `log-collage log-collage--${layout}`);
+    collage.setAttribute("role", "group");
+    collage.setAttribute("aria-label", text(block.label) || `${images.length}-image collage`);
+    images.forEach((image) => {
+      const figure = renderFigure(image, { priority: false, compact: true });
+      if (figure) collage.append(figure);
+    });
+    return collage.children.length ? collage : null;
+  }
+
+  function renderSequence(block) {
+    const images = Array.isArray(block.images) ? block.images.slice(0, 5) : [];
+    const section = create("section", "log-sequence");
+    section.setAttribute("role", "group");
+    section.setAttribute("aria-label", text(block.label) || "Photographic sequence");
+    images.forEach((image) => {
+      const figure = renderFigure(image, { priority: false, compact: true });
+      if (figure) section.append(figure);
+    });
+    return section.children.length ? section : null;
+  }
+
+  function renderCaption(block) {
+    const value = text(block.text);
+    return value ? create("p", "log-caption", value) : null;
+  }
+
+  function renderNote(block) {
+    const paragraphs = Array.isArray(block.paragraphs)
+      ? block.paragraphs.map(text).filter(Boolean)
+      : [text(block.text)].filter(Boolean);
+    if (!paragraphs.length) return null;
+    const section = create("section", `log-note${paragraphs.length > 1 ? " log-note--long" : ""}`);
+    const heading = text(block.heading);
+    if (heading) section.append(create("h2", "", heading));
+    paragraphs.forEach((paragraph) => section.append(create("p", "", paragraph)));
+    return section;
+  }
+
+  function renderQuote(block) {
+    const value = text(block.text);
+    if (!value) return null;
+    const quote = create("blockquote", "log-quote");
+    quote.append(create("p", "", value));
+    const attribution = text(block.attribution);
+    if (attribution) quote.append(create("cite", "", attribution));
+    return quote;
+  }
+
+  function renderVideo(block) {
+    const src = mediaUrl(block.src);
+    if (!src || block.private === true) return null;
+    const figure = create("figure", "log-video");
+    const video = document.createElement("video");
+    video.controls = true;
+    video.preload = "metadata";
+    video.playsInline = true;
+    video.src = src;
+    const poster = mediaUrl(block.poster);
+    if (poster) video.poster = poster;
+    if (Array.isArray(block.tracks)) {
+      block.tracks.slice(0, 3).forEach((trackData) => {
+        const trackSrc = mediaUrl(trackData?.src);
+        if (!trackSrc) return;
+        const track = document.createElement("track");
+        track.src = trackSrc;
+        track.kind = ["captions", "descriptions", "subtitles"].includes(trackData.kind)
+          ? trackData.kind
+          : "captions";
+        if (text(trackData.srclang)) track.srclang = trackData.srclang;
+        if (text(trackData.label)) track.label = trackData.label;
+        track.default = trackData.default === true;
+        video.append(track);
+      });
+    }
+    const label = text(block.alt) || "Travel Log video";
+    video.setAttribute("aria-label", label);
+    figure.append(video);
+    appendCaption(figure, block);
+    return figure;
+  }
+
+  function renderPause(block) {
+    const pause = create("div", "log-pause");
+    pause.append(document.createElement("hr"));
+    const value = text(block.text);
+    if (value) pause.append(create("p", "", value));
+    return pause;
+  }
+
+  function renderComparison(block) {
+    const planned = text(block.planned);
+    const actual = text(block.actual);
+    if (!planned && !actual) return null;
+    const section = create("section", "log-comparison");
+    section.setAttribute("aria-label", "Plan versus reality");
+    [["Planned", planned], ["Actually", actual]].forEach(([label, value]) => {
+      if (!value) return;
+      const column = create("div", "");
+      column.append(create("h2", "", label), create("p", "", value));
+      section.append(column);
+    });
+    return section;
+  }
+
+  function renderPlace(block) {
+    const name = text(block.name);
+    if (!name) return null;
+    const aside = create("aside", "log-place");
+    const map = safeHttpUrl(block.mapUrl);
+    if (map) {
+      const link = create("a", "", name);
+      link.href = map;
+      link.target = "_blank";
+      link.rel = "noopener";
+      aside.append(link);
+    } else {
+      aside.append(create("strong", "", name));
+    }
+    const note = text(block.note);
+    if (note) aside.append(create("p", "", note));
+    return aside;
+  }
+
+  function renderFigure(media, { priority = false, compact = false } = {}) {
+    const src = mediaUrl(media?.src);
+    if (!src || media.private === true) return null;
+    const decorative = media.decorative === true;
+    const alt = text(media.alt);
+    if (!decorative && !alt) return null;
+
+    const figure = create("figure", compact ? "log-media log-media--compact" : "log-media");
+    const picture = document.createElement("picture");
+    if (Array.isArray(media.sources)) {
+      media.sources.forEach((sourceData) => {
+        const srcset = text(sourceData?.srcset);
+        if (!srcset || /javascript:/i.test(srcset)) return;
+        const source = document.createElement("source");
+        source.srcset = srcset;
+        if (text(sourceData.type)) source.type = sourceData.type;
+        if (text(sourceData.media)) source.media = sourceData.media;
+        picture.append(source);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    image.alt = decorative ? "" : alt;
+    if (decorative) image.setAttribute("role", "presentation");
+    image.loading = priority ? "eager" : "lazy";
+    image.decoding = "async";
+    if (priority) image.fetchPriority = "high";
+    if (positiveNumber(media.width)) image.width = media.width;
+    if (positiveNumber(media.height)) image.height = media.height;
+    image.sizes = text(media.sizes) || (compact ? "(max-width: 700px) 100vw, 50vw" : "100vw");
+    if (text(media.focalPoint)) image.style.objectPosition = media.focalPoint;
+    if (media.crop === true) figure.classList.add("log-media--crop");
+    picture.append(image);
+    figure.append(picture);
+    appendCaption(figure, media);
+    return figure;
+  }
+
+  function appendCaption(figure, media) {
+    const parts = [text(media.location), text(media.caption), text(media.time)].filter(Boolean);
+    if (!parts.length) return;
+    const caption = create("figcaption", "");
+    parts.forEach((part, index) => {
+      if (index) caption.append(document.createTextNode(" · "));
+      caption.append(document.createTextNode(part));
+    });
+    figure.append(caption);
+  }
+
+  function renderChapterNavigation(entry, allEntries, index) {
+    const nav = create("nav", "travel-log-chapter-nav");
+    nav.setAttribute("aria-label", `${entry.place} chapter navigation`);
+    const planLink = create("a", "", "View the planned day");
+    planLink.href = `days/${entry.day.path}`;
+    nav.append(planLink);
+    const next = allEntries[index + 1];
+    if (next) {
+      const nextLink = create("a", "", `Next · ${next.place}`);
+      nextLink.href = `#${next.dayId}`;
+      nav.append(nextLink);
+    } else {
+      nav.append(create("span", "", "Latest chapter"));
+    }
+    return nav;
+  }
+
+  function setupRevealMotion() {
+    const candidates = document.querySelectorAll(".log-photo--full, .log-photo--portrait, .log-collage");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      candidates.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver((entriesToReveal) => {
+      entriesToReveal.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "80px 0px", threshold: 0.08 });
+    candidates.forEach((element) => observer.observe(element));
+  }
+
+  function activateHashTarget() {
+    if (!location.hash) return;
+    const target = document.querySelector(location.hash);
+    if (!target) return;
+    requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+  }
+
+  function create(tag, className, value) {
     const element = document.createElement(tag);
     if (className) element.className = className;
-    if (text) element.textContent = text;
+    if (value) element.textContent = value;
     return element;
-  };
-
-  const tabs = make("div", "trip-view-tabs");
-  tabs.setAttribute("role", "tablist");
-  tabs.setAttribute("aria-label", "Choose day view");
-  const planButton = make("button", "trip-view-tab", "The Plan");
-  const logButton = make("button", "trip-view-tab", "Memories");
-  [planButton, logButton].forEach((button, index) => {
-    button.type = "button";
-    button.id = index ? "travel-log-tab" : "plan-tab";
-    button.setAttribute("role", "tab");
-    button.setAttribute("aria-controls", index ? "travel-log-view" : "plan-view");
-    //button.innerHTML += `<small>${index ? "What actually happened" : "What we expected"}</small>`;
-  });
-  tabs.append(planButton, logButton);
-
-  const planView = make("div", "trip-view-panel");
-  planView.id = "plan-view";
-  planView.setAttribute("role", "tabpanel");
-  planView.setAttribute("aria-labelledby", "plan-tab");
-  [...main.children].filter((child) => child !== hero).forEach((child) => planView.append(child));
-
-  const logView = make("section", "trip-view-panel trip-log-view");
-  logView.id = "travel-log-view";
-  logView.setAttribute("role", "tabpanel");
-  logView.setAttribute("aria-labelledby", "travel-log-tab");
-  logView.tabIndex = 0;
-
-  const intro = make("header", "trip-log-intro day-container");
-  intro.append(make("p", "eyebrow", "Memories"));
-  if (hasText(day.actualTitle)) intro.append(make("h2", "", day.actualTitle));
-  if (hasText(day.actualSubtitle)) intro.append(make("p", "trip-log-subtitle", day.actualSubtitle));
-  if (hasText(day.actualSummary)) intro.append(make("p", "trip-log-summary", day.actualSummary));
-
-  if (Array.isArray(day.actualLocations) && day.actualLocations.length) {
-    const locations = make("ul", "trip-log-locations");
-    day.actualLocations.forEach((location) => {
-      if (!location || !hasText(location.name)) return;
-      const item = make("li", "");
-      const name = location.mapUrl ? make("a", "", location.name) : make("strong", "", location.name);
-      if (location.mapUrl) { name.href = location.mapUrl; name.target = "_blank"; name.rel = "noopener"; }
-      item.append(name);
-      if (hasText(location.note)) item.append(make("span", "", location.note));
-      locations.append(item);
-    });
-    if (locations.children.length) intro.append(locations);
-  }
-  logView.append(intro);
-
-  const notes = [
-    ["Best moment", day.bestMoment], ["Unexpected moment", day.unexpectedMoment],
-    ["Food highlight", day.foodHighlight], ["Quote of the day", day.quoteOfTheDay],
-    ["Weather note", day.weatherNote], ["Lesson learned", day.lessonLearned]
-  ].filter(([, value]) => hasText(value));
-  if (notes.length) {
-    const section = make("section", "trip-log-section day-container");
-    section.append(make("p", "eyebrow", "Day notes"));
-    const grid = make("div", "trip-log-note-grid");
-    notes.forEach(([label, value]) => { const card = make("article", ""); card.append(make("h3", "", label), make("p", "", value)); grid.append(card); });
-    section.append(grid); logView.append(section);
   }
 
-  const publicGallery = Array.isArray(day.gallery) ? day.gallery.filter((photo) => photo && photo.private !== true && hasText(photo.src) && hasText(photo.alt)) : [];
-  if (publicGallery.length) {
-    const section = make("section", "trip-log-section trip-log-gallery-section day-container");
-    section.append(make("p", "eyebrow", "Photographs"), make("h2", "", "The day in pictures."));
-    const gallery = make("div", "trip-log-gallery");
-    publicGallery.forEach((photo, index) => {
-      const button = make("button", "trip-log-photo"); button.type = "button"; button.dataset.photoIndex = String(index); button.setAttribute("aria-label", `Open photograph ${index + 1}: ${photo.alt}`);
-      const image = new Image(); image.src = photo.src; image.alt = photo.alt; image.loading = "lazy"; image.decoding = "async"; image.width = photo.width || 1200; image.height = photo.height || 900;
-      button.append(image);
-      if (hasText(photo.caption) || hasText(photo.location)) { const caption = make("span", ""); caption.textContent = [photo.location, photo.caption].filter(hasText).join(" · "); button.append(caption); }
-      gallery.append(button);
-    });
-    section.append(gallery); logView.append(section);
-    setupLightbox(gallery, publicGallery);
+  function text(value) {
+    return typeof value === "string" ? value.trim() : "";
   }
 
-  if (day.routeChanged && (hasText(day.routeChanged.planned) || hasText(day.routeChanged.actual))) {
-    const section = make("section", "trip-log-section trip-log-comparison day-container");
-    section.append(make("p", "eyebrow", "Plan versus reality"), make("h2", "", "Plan versus reality"));
-    const columns = make("div", "trip-log-comparison-grid");
-    [["Planned", day.routeChanged.planned], ["Actually", day.routeChanged.actual]].forEach(([label, value]) => { if (!hasText(value)) return; const column = make("article", ""); column.append(make("h3", "", label), make("p", "", value)); columns.append(column); });
-    section.append(columns); logView.append(section);
+  function positiveNumber(value) {
+    return Number.isFinite(value) && value > 0;
   }
 
-  hero.after(tabs, planView, logView);
-
-  const selectView = (view, updateHistory) => {
-    const showLog = view === "log";
-    planButton.setAttribute("aria-selected", String(!showLog)); logButton.setAttribute("aria-selected", String(showLog));
-    planButton.tabIndex = showLog ? -1 : 0; logButton.tabIndex = showLog ? 0 : -1;
-    planView.hidden = showLog; logView.hidden = !showLog;
-    if (updateHistory) history.pushState({ tripView: view }, "", showLog ? "#travel-log" : location.pathname + location.search);
-  };
-  planButton.addEventListener("click", () => selectView("plan", true));
-  logButton.addEventListener("click", () => selectView("log", true));
-  tabs.addEventListener("keydown", (event) => {
-    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-    event.preventDefault(); const target = event.key === "ArrowLeft" || event.key === "Home" ? planButton : logButton; target.focus(); target.click();
-  });
-  const syncHash = () => selectView(location.hash === "#travel-log" ? "log" : "plan", false);
-  window.addEventListener("popstate", syncHash); window.addEventListener("hashchange", syncHash); syncHash();
-
-  function setupLightbox(gallery, photos) {
-    const dialog = make("dialog", "trip-log-lightbox");
-    const close = make("button", "trip-log-lightbox-close", "Close"); close.type = "button";
-    const image = new Image(); image.alt = "";
-    const meta = make("p", "");
-    const previous = make("button", "trip-log-lightbox-previous", "Previous"); previous.type = "button";
-    const next = make("button", "trip-log-lightbox-next", "Next"); next.type = "button";
-    dialog.append(close, image, meta, previous, next); document.body.append(dialog);
-    let current = 0, opener = null;
-    const show = (index) => { current = (index + photos.length) % photos.length; const photo = photos[current]; image.src = photo.src; image.alt = photo.alt; meta.textContent = [photo.location, photo.caption, photo.dateTaken].filter(hasText).join(" · "); previous.disabled = next.disabled = photos.length < 2; };
-    gallery.addEventListener("click", (event) => { const button = event.target.closest("button[data-photo-index]"); if (!button) return; opener = button; show(Number(button.dataset.photoIndex)); dialog.showModal(); close.focus(); });
-    close.addEventListener("click", () => dialog.close()); previous.addEventListener("click", () => show(current - 1)); next.addEventListener("click", () => show(current + 1));
-    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
-    dialog.addEventListener("keydown", (event) => { if (event.key === "ArrowLeft") show(current - 1); if (event.key === "ArrowRight") show(current + 1); });
-    dialog.addEventListener("close", () => { if (opener) opener.focus(); });
+  function safeHttpUrl(value) {
+    if (!text(value)) return "";
+    try {
+      const url = new URL(value, document.baseURI);
+      return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+    } catch {
+      return "";
+    }
   }
+
+  function mediaUrl(value) {
+    const url = safeHttpUrl(value);
+    if (!url) return "";
+    return new URL(url).origin === location.origin ? url : "";
+  }
+
+  function formatDate(value, { short = false } = {}) {
+    const date = new Date(`${value}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return value;
+    return new Intl.DateTimeFormat("en-GB", short
+      ? { day: "numeric", month: "short" }
+      : { day: "numeric", month: "long", year: "numeric" }).format(date);
   }
 })();

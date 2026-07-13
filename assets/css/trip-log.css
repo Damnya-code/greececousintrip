@@ -1,344 +1,653 @@
-/* Injected only after a Travel Log day is explicitly published. */
-[data-theme="dark"] .trip-log-view {
-    background: #101923;
-    color: #e7edf4
+:root {
+    --log-surface: #f7f1e6;
+    --log-paper: #fffdf8;
+    --log-ink: #17233b;
+    --log-muted: #67717b;
+    --log-line: rgba(23, 35, 59, .18);
+    --log-night: #102130;
+    --log-accent: #2b7488
 }
 
-[data-theme="dark"] .trip-log-note-grid article,
-[data-theme="dark"] .trip-log-comparison-grid article {
-    border-color: #344455;
-    background: #182535;
-    color: #e7edf4
+html[data-theme="dark"] {
+    --log-surface: #0d1624;
+    --log-paper: #121f2d;
+    --log-ink: #e9eef5;
+    --log-muted: #aab8c4;
+    --log-line: rgba(219, 229, 237, .2);
+    --log-night: #07111c;
+    --log-accent: #78c5d4
 }
 
-.trip-view-tabs {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 220px));
-    justify-content: center;
-    gap: 1px;
-    padding: 18px 5vw;
-    background: rgba(251, 247, 237, .94);
-    border-bottom: 1px solid rgba(23, 35, 59, .14);
-    backdrop-filter: blur(14px)
+.travel-log-page:not(.travel-log-ready) {
+    visibility: hidden
 }
 
-.trip-view-tab {
-    border: 1px solid rgba(23, 35, 59, .25);
-    background: transparent;
-    color: var(--ink);
-    padding: 13px 18px;
-    font: 600 14px "DM Sans";
-    cursor: pointer
+.travel-log-page {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
+    background: var(--log-surface);
+    color: var(--log-ink)
 }
 
-.trip-view-tab small {
-    display: block;
-    margin-top: 3px;
-    font: 400 10px "DM Mono";
-    opacity: .7
+.travel-log-page main {
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+    overflow: clip
 }
 
-.trip-view-tab[aria-selected="true"] {
-    background: var(--ink);
-    color: #fff;
-    box-shadow: inset 0 -3px 0 var(--sand)
-}
-
-[data-theme="dark"] .trip-view-tab[aria-selected="true"] {
-    background: var(--ink);
-    color: #5ea3b4;
-    box-shadow: inset 0 -3px 0 var(--sand)
-}
-
-
-.trip-view-tab:focus-visible,
-.trip-log-photo:focus-visible,
-.trip-log-lightbox button:focus-visible {
+.travel-log-page a:focus-visible,
+.travel-log-page button:focus-visible,
+.travel-log-page video:focus-visible {
     outline: 3px solid var(--coral);
-    outline-offset: 3px
+    outline-offset: 4px
 }
 
-.trip-view-panel[hidden] {
-    display: none
+.travel-log-nav {
+    background: linear-gradient(110deg, rgba(5, 16, 25, .97), rgba(13, 37, 51, .96));
+    color: #f6f2e8
 }
 
-.trip-log-view {
-    background: var(--cream);
-    padding: 100px 0 0
+.travel-log-nav .logo,
+.travel-log-nav nav a {
+    color: #f6f2e8
 }
 
-.trip-log-intro {
-    padding-bottom: 90px
+.travel-log-masthead {
+    width: min(100% - 40px, 1120px);
+    margin: 0 auto;
+    padding: 150px 0 56px
 }
 
-.trip-log-intro h2,
-.trip-log-section>h2 {
-    margin: 0 0 24px;
-    font: 600 clamp(48px, 7vw, 90px)/.95 "Playfair Display";
+.travel-log-masthead .eyebrow {
+    margin: 0 0 18px;
+    color: var(--coral)
+}
+
+.travel-log-masthead h1 {
+    max-width: 720px;
+    margin: 0;
+    font: 600 clamp(46px, 7vw, 82px)/.94 "Playfair Display", serif;
     letter-spacing: -.045em
 }
 
-.trip-log-subtitle {
-    color: var(--blue);
-    font: 600 24px/1.35 "Playfair Display"
+.travel-log-masthead h1 em {
+    color: var(--log-accent);
+    font-weight: 600
 }
 
-.trip-log-summary {
-    max-width: 760px;
-    font-size: 19px;
-    line-height: 1.75
+.travel-log-preview-note {
+    display: inline-block;
+    margin: 28px 0 0;
+    padding: 8px 11px;
+    border: 1px solid var(--log-line);
+    color: var(--log-muted);
+    font: 500 10px/1.4 "DM Mono", monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase
 }
 
-.trip-log-locations {
+.travel-log-preview-note[hidden] {
+    display: none
+}
+
+.travel-log-index {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    list-style: none;
-    padding: 0;
-    margin: 32px 0 0
+    gap: 10px;
+    margin-top: 42px;
+    padding-bottom: 8px;
+    overflow-x: auto;
+    scrollbar-width: none
 }
 
-.trip-log-locations li {
-    padding: 12px 15px;
-    border: 1px solid rgba(23, 35, 59, .18)
+.travel-log-index::-webkit-scrollbar {
+    display: none
 }
 
-.trip-log-locations a,
-.trip-log-locations strong {
+.travel-log-index a {
+    flex: 0 0 auto;
+    padding: 9px 0 5px;
+    border-bottom: 1px solid var(--log-line);
+    color: var(--log-ink);
+    font: 500 12px/1.2 "DM Mono", monospace;
+    text-decoration: none
+}
+
+.travel-log-index a:hover {
+    border-color: var(--coral);
+    color: var(--coral)
+}
+
+.travel-log-chapter {
+    position: relative;
+    width: 100%;
+    padding-bottom: 110px;
+    scroll-margin-top: 90px
+}
+
+.travel-log-chapter-marker {
+    width: min(100% - 40px, 1120px);
+    margin: 0 auto;
+    padding: 44px 0 24px;
+    border-top: 1px solid var(--log-line)
+}
+
+.travel-log-chapter-marker time,
+.travel-log-chapter-marker p,
+.travel-log-chapter-marker small {
     display: block;
-    color: var(--ink);
-    font-size: 14px
+    margin: 0
 }
 
-.trip-log-locations span {
-    display: block;
+.travel-log-chapter-marker time {
+    color: var(--log-muted);
+    font: 500 11px/1.4 "DM Mono", monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase
+}
+
+.travel-log-chapter-marker p {
     margin-top: 4px;
-    color: #5d6670;
-    font-size: 12px
+    font: 600 clamp(28px, 4vw, 46px)/1 "Playfair Display", serif
 }
 
-.trip-log-section {
-    padding-top: 90px;
-    padding-bottom: 90px;
-    border-top: 1px solid rgba(23, 35, 59, .16)
+.travel-log-chapter-marker small {
+    margin-top: 10px;
+    color: var(--coral);
+    font: 500 10px/1.4 "DM Mono", monospace;
+    letter-spacing: .06em;
+    text-transform: uppercase
 }
 
-.trip-log-note-grid {
+.log-block {
+    margin-top: clamp(54px, 8vw, 112px)
+}
+
+.log-media {
+    margin-right: auto;
+    margin-left: auto
+}
+
+.log-media picture,
+.log-media img {
+    display: block;
+    width: 100%
+}
+
+.log-media img {
+    height: auto;
+    background: color-mix(in srgb, var(--log-ink) 8%, var(--log-surface));
+    object-fit: contain
+}
+
+.log-media figcaption {
+    padding-top: 10px;
+    color: var(--log-muted);
+    font: 400 11px/1.55 "DM Mono", monospace
+}
+
+.log-photo--full {
+    width: min(100%, 1680px);
+    margin-top: 0
+}
+
+.log-photo--full figcaption {
+    width: min(100% - 40px, 1120px);
+    margin: 0 auto
+}
+
+.log-photo--contained {
+    width: min(100% - 40px, 1120px)
+}
+
+.log-photo--portrait {
+    width: min(100% - 40px, 660px)
+}
+
+.log-photo--portrait.log-media--crop img {
+    height: min(82vh, 880px);
+    aspect-ratio: 3 / 4;
+    object-fit: cover
+}
+
+.log-photo--quiet {
+    width: min(76%, 820px)
+}
+
+.log-caption {
+    width: min(100% - 40px, 620px);
+    margin-right: auto;
+    margin-left: auto;
+    color: var(--log-muted);
+    font: 500 clamp(15px, 2vw, 18px)/1.65 "DM Sans", sans-serif;
+    text-align: center
+}
+
+.log-collage {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: rgba(23, 35, 59, .14)
+    width: min(100% - 40px, 1220px);
+    margin-right: auto;
+    margin-left: auto;
+    gap: clamp(8px, 1.4vw, 18px)
 }
 
-.trip-log-note-grid article,
-.trip-log-comparison-grid article {
-    min-height: 230px;
-    padding: 34px;
-    background: #f4eddf
+.log-collage figure {
+    min-width: 0;
+    margin: 0
 }
 
-.trip-log-note-grid h3,
-.trip-log-comparison h3 {
-    margin: 0 0 35px;
-    color: var(--blue);
-    font: 500 11px "DM Mono";
+.log-collage figcaption {
+    padding: 8px 2px 0
+}
+
+.log-collage--two-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+}
+
+.log-collage--feature-left,
+.log-collage--feature-right {
+    grid-template-columns: minmax(0, 1.75fr) minmax(220px, .75fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr))
+}
+
+.log-collage--feature-left figure:first-child,
+.log-collage--feature-right figure:first-child {
+    grid-row: 1 / span 2
+}
+
+.log-collage--feature-right figure:first-child {
+    grid-column: 2
+}
+
+.log-collage--feature-left figure:first-child img,
+.log-collage--feature-right figure:first-child img {
+    height: 100%;
+    object-fit: cover
+}
+
+.log-collage--film-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(100% - 40px, 1360px);
+    padding: clamp(12px, 2vw, 24px);
+    background: var(--log-night)
+}
+
+.log-collage--film-strip figure {
+    color: #e9eef5
+}
+
+.log-collage--film-strip figcaption {
+    color: rgba(233, 238, 245, .7)
+}
+
+.log-collage--film-strip img {
+    aspect-ratio: 3 / 4;
+    object-fit: cover
+}
+
+.log-collage--scrapbook {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    padding: clamp(20px, 4vw, 55px);
+    background: var(--log-paper)
+}
+
+.log-collage--scrapbook figure {
+    grid-column: span 5
+}
+
+.log-collage--scrapbook figure:nth-child(even) {
+    grid-column: 7 / span 6;
+    transform: translateY(24px) rotate(1deg)
+}
+
+.log-collage--scrapbook figure:nth-child(3n) {
+    grid-column: 3 / span 7;
+    transform: rotate(-1deg)
+}
+
+.log-sequence {
+    display: flex;
+    gap: 12px;
+    width: min(100% - 40px, 1220px);
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 12px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity
+}
+
+.log-sequence figure {
+    flex: 0 0 min(76vw, 520px);
+    margin: 0;
+    scroll-snap-align: start
+}
+
+.log-note {
+    width: min(100% - 40px, 720px);
+    margin-right: auto;
+    margin-left: auto
+}
+
+.log-note h2 {
+    margin: 0 0 28px;
+    font: 600 clamp(30px, 4vw, 46px)/1.05 "Playfair Display", serif;
+    letter-spacing: -.025em
+}
+
+.log-note p {
+    margin: 0 0 1.2em;
+    color: var(--log-ink);
+    font-size: clamp(16px, 1.7vw, 19px);
+    line-height: 1.78
+}
+
+.log-note p:last-child {
+    margin-bottom: 0
+}
+
+.log-note--long {
+    padding-left: clamp(20px, 4vw, 44px);
+    border-left: 1px solid var(--coral)
+}
+
+.log-quote {
+    width: min(100% - 40px, 920px);
+    margin-right: auto;
+    margin-left: auto;
+    padding: clamp(48px, 8vw, 96px) clamp(20px, 6vw, 70px);
+    border-top: 1px solid var(--log-line);
+    border-bottom: 1px solid var(--log-line);
+    text-align: center
+}
+
+.log-quote p {
+    margin: 0;
+    font: 600 clamp(30px, 5vw, 58px)/1.12 "Playfair Display", serif;
+    letter-spacing: -.03em
+}
+
+.log-quote cite {
+    display: block;
+    margin-top: 24px;
+    color: var(--log-muted);
+    font: 500 10px/1.4 "DM Mono", monospace;
+    letter-spacing: .09em;
+    text-transform: uppercase
+}
+
+.log-video {
+    width: min(100% - 40px, 1120px);
+    margin-right: auto;
+    margin-left: auto
+}
+
+.log-video video {
+    display: block;
+    width: 100%;
+    max-height: 82vh;
+    background: #07111c
+}
+
+.log-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100% - 40px, 900px);
+    margin-right: auto;
+    margin-left: auto;
+    border-top: 1px solid var(--log-line);
+    border-bottom: 1px solid var(--log-line)
+}
+
+.log-comparison>div {
+    padding: clamp(26px, 4vw, 46px)
+}
+
+.log-comparison>div+div {
+    border-left: 1px solid var(--log-line)
+}
+
+.log-comparison h2 {
+    margin: 0 0 18px;
+    color: var(--coral);
+    font: 500 10px/1.4 "DM Mono", monospace;
     letter-spacing: .1em;
     text-transform: uppercase
 }
 
-.trip-log-note-grid p,
-.trip-log-comparison p {
+.log-comparison p {
     margin: 0;
-    font: 600 25px/1.4 "Playfair Display"
+    font: 500 17px/1.65 "DM Sans", sans-serif
 }
 
-.trip-log-gallery {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 18px;
-    margin-top: 42px
+.log-place {
+    width: min(100% - 40px, 620px);
+    margin-right: auto;
+    margin-left: auto;
+    padding: 18px 0;
+    border-top: 1px solid var(--log-line);
+    border-bottom: 1px solid var(--log-line)
 }
 
-.trip-log-photo {
-    grid-column: span 6;
-    position: relative;
-    min-height: 320px;
-    padding: 0;
+.log-place a,
+.log-place strong {
+    color: var(--log-ink);
+    font: 600 18px/1.3 "Playfair Display", serif
+}
+
+.log-place a:hover {
+    color: var(--coral)
+}
+
+.log-place p {
+    margin: 6px 0 0;
+    color: var(--log-muted);
+    font-size: 13px
+}
+
+.log-pause {
+    width: min(100% - 40px, 420px);
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center
+}
+
+.log-pause hr {
+    width: 56px;
+    margin: 0 auto 14px;
     border: 0;
-    overflow: hidden;
-    background: #d9dfda;
-    cursor: zoom-in
+    border-top: 1px solid var(--log-line)
 }
 
-.trip-log-photo:nth-child(3n) {
-    grid-column: span 12
+.log-pause p {
+    color: var(--log-muted);
+    font: 500 10px/1.5 "DM Mono", monospace;
+    letter-spacing: .07em;
+    text-transform: uppercase
 }
 
-.trip-log-photo img {
-    display: block;
+.travel-log-chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    width: min(100% - 40px, 1120px);
+    margin: clamp(70px, 11vw, 140px) auto 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--log-line);
+    font: 500 12px/1.4 "DM Mono", monospace
+}
+
+.travel-log-chapter-nav a {
+    color: var(--log-ink);
+    text-decoration: none
+}
+
+.travel-log-chapter-nav a:hover {
+    color: var(--coral)
+}
+
+.travel-log-chapter-nav span {
+    color: var(--log-muted)
+}
+
+.travel-log-end {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
     width: 100%;
-    height: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    transition: transform .5s ease
-}
-
-.trip-log-photo:hover img {
-    transform: scale(1.025)
-}
-
-.trip-log-photo span {
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 14px;
-    padding: 10px 12px;
-    background: rgba(15, 29, 43, .78);
-    color: #fff;
-    text-align: left;
-    font-size: 12px
-}
-
-.trip-log-comparison-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    margin-top: 38px;
-    background: rgba(23, 35, 59, .16)
-}
-
-.trip-log-lightbox {
-    width: min(1100px, calc(100% - 40px));
-    max-height: calc(100vh - 40px);
-    padding: 54px 70px 30px;
+    max-width: none;
+    margin: 0;
+    padding: 56px max(20px, calc((100% - 1120px) / 2));
     border: 0;
-    background: #101b2b;
-    color: #fff
+    background: var(--log-night);
+    color: #e9eef5
 }
 
-.trip-log-lightbox::backdrop {
-    background: rgba(7, 14, 23, .86)
+.travel-log-end p {
+    margin: 0;
+    font: 600 clamp(26px, 4vw, 42px)/1.1 "Playfair Display", serif
 }
 
-.trip-log-lightbox img {
-    display: block;
-    max-width: 100%;
-    max-height: 72vh;
-    margin: auto;
-    object-fit: contain
+.travel-log-end a {
+    color: #e9eef5;
+    font-size: 13px
 }
 
-.trip-log-lightbox p {
-    min-height: 1.4em;
-    text-align: center;
-    color: rgba(255, 255, 255, .76)
+.travel-log-noscript {
+    margin: 140px 20px;
+    text-align: center
 }
 
-.trip-log-lightbox button {
-    border: 1px solid rgba(255, 255, 255, .35);
-    background: #101b2b;
-    color: #fff;
-    padding: 10px 13px;
-    cursor: pointer
+.travel-log-ready .log-photo--full,
+.travel-log-ready .log-photo--portrait,
+.travel-log-ready .log-collage {
+    transform: translateY(14px);
+    transition: transform .55s ease
 }
 
-.trip-log-lightbox-close {
-    position: absolute;
-    right: 16px;
-    top: 14px
+.travel-log-ready .log-photo--full.is-visible,
+.travel-log-ready .log-photo--portrait.is-visible,
+.travel-log-ready .log-collage.is-visible {
+    transform: none
 }
 
-.trip-log-lightbox-previous {
-    float: left
-}
-
-.trip-log-lightbox-next {
-    float: right
-}
-
-@media(max-width:760px) {
-    .trip-view-tabs {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 12px 20px
+@media (max-width: 760px) {
+    .travel-log-masthead {
+        width: min(100% - 32px, 1120px);
+        padding: 112px 0 40px
     }
 
-    .trip-view-tab {
-        padding: 11px 8px
+    .travel-log-masthead h1 {
+        font-size: clamp(42px, 14vw, 62px)
     }
 
-    .trip-log-view {
-        padding-top: 70px
+    .travel-log-index {
+        margin-top: 30px
     }
 
-    .trip-log-intro {
-        padding-bottom: 65px
+    .travel-log-chapter {
+        padding-bottom: 80px
     }
 
-    .trip-log-summary {
-        font-size: 17px
+    .travel-log-chapter-marker {
+        width: calc(100% - 32px);
+        padding-top: 34px
     }
 
-    .trip-log-section {
-        padding-top: 65px;
-        padding-bottom: 65px
+    .log-block {
+        margin-top: 58px
     }
 
-    .trip-log-note-grid,
-    .trip-log-comparison-grid {
+    .log-photo--contained,
+    .log-photo--portrait,
+    .log-collage,
+    .log-note,
+    .log-quote,
+    .log-video,
+    .log-comparison,
+    .log-place,
+    .log-pause,
+    .travel-log-chapter-nav {
+        width: calc(100% - 32px)
+    }
+
+    .log-photo--quiet {
+        width: calc(100% - 64px)
+    }
+
+    .log-photo--full figcaption {
+        width: calc(100% - 32px)
+    }
+
+    .log-photo--portrait.log-media--crop img {
+        height: auto;
+        aspect-ratio: 3 / 4
+    }
+
+    .log-collage--two-up,
+    .log-collage--feature-left,
+    .log-collage--feature-right,
+    .log-collage--film-strip,
+    .log-collage--scrapbook {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto
+    }
+
+    .log-collage--feature-left figure:first-child,
+    .log-collage--feature-right figure:first-child,
+    .log-collage--scrapbook figure,
+    .log-collage--scrapbook figure:nth-child(n) {
+        grid-column: auto;
+        grid-row: auto;
+        transform: none
+    }
+
+    .log-collage--feature-left figure:first-child img,
+    .log-collage--feature-right figure:first-child img {
+        height: auto;
+        object-fit: contain
+    }
+
+    .log-collage--film-strip img {
+        aspect-ratio: auto;
+        object-fit: contain
+    }
+
+    .log-note--long {
+        padding-left: 20px
+    }
+
+    .log-comparison {
         grid-template-columns: 1fr
     }
 
-    .trip-log-note-grid article,
-    .trip-log-comparison-grid article {
-        min-height: 0;
-        padding: 27px 22px
+    .log-comparison>div+div {
+        border-top: 1px solid var(--log-line);
+        border-left: 0
     }
 
-    .trip-log-photo,
-    .trip-log-photo:nth-child(3n) {
-        grid-column: span 12;
-        min-height: 240px
+    .travel-log-chapter-nav,
+    .travel-log-end {
+        align-items: flex-start;
+        flex-direction: column
     }
 
-    .trip-log-lightbox {
-        width: calc(100% - 20px);
-        padding: 54px 16px 20px
+    .travel-log-end {
+        padding: 44px 20px
     }
 }
 
-/* Override each day's light practical palette after its individual theme. */
-[data-theme="dark"] .day-page .practical {
-    background: #162332;
-    color: #e7edf4
-}
+@media (prefers-reduced-motion: reduce) {
+    .travel-log-page {
+        scroll-behavior: auto
+    }
 
-[data-theme="dark"] .day-page .practical-list {
-    border-color: #435363
-}
-
-[data-theme="dark"] .day-page .practical-list article {
-    border-color: #354657
-}
-
-[data-theme="dark"] .day-page .practical-list p,
-[data-theme="dark"] .day-page .practical-grid>div>p {
-    color: #aebbc7
-}
-
-[data-theme="dark"] .day-page footer {
-    background: #08111d;
-    color: #e7edf4
-}
-
-[data-theme="dark"] .day-page .day-highlights {
-    background: #0b1724;
-    color: #f2f6fa
-}
-
-[data-theme="dark"] .day-page .day-highlights .experience-card {
-    border-color: #3a4c5f;
-    color: #f2f6fa
+    .travel-log-ready .log-photo--full,
+    .travel-log-ready .log-photo--portrait,
+    .travel-log-ready .log-collage {
+        transform: none;
+        transition: none
+    }
 }

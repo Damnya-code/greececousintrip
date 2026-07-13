@@ -10,8 +10,11 @@ const mimeTypes = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".mp4": "video/mp4",
   ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".vtt": "text/vtt; charset=utf-8",
+  ".webm": "video/webm",
   ".webp": "image/webp"
 };
 

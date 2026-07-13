@@ -78,10 +78,6 @@ html[data-theme="dark"] {
     color: #aebbc7
 }
 
-[data-theme="dark"] .trip-view-tabs {
-    background: rgba(16, 25, 35, .95)
-}
-
 .day-page {
     background: var(--day-ivory);
     color: var(--day-navy)
@@ -2041,4 +2037,38 @@ html {
     .day-nav > nav {
         transition: none;
     }
+}
+
+/* Daily-page surfaces belong here rather than in the optional Travel Log stylesheet. */
+[data-theme="dark"] .day-page .practical {
+    background: #162332;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .day-page .practical-list {
+    border-color: #435363
+}
+
+[data-theme="dark"] .day-page .practical-list article {
+    border-color: #354657
+}
+
+[data-theme="dark"] .day-page .practical-list p,
+[data-theme="dark"] .day-page .practical-grid>div>p {
+    color: #aebbc7
+}
+
+[data-theme="dark"] .day-page footer {
+    background: #08111d;
+    color: #e7edf4
+}
+
+[data-theme="dark"] .day-page .day-highlights {
+    background: #0b1724;
+    color: #f2f6fa
+}
+
+[data-theme="dark"] .day-page .day-highlights .experience-card {
+    border-color: #3a4c5f;
+    color: #f2f6fa
 }

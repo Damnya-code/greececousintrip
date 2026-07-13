@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A private visual record of the Aegean Odyssey.">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Travel Log | Aegean Odyssey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/trip-log.css">
+  <script src="assets/js/theme.js"></script>
+</head>
+
+<body class="travel-log-page" data-travel-log-page>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="nav travel-log-nav">
+    <a class="logo" href="index.html">Aegean <i>Odyssey</i></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html#itinerary">The plan</a>
+      <a href="essentials.html">Essentials</a>
+    </nav>
+  </header>
+
+  <main id="travel-log-main" hidden>
+    <header class="travel-log-masthead">
+      <p class="eyebrow">Travel Log</p>
+      <h1>The trip,<br><em>as it happened.</em></h1>
+      <p id="travel-log-preview-note" class="travel-log-preview-note" hidden>
+        Local draft preview · temporary content
+      </p>
+      <nav id="travel-log-index" class="travel-log-index" aria-label="Travel Log chapters"></nav>
+    </header>
+
+    <div id="travel-log-feed" aria-live="polite"></div>
+
+    <footer class="travel-log-end">
+      <p>End of the current log.</p>
+      <a href="index.html#itinerary">Return to the planned journey</a>
+    </footer>
+  </main>
+
+  <noscript>
+    <style>body { visibility: visible !important; }</style>
+    <p class="travel-log-noscript"><a href="index.html#itinerary">Return to the itinerary</a></p>
+  </noscript>
+
+  <script src="data/trip-config.js"></script>
+  <script src="data/trip-log-index.js"></script>
+  <script src="assets/js/trip-log.js"></script>
+</body>
+
+</html>

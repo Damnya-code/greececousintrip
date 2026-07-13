@@ -1,15 +1,18 @@
 (function () {
-  // This manifest controls loading only. Files committed to a public repository remain directly accessible.
-  window.TRIP_LOG_INDEX = {
-    version: 1,
+  // Loading manifest only. Repository files remain directly accessible on a public static site.
+  window.TRIP_LOG_INDEX = Object.freeze({
+    version: 2,
     days: {
-      "day-01": { published: false },
-      "day-02": { published: false },
-      "day-03": { published: false },
-      "day-04": { published: false },
-      "day-05": { published: false },
-      "day-06": { published: false },
-      "day-07": { published: false }
+      "day-01": { state: "hidden" },
+      "day-02": { state: "hidden" },
+      "day-03": {
+        state: "draft",
+        file: "trip-log/day-03.js"
+      },
+      "day-04": { state: "hidden" },
+      "day-05": { state: "hidden" },
+      "day-06": { state: "hidden" },
+      "day-07": { state: "hidden" }
     }
-  };
+  });
 })();
