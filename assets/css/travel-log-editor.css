@@ -46,6 +46,211 @@ html[data-theme="dark"] {
     transform: none
 }
 
+.editor-export-primary {
+    border-color: var(--action) !important;
+    background: var(--action) !important;
+    color: #fff !important
+}
+
+.package-export-dialog {
+    position: fixed;
+    inset: 0;
+    box-sizing: border-box;
+    width: min(760px, calc(100dvw - 32px));
+    height: min(82dvh, 760px);
+    max-width: calc(100dvw - 32px);
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--editor-border);
+    border-radius: 5px;
+    background: var(--editor-surface);
+    color: var(--ink);
+    box-shadow: 0 24px 70px rgba(10, 22, 36, .32)
+}
+
+.package-export-dialog::backdrop {
+    background: rgba(7, 20, 32, .7)
+}
+
+.package-export-shell {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden
+}
+
+.package-export-heading,
+.package-export-actions,
+.package-export-options,
+.package-day-row,
+.package-day-status {
+    display: flex;
+    align-items: center
+}
+
+.package-export-heading {
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--editor-border);
+    background: var(--editor-surface)
+}
+
+.package-export-heading h2,
+.package-export-heading p,
+.package-export-feedback,
+.package-export-progress p {
+    margin: 0
+}
+
+.package-export-heading h2 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.7rem, 4vw, 2.4rem)
+}
+
+.package-export-close {
+    align-self: flex-start
+}
+
+.package-export-body {
+    min-height: 0;
+    padding: 18px 24px 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable
+}
+
+.package-export-body > * + * {
+    margin-top: 18px
+}
+
+.package-export-options {
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    padding: 13px 15px;
+    border: 1px solid var(--editor-border);
+    background: var(--editor-panel)
+}
+
+.package-export-options label,
+.package-day-row label {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center
+}
+
+.package-day-list {
+    min-width: 0;
+    padding: 0;
+    border: 0
+}
+
+.package-day-list legend,
+.package-export-issues h3 {
+    margin-bottom: 9px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase
+}
+
+.package-day-row {
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--editor-border)
+}
+
+.package-day-row small {
+    display: block;
+    margin-top: 2px;
+    color: var(--editor-muted)
+}
+
+.package-day-status {
+    flex: 0 0 auto;
+    gap: 7px;
+    font-size: .78rem;
+    font-weight: 700
+}
+
+.package-day-status::before {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--editor-muted);
+    content: ""
+}
+
+.package-day-status[data-level="ready"]::before { background: #3b8069 }
+.package-day-status[data-level="warning"]::before { background: #b58132 }
+.package-day-status[data-level="blocked"]::before { background: #b44f4b }
+
+.package-export-summary,
+.package-export-issues {
+    font-size: .9rem
+}
+
+.package-export-issues ul {
+    margin: 0;
+    padding-left: 20px
+}
+
+.package-export-issues li + li {
+    margin-top: 5px
+}
+
+.package-export-progress {
+    padding: 14px;
+    border: 1px solid var(--editor-border);
+    background: var(--editor-panel)
+}
+
+.package-export-progress progress {
+    width: 100%;
+    margin-top: 8px;
+    accent-color: var(--action)
+}
+
+.package-export-feedback {
+    min-height: 1.4em;
+    color: var(--editor-muted)
+}
+
+.package-export-actions {
+    gap: 8px;
+    padding: 14px 24px;
+    border-top: 1px solid var(--editor-border);
+    background: var(--editor-panel)
+}
+
+.package-export-actions [data-package-refresh],
+.package-export-actions [data-package-cancel] {
+    margin-right: auto
+}
+
+@media (max-width: 560px) {
+    .package-export-dialog {
+        width: calc(100dvw - 16px);
+        max-width: calc(100dvw - 16px);
+        height: calc(100dvh - 16px);
+        max-height: calc(100dvh - 16px)
+    }
+
+    .package-export-heading,
+    .package-export-body,
+    .package-export-actions {
+        padding-right: 18px;
+        padding-left: 18px
+    }
+
+    .package-export-heading { align-items: flex-start }
+    .package-day-row { align-items: flex-start }
+}
+
 .editor-sr-only {
     position: absolute;
     width: 1px;
@@ -133,7 +338,8 @@ html[data-theme="dark"] {
 
 .editor-command-bar button,
 .editor-panel button,
-.editor-mobile-tabs button {
+.editor-desktop-app button,
+.package-export-dialog button {
     min-height: 36px;
     padding: 7px 10px;
     border: 1px solid var(--editor-border);
@@ -147,14 +353,17 @@ html[data-theme="dark"] {
 
 .editor-command-bar button:hover,
 .editor-panel button:hover,
-.editor-mobile-tabs button:hover {
+.editor-desktop-app button:hover,
+.package-export-dialog button:hover {
     border-color: var(--action);
     background: color-mix(in srgb, var(--action) 9%, transparent)
 }
 
 .editor-command-bar button:focus-visible,
 .editor-panel button:focus-visible,
-.editor-mobile-tabs button:focus-visible,
+.editor-desktop-app button:focus-visible,
+.package-export-dialog button:focus-visible,
+.package-export-dialog input:focus-visible,
 .editor-panel input:focus-visible,
 .editor-panel textarea:focus-visible,
 .editor-panel select:focus-visible {
@@ -163,7 +372,8 @@ html[data-theme="dark"] {
 }
 
 .editor-command-bar button:disabled,
-.editor-panel button:disabled {
+.editor-panel button:disabled,
+.package-export-dialog button:disabled {
     opacity: .42;
     cursor: not-allowed
 }
@@ -667,7 +877,7 @@ html[data-theme="dark"] {
     transform: translateY(0)
 }
 
-.editor-mobile-tabs {
+.editor-desktop-notice {
     display: none
 }
 
@@ -697,105 +907,42 @@ html[data-theme="dark"] {
 }
 
 @media (max-width: 760px) {
+    .editor-skip-link,
     .editor-nav>p {
         display: none
     }
 
     .editor-main {
-        width: min(100% - 16px, 1800px);
-        margin-top: 8px
-    }
-
-    .editor-command-bar {
-        align-items: flex-start;
-        flex-wrap: wrap
-    }
-
-    .editor-save-state {
-        margin-left: auto
-    }
-
-    .editor-command-actions {
-        flex-basis: 100%;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 3px
-    }
-
-    .editor-command-actions button {
-        flex: 0 0 auto
-    }
-
-    .editor-mobile-tabs {
-        position: sticky;
-        z-index: 20;
-        top: 60px;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-        margin-top: 8px;
-        padding: 4px;
-        border: 1px solid var(--editor-border);
-        background: var(--editor-surface)
+        width: min(100% - 32px, 680px);
+        min-height: calc(100dvh - 92px);
+        margin-top: 0;
+        place-items: center
     }
 
-    .editor-mobile-tabs button[aria-selected="true"] {
-        border-color: var(--action);
-        background: var(--action);
-        color: #fff
-    }
-
-    .editor-workspace {
-        display: block;
-        margin-top: 7px
-    }
-
-    .editor-panel {
-        width: 100%;
-        height: auto;
-        min-height: calc(100vh - 210px);
-        max-height: none
-    }
-
-    body[data-editor-area="content"] [data-editor-panel]:not([data-editor-panel="content"]),
-    body[data-editor-area="preview"] [data-editor-panel]:not([data-editor-panel="preview"]),
-    body[data-editor-area="settings"] [data-editor-panel]:not([data-editor-panel="settings"]) {
+    .editor-desktop-app,
+    .package-export-dialog {
         display: none
     }
 
-    .editor-preview-panel {
-        height: calc(100vh - 210px);
-        min-height: 520px
+    .editor-desktop-notice {
+        display: block;
+        max-width: 520px;
+        padding: 32px 0;
+        text-align: center
     }
 
-    .editor-preview-toolbar {
-        align-items: flex-start;
-        flex-wrap: wrap
+    .editor-desktop-notice h1 {
+        margin: 0;
+        font: 600 clamp(1.8rem, 8vw, 2.7rem)/1.08 "Playfair Display", serif
     }
 
-    .editor-preview-toolbar>div:first-child {
-        flex-basis: 100%
-    }
-
-    .editor-preview-stage {
-        height: calc(100% - 108px)
-    }
-
-    .editor-settings-panel form {
-        display: block
-    }
-}
-
-@media (max-width: 420px) {
-    .template-grid,
-    .add-block-grid,
-    .settings-grid {
-        grid-template-columns: 1fr
-    }
-
-    .editor-segmented {
-        flex-wrap: nowrap;
-        overflow-x: auto
+    .editor-desktop-notice p {
+        max-width: 440px;
+        margin: 16px auto 0;
+        color: var(--editor-muted);
+        font-size: 1rem;
+        line-height: 1.6
     }
 }
 

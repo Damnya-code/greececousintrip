@@ -23,6 +23,12 @@
   </header>
 
   <main id="editor-main" class="editor-main">
+    <section class="editor-desktop-notice" aria-labelledby="editor-desktop-title">
+      <h1 id="editor-desktop-title">The Travel Log editor is designed for a larger screen.</h1>
+      <p>Open it on a laptop or desktop to edit and export your trip.</p>
+    </section>
+
+    <div class="editor-desktop-app">
     <header class="editor-command-bar">
       <div>
         <p class="eyebrow">Editor preview</p>
@@ -32,6 +38,8 @@
       <div class="editor-command-actions" aria-label="Editor file actions">
         <button type="button" data-action="undo" disabled>Undo</button>
         <button type="button" data-action="redo" disabled>Redo</button>
+        <button class="editor-export-primary" type="button" data-action="export-trip-package">Export trip</button>
+        <button type="button" data-action="export-day-package">Export current day</button>
         <button type="button" data-action="import">Import JSON</button>
         <button type="button" data-action="copy">Copy data</button>
         <button type="button" data-action="export-json">Export JSON</button>
@@ -39,12 +47,6 @@
         <input id="editor-import-file" type="file" accept="application/json,.json" hidden>
       </div>
     </header>
-
-    <div class="editor-mobile-tabs" role="tablist" aria-label="Editor areas">
-      <button type="button" role="tab" aria-selected="true" aria-controls="editor-content-panel" data-editor-area="content">Content</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls="editor-preview-panel" data-editor-area="preview">Preview</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls="editor-settings-panel" data-editor-area="settings">Settings</button>
-    </div>
 
     <div class="editor-workspace">
       <aside id="editor-content-panel" class="editor-panel editor-content-panel" data-editor-panel="content">
@@ -114,7 +116,7 @@
           </div>
         </div>
         <div class="editor-preview-stage" data-preview-stage="desktop">
-          <iframe id="travel-log-editor-preview" title="Travel Log live preview" src="preview.html?preview=editor"></iframe>
+          <iframe id="travel-log-editor-preview" title="Travel Log live preview" data-src="preview.html?preview=editor"></iframe>
         </div>
       </section>
 
@@ -128,13 +130,55 @@
         <form data-settings-form novalidate></form>
       </aside>
     </div>
+    </div>
   </main>
+
+  <dialog id="travel-log-package-export" class="package-export-dialog" aria-labelledby="package-export-title">
+    <form method="dialog" class="package-export-shell">
+      <header class="package-export-heading">
+        <div>
+          <p class="eyebrow">Repository package</p>
+          <h2 id="package-export-title">Export Travel Log</h2>
+          <p>Choose the saved entries to package. Nothing here changes the editor drafts.</p>
+        </div>
+        <button type="submit" class="package-export-close" value="close" aria-label="Close export panel">Close</button>
+      </header>
+
+      <div class="package-export-body">
+      <div class="package-export-options">
+        <label><input type="checkbox" data-package-include-drafts checked> Include draft entries</label>
+        <label><input type="checkbox" data-package-feature-flag> Include feature-flag instructions</label>
+      </div>
+
+      <div class="package-export-summary" data-package-summary aria-live="polite"></div>
+      <fieldset class="package-day-list">
+        <legend>Select days</legend>
+        <div data-package-days></div>
+      </fieldset>
+
+      <section class="package-export-issues" aria-labelledby="package-issues-title">
+        <h3 id="package-issues-title">Preflight details</h3>
+        <div data-package-issues></div>
+      </section>
+
+      <div class="package-export-progress" data-package-progress hidden>
+        <p data-package-progress-label>Preparing export…</p>
+        <progress data-package-progress-bar max="100" value="0">0%</progress>
+      </div>
+      <p class="package-export-feedback" data-package-feedback role="status" aria-live="polite"></p>
+      </div>
+
+      <footer class="package-export-actions">
+        <button type="button" data-package-cancel hidden>Cancel</button>
+        <button type="button" data-package-refresh>Refresh drafts</button>
+        <button type="button" class="editor-export-primary" data-package-create>Create ZIP</button>
+      </footer>
+    </form>
+  </dialog>
 
   <div class="editor-toast" data-editor-status aria-live="polite" aria-atomic="true"></div>
 
-  <script src="../data/trip-config.js"></script>
-  <script src="../data/trip-log-index.js"></script>
-  <script src="../assets/js/travel-log-editor.js"></script>
+  <script src="../assets/js/travel-log-editor-bootstrap.js"></script>
 </body>
 
 </html>

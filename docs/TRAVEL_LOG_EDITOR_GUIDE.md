@@ -20,6 +20,8 @@ http://127.0.0.1:5500/editor/index.html
 
 The editor is deliberately absent from the public website navigation. Its `noindex` setting discourages search indexing, but it is not access control. Anything committed to a public repository remains publicly requestable.
 
+The editor requires a screen wider than 760px. On a phone or narrow browser window it shows a desktop-only notice and does not load the editor, package exporter or live-preview iframe. Open it on a laptop or desktop for authoring and export.
+
 ## Start an entry
 
 1. Choose a trip day.
@@ -124,6 +126,22 @@ The status changes between **Unsaved**, **Saving…** and **Saved locally**. Rel
 
 ## Import and export
 
+### Export trip package
+
+Choose **Export trip** to discover every day draft saved in this browser. You do not need to open each day first. The export panel lets you select included days and decide whether draft and hidden entries should be available for selection.
+
+Each day receives one preflight result:
+
+- **Ready** means the entry and every required media reference can be packaged.
+- **Warning** means the package can be created, but the entry is not published or incomplete placeholders will be removed.
+- **Blocked** means required media or renderable content is missing. A blocked selected day must be fixed or excluded.
+
+Local photographs are converted to WebP without changing the originals. The package creates a mobile derivative around a 960px long edge and a large derivative up to 2200px, without upscaling. Local videos are copied unchanged. Existing files already available at a repository path remain referenced instead of being duplicated.
+
+The downloaded ZIP contains renderer entries, a selected-day manifest, packaged media, an editor metadata backup, a package report and publishing instructions. The feature flag remains disabled. The optional feature-flag choice adds instructions only; it does not edit or publish the site.
+
+Choose **Export current day** for the same workflow limited to the active day.
+
 ### Export JSON
 
 Creates an editor project file containing:
@@ -148,15 +166,14 @@ Copies the clean editor JSON representation for inspection or backup.
 
 Accepts either an editor JSON export or a renderer-compatible entry represented as pure JSON. JavaScript files are not accepted. Unsupported block types and fields are ignored and reported.
 
-## What export does not do yet
+## What package export does not do
 
-The MVP does not:
+Package export does not:
 
-- copy or optimise image files
-- create a media ZIP
 - modify the repository
-- update the publication manifest
 - enable the public feature flag
 - commit or deploy the website
+- transcode videos
+- include image or video binaries inside the JSON backup
 
-Publishing remains a deliberate repository workflow. Before putting photographs in a public repository, remove ticket details, booking references, access information and any image the group has not approved.
+Publishing remains a deliberate copy-and-review workflow described inside every ZIP. Before putting photographs in a public repository, remove ticket details, booking references, access information and any image the group has not approved.

@@ -151,7 +151,6 @@
     renderTemplates();
     renderAddButtons();
     bindStaticEvents();
-    elements.body.dataset.editorArea = "content";
     const lastDay = localStorage.getItem(LAST_DAY_KEY);
     if (daysById.has(lastDay)) selectDay(lastDay);
     else renderAll();
@@ -242,7 +241,6 @@
     elements.importFile.addEventListener("change", importSelectedFile);
     document.querySelectorAll("[data-preview-width]").forEach((button) => button.addEventListener("click", () => setPreviewWidth(button.dataset.previewWidth)));
     document.querySelectorAll("[data-preview-theme]").forEach((button) => button.addEventListener("click", () => setPreviewTheme(button.dataset.previewTheme)));
-    setupMobileTabs();
     elements.preview.addEventListener("load", () => {
       connectPreviewFrame({ recover: true });
     });
@@ -264,26 +262,6 @@
     }
 
     if (recover) elements.preview.src = "preview.html?preview=editor";
-  }
-
-  function setupMobileTabs() {
-    const tabs = [...document.querySelectorAll("[data-editor-area]")];
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => activateEditorArea(tab.dataset.editorArea));
-      tab.addEventListener("keydown", (event) => {
-        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-        event.preventDefault();
-        const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1
-          : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
-        tabs[next].focus();
-        activateEditorArea(tabs[next].dataset.editorArea);
-      });
-    });
-  }
-
-  function activateEditorArea(area) {
-    elements.body.dataset.editorArea = area;
-    document.querySelectorAll("[data-editor-area]").forEach((tab) => tab.setAttribute("aria-selected", String(tab.dataset.editorArea === area)));
   }
 
   async function selectDay(dayId, { preferDraft = true } = {}) {
@@ -324,7 +302,6 @@
       current.entry.blocks.push(block);
       current.selectedBlockId = block.id;
     }, { settings: true });
-    if (matchMedia("(max-width: 760px)").matches) activateEditorArea("settings");
   }
 
   function handleBlockListClick(event) {
@@ -349,7 +326,6 @@
     current.selectedBlockId = blockId;
     renderBlockList();
     renderSettings();
-    if (matchMedia("(max-width: 760px)").matches) activateEditorArea("settings");
   }
 
   function moveBlock(from, to) {
@@ -411,6 +387,10 @@
     if (action === "copy") copyData();
     if (action === "export-json") exportJson();
     if (action === "export-renderer") exportRenderer();
+    if (action === "export-trip-package" || action === "export-day-package") {
+      await saveDraftNow();
+      window.TravelLogPackageExporter?.open(action === "export-day-package" ? "day" : "trip", current.dayId);
+    }
     if (action === "load-existing") loadExistingEntry();
     if (action === "duplicate-entry") duplicateEntry();
     if (action === "clear-draft") clearDraft();

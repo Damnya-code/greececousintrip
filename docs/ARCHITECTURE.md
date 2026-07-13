@@ -243,6 +243,8 @@ The content-focused editing workflow and copyable examples are in `docs/TRAVEL_L
 
 `editor/index.html` is a local no-code authoring tool and is not linked from public navigation. It carries `noindex, nofollow, noarchive`, which is indexing guidance rather than authentication. Open it through the normal local HTTP server at `/editor/index.html`.
 
+`assets/js/travel-log-editor-bootstrap.js` is the editor's responsive boundary. At 760px and below it leaves the workspace hidden, does not assign the preview iframe source and does not load trip data, JSZip, package export or editor modules. Above 760px it loads those dependencies in order. Public pages do not use this bootstrap and remain fully responsive.
+
 ### Responsibilities and state
 
 `assets/js/travel-log-editor.js` owns day selection, starter templates, ordered blocks, controlled settings, validation, bounded undo/redo, local persistence, media metadata and import/export. Editor-specific presentation stays in `assets/css/travel-log-editor.css`; the public log does not load that file.
@@ -276,7 +278,11 @@ Editor imports use pure JSON only. Imported values pass through allow-lists for 
 
 Editor JSON exports use `editorVersion: 1` and `schemaVersion: 2`, plus the clean entry, a media manifest and an export timestamp. Renderer export produces a safely serialised `day-0X.js` registry assignment. Temporary object URLs and image binaries are excluded from both formats.
 
-The deferred publishing workflow still needs media copying/optimisation, a final package or ZIP, manifest updates, feature-flag changes, repository writes and deployment. The MVP performs none of those operations.
+`assets/js/travel-log-package-export.js` owns multi-day discovery, asynchronous preflight, IndexedDB media reads, WebP derivative generation and repository-package assembly. It reads each `aegeanTravelLogEditor:v1:<day-id>` snapshot directly, so saved days do not need to be opened first. Local JSZip is loaded from `assets/vendor/jszip/`; its licence is bundled beside it.
+
+The package exporter creates a repository-shaped ZIP with selected renderer entries, `data/trip-log-index.js`, responsive local media, a metadata-only editor backup, a report and publishing guide. Existing repository media remains referenced after a successful local path check. Missing required blobs or repository files block export rather than being omitted. Video blobs are copied without transcoding. Cancellation never changes localStorage, IndexedDB or the active editor state.
+
+Direct repository writes, feature-flag mutation, commits and deployment remain deferred. The optional feature-flag export produces manual instructions and defaults off; the public Travel Log remains disabled until deliberately enabled in `data/trip-config.js`.
 
 Deferred work includes real trip media, an image-optimization command, video caption tracks, automated publishing and any authenticated/private distribution approach. The local editor selects from the renderer's controlled block, presentation and layout values rather than writing HTML, CSS coordinates or arbitrary layout dimensions. No upload system, database or social interaction is planned in this static phase.
 

@@ -706,6 +706,154 @@ test("editor autosaves, restores and exports clean data without object URLs", as
   assertNoFailures();
 });
 
+test("Travel Log package export discovers saved days and packages responsive local media", async ({ page }) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1024, height: 650 });
+  const assertNoFailures = monitorPage(page);
+  await openEditor(page, "day-03");
+  await page.getByRole("button", { name: /Minimal Four deliberate moments/ }).click();
+  const settings = page.locator("[data-settings-form]");
+  await settings.locator('[data-editor-field="choose-image"]').setInputFiles("assets/days/day-03-chania.webp");
+  await settings.locator('[data-editor-field="alt-text"]').fill("Temporary Chania editor package test image");
+  await expect(page.locator("[data-save-state]")).toHaveText("Saved locally");
+
+  await page.getByLabel("Trip day", { exact: true }).selectOption("day-04");
+  await page.getByRole("button", { name: /Blank Start with an empty entry/ }).click();
+  await page.getByRole("button", { name: "Caption", exact: true }).click();
+  await settings.locator('[data-editor-field="caption"]').fill("Temporary Day 4 package caption.");
+  await expect(page.locator("[data-save-state]")).toHaveText("Saved locally");
+
+  await page.getByRole("button", { name: "Export trip", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Export Travel Log" });
+  await expect(dialog).toBeVisible();
+  const dialogLayout = await dialog.evaluate((element) => {
+    const dialogRect = element.getBoundingClientRect();
+    const headerRect = element.querySelector(".package-export-heading").getBoundingClientRect();
+    const bodyRect = element.querySelector(".package-export-body").getBoundingClientRect();
+    const footerRect = element.querySelector(".package-export-actions").getBoundingClientRect();
+    return {
+      dialogTop: dialogRect.top,
+      dialogBottom: dialogRect.bottom,
+      viewportHeight: window.innerHeight,
+      headerBottom: headerRect.bottom,
+      bodyTop: bodyRect.top,
+      bodyBottom: bodyRect.bottom,
+      footerTop: footerRect.top,
+      footerBottom: footerRect.bottom,
+      position: getComputedStyle(element).position,
+      bodyOverflow: getComputedStyle(element.querySelector(".package-export-body")).overflowY
+    };
+  });
+  expect(dialogLayout.position).toBe("fixed");
+  expect(dialogLayout.dialogTop).toBeGreaterThanOrEqual(0);
+  expect(dialogLayout.dialogBottom).toBeLessThanOrEqual(dialogLayout.viewportHeight);
+  expect(dialogLayout.headerBottom).toBeLessThanOrEqual(dialogLayout.bodyTop + 1);
+  expect(dialogLayout.bodyBottom).toBeLessThanOrEqual(dialogLayout.footerTop + 1);
+  expect(dialogLayout.footerBottom).toBeLessThanOrEqual(dialogLayout.dialogBottom + 1);
+  expect(dialogLayout.bodyOverflow).toBe("auto");
+  await expect(dialog.locator("[data-package-day]:checked")).toHaveCount(2);
+  await expect(dialog.locator("[data-package-summary]")).toContainText("2 days selected");
+  await expect(dialog.locator('[data-level="blocked"]')).toHaveCount(0);
+
+  const tripDownloadPromise = page.waitForEvent("download");
+  await dialog.getByRole("button", { name: "Create ZIP" }).click();
+  const tripDownload = await tripDownloadPromise;
+  expect(tripDownload.suggestedFilename()).toBe("aegean-odyssey-travel-log.zip");
+  const tripBuffer = await fs.readFile(await tripDownload.path());
+  const tripArchive = await page.evaluate(async (base64) => {
+    const zip = await window.JSZip.loadAsync(base64, { base64: true });
+    const root = "aegean-odyssey-travel-log/";
+    return {
+      files: Object.keys(zip.files),
+      day3: await zip.file(`${root}data/trip-log/day-03.js`).async("string"),
+      index: await zip.file(`${root}data/trip-log-index.js`).async("string"),
+      backup: await zip.file(`${root}backup/travel-log-editor-project.json`).async("string"),
+      report: await zip.file(`${root}PACKAGE_REPORT.md`).async("string"),
+      guide: await zip.file(`${root}PUBLISHING_GUIDE.md`).async("string")
+    };
+  }, tripBuffer.toString("base64"));
+  expect(tripArchive.files).toContain("aegean-odyssey-travel-log/data/trip-log/day-04.js");
+  expect(tripArchive.files.some((name) => /assets\/log\/day-03\/.*-960\.webp$/.test(name))).toBeTruthy();
+  expect(tripArchive.files.some((name) => /assets\/log\/day-03\/.*\.webp$/.test(name) && !name.endsWith("-960.webp"))).toBeTruthy();
+  expect(tripArchive.day3).toContain('sources');
+  expect(tripArchive.day3).not.toContain("blob:");
+  expect(tripArchive.day3).not.toContain("mediaId");
+  expect(tripArchive.index).toContain('"day-03"');
+  expect(tripArchive.index).toContain('"day-04"');
+  const generatedRuntime = await page.evaluate(({ day3, index }) => {
+    window.TRIP_LOG_ENTRIES = Object.create(null);
+    const entryScript = document.createElement("script");
+    entryScript.textContent = day3;
+    document.head.append(entryScript);
+    const manifestScript = document.createElement("script");
+    manifestScript.textContent = index;
+    document.head.append(manifestScript);
+    return {
+      entry: window.TRIP_LOG_ENTRIES["day-03"],
+      publication: window.TRIP_LOG_INDEX.days["day-03"]
+    };
+  }, { day3: tripArchive.day3, index: tripArchive.index });
+  expect(generatedRuntime.entry.version).toBe(2);
+  expect(generatedRuntime.entry.blocks.some((block) => block.type === "photo")).toBeTruthy();
+  expect(generatedRuntime.publication.file).toBe("trip-log/day-03.js");
+  expect(tripArchive.backup).not.toContain("blob:");
+  expect(tripArchive.report).toContain("Original local media");
+  expect(tripArchive.guide).toContain("features.travelLog");
+
+  await dialog.getByRole("button", { name: "Close export panel" }).click();
+  await page.getByRole("button", { name: "Export current day", exact: true }).click();
+  await expect(dialog.locator("[data-package-day]:checked")).toHaveCount(1);
+  const selectedDay = dialog.locator("[data-package-day]:checked");
+  await expect(selectedDay).toHaveAttribute("data-package-day", "day-04");
+  const dayDownloadPromise = page.waitForEvent("download");
+  await dialog.getByRole("button", { name: "Create ZIP" }).click();
+  const dayDownload = await dayDownloadPromise;
+  const dayBuffer = await fs.readFile(await dayDownload.path());
+  const dayFiles = await page.evaluate(async (base64) => {
+    const zip = await window.JSZip.loadAsync(base64, { base64: true });
+    return Object.keys(zip.files);
+  }, dayBuffer.toString("base64"));
+  expect(dayFiles).toContain("aegean-odyssey-travel-log/data/trip-log/day-04.js");
+  expect(dayFiles).not.toContain("aegean-odyssey-travel-log/data/trip-log/day-03.js");
+  assertNoFailures();
+});
+
+test("Travel Log package export blocks unresolved required media", async ({ page }) => {
+  await page.goto("/editor/index.html");
+  await page.evaluate(() => {
+    localStorage.setItem("aegeanTravelLogEditor:v1:day-05", JSON.stringify({
+      dayId: "day-05",
+      entry: {
+        version: 2,
+        dayId: "day-05",
+        state: "draft",
+        date: "2026-10-14",
+        place: "Across Crete",
+        blocks: [{ type: "photo", id: "moment-missing-photo", mediaId: "media-missing-photo", alt: "Missing test photograph" }]
+      },
+      media: {
+        "media-missing-photo": {
+          id: "media-missing-photo",
+          originalName: "missing-photo.jpg",
+          outputName: "missing-photo.webp",
+          repositoryPath: "assets/log/day-05/missing-photo.webp",
+          mimeType: "image/jpeg",
+          width: 1200,
+          height: 800,
+          fileSize: 1000,
+          kind: "image"
+        }
+      }
+    }));
+  });
+
+  await page.getByRole("button", { name: "Export trip", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Export Travel Log" });
+  await expect(dialog.locator('[data-level="blocked"]')).toHaveText("Blocked");
+  await expect(dialog.locator("[data-package-issues]")).toContainText("local file is unavailable");
+  await expect(dialog.getByRole("button", { name: "Create ZIP" })).toBeDisabled();
+});
+
 test("editor imports safe JSON and reports invalid or unsupported content", async ({ page }) => {
   const assertNoFailures = monitorPage(page);
   await page.goto("/editor/index.html");
@@ -737,7 +885,7 @@ test("editor imports safe JSON and reports invalid or unsupported content", asyn
   assertNoFailures();
 });
 
-test("Travel Log editor remains usable without horizontal overflow", async ({ page }) => {
+test("Travel Log editor is desktop-only and remains stable at supported widths", async ({ page }) => {
   const assertNoFailures = monitorPage(page);
   for (const viewport of VIEWPORTS) {
     await page.setViewportSize(viewport);
@@ -747,12 +895,21 @@ test("Travel Log editor remains usable without horizontal overflow", async ({ pa
       scroll: document.documentElement.scrollWidth
     }));
     expect(widths.scroll).toBeLessThanOrEqual(widths.client);
-    await expect(page.getByLabel("Trip day", { exact: true })).toBeVisible();
     if (viewport.width <= 760) {
-      await page.getByRole("tab", { name: "Preview", exact: true }).click();
-      await expect(page.locator('[data-editor-panel="preview"]')).toBeVisible();
+      await expect(page.getByRole("heading", { name: "The Travel Log editor is designed for a larger screen." })).toBeVisible();
+      await expect(page.getByText("Open it on a laptop or desktop to edit and export your trip.")).toBeVisible();
+      await expect(page.locator(".editor-desktop-app")).toBeHidden();
+      await expect(page.locator("#travel-log-editor-preview")).not.toHaveAttribute("src", /.+/);
+      const mobileRuntime = await page.evaluate(() => ({
+        config: typeof window.TRIP_CONFIG,
+        exporter: typeof window.TravelLogPackageExporter,
+        editorScripts: [...document.scripts].some((script) => /travel-log-editor\.js$/.test(script.src))
+      }));
+      expect(mobileRuntime).toEqual({ config: "undefined", exporter: "undefined", editorScripts: false });
     } else {
+      await expect(page.getByLabel("Trip day", { exact: true })).toBeVisible();
       await expect(page.locator("#travel-log-editor-preview")).toBeVisible();
+      await expect(page.locator("#travel-log-editor-preview")).toHaveAttribute("src", "preview.html?preview=editor");
     }
   }
   assertNoFailures();
