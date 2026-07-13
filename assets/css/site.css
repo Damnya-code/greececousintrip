@@ -1106,62 +1106,572 @@ body {
     gap: 100px
 }
 
-.route-panel {
-    padding-top: 55px
-}
 
-.route-panel>p {
-    font: 22px/1.45 "Playfair Display";
-    margin: 0 0 34px
-}
+/* =========================================================
+   EDITORIAL ROUTE MAP
+   ========================================================= */
 
-.route-stops {
-    border-top: 1px solid var(--ink)
-}
-
-.route-stops article {
-    position: relative;
+.route {
     display: grid;
-    grid-template-columns: 54px 1fr 1.3fr;
+    grid-template-columns: minmax(280px, 0.72fr) minmax(560px, 1.28fr);
     align-items: center;
-    padding: 17px 0;
-    border-bottom: 1px solid var(--line)
+    gap: clamp(58px, 7vw, 112px);
 }
 
-.route-stop-hit {
+.route-intro {
+    align-self: center;
+}
+
+.route-summary {
+    max-width: 470px;
+    margin: 30px 0 0;
+    color: #52606d;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+.route-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px 20px;
+    margin-top: 36px;
+    padding-top: 25px;
+    border-top: 1px solid var(--line);
+}
+
+.route-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #65717a;
+    font: 500 10px/1.2 "DM Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.route-legend-line {
+    display: inline-block;
+    width: 27px;
+    height: 2px;
+    flex: 0 0 auto;
+}
+
+.route-legend-ferry {
+    background:
+        repeating-linear-gradient(90deg,
+            var(--sea) 0 5px,
+            transparent 5px 9px);
+}
+
+.route-legend-drive {
+    background: var(--ink);
+}
+
+.route-legend-daytrip {
+    background:
+        repeating-linear-gradient(90deg,
+            var(--coral) 0 2px,
+            transparent 2px 7px);
+}
+
+.route-map-card {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    border: 1px solid rgba(23, 35, 59, 0.14);
+    border-radius: 5px;
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.82),
+            rgba(247, 243, 232, 0.72));
+    box-shadow:
+        0 30px 70px rgba(23, 35, 59, 0.1),
+        inset 0 1px rgba(255, 255, 255, 0.86);
+}
+
+.route-map-card::before {
+    content: "";
     position: absolute;
     inset: 0;
-    z-index: 2
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 81% 22%,
+            rgba(84, 185, 192, 0.12),
+            transparent 31%),
+        radial-gradient(circle at 19% 77%,
+            rgba(232, 212, 165, 0.18),
+            transparent 32%);
 }
 
-.route-stop-hit:focus-visible {
-    outline: 3px solid var(--coral);
-    outline-offset: -3px
+.route-map-topline,
+.route-map-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
 }
 
-.route-stops article:has(.route-stop-hit):hover {
-    background: rgba(25, 90, 112, .06)
+.route-map-topline {
+    padding: 18px 22px;
+    border-bottom: 1px solid rgba(23, 35, 59, 0.1);
+    color: #64717d;
+    font: 500 10px/1 "DM Mono", monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
-.route-stops span {
-    font: 500 11px "DM Mono";
-    color: var(--coral)
+.route-map-visual {
+    position: relative;
+    z-index: 1;
+    padding: 7px 12px 0;
 }
 
-.route-stops h3 {
+.route-map-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    color: var(--ink);
+}
+
+.route-map-grid {
+    color: var(--ink);
+}
+
+.route-land {
+    fill: rgba(232, 212, 165, 0.34);
+    stroke: rgba(23, 35, 59, 0.13);
+    stroke-width: 1.2;
+}
+
+.route-land-mainland {
+    fill: rgba(232, 212, 165, 0.28);
+}
+
+.route-land-crete {
+    fill: rgba(232, 212, 165, 0.45);
+}
+
+.route-land-santorini {
+    fill: rgba(232, 212, 165, 0.38);
+}
+
+.route-path {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* .route-path-ferry {
+    stroke: var(--sea);
+    stroke-width: 3;
+    stroke-dasharray: 4 10;
+}
+ */
+.route-path-ferry {
+    stroke: var(--sea);
+    stroke-width: 3.2;
+    stroke-dasharray: 3 9;
+}
+
+/* .route-path-road {
+    stroke: var(--ink);
+    stroke-width: 3.5;
+} */
+
+.route-path-road {
+    stroke: var(--ink);
+    stroke-width: 3.2;
+}
+
+/* .route-path-daytrip {
+    stroke: var(--coral);
+    stroke-width: 3;
+    stroke-dasharray: 1 10;
+} */
+
+.route-path-daytrip {
+    stroke: var(--coral);
+    stroke-width: 3.2;
+    stroke-dasharray: 1 9;
+}
+
+.route-transport-label rect {
+    fill: rgba(251, 247, 237, 0.92);
+    stroke: rgba(23, 35, 59, 0.1);
+    stroke-width: 1;
+}
+
+.route-transport-label text {
+    fill: #65717a;
+    font: 500 9px "DM Mono", monospace;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+}
+
+.route-vehicle {
+    color: var(--ink);
+    pointer-events: none;
+}
+
+.route-vehicle-body {
+    fill: var(--ink);
+}
+
+.route-vehicle circle {
+    fill: var(--cream);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+}
+
+.route-vehicle-window {
+    fill: var(--cream);
+    opacity: 0.72;
+}
+
+.route-ferry-icon {
+    color: var(--blue);
+}
+
+.route-ferry-icon .route-vehicle-body {
+    fill: var(--blue);
+}
+
+.route-ferry-icon circle {
+    fill: var(--sand);
+    stroke: none;
+}
+
+.route-node {
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+}
+
+.route-node-halo {
+    fill: rgba(255, 255, 255, 0.001);
+    stroke: transparent;
+    stroke-width: 1;
+    transition:
+        fill 180ms ease,
+        stroke 180ms ease,
+        transform 180ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.route-node-dot {
+    fill: var(--cream);
+    stroke: var(--ink);
+    stroke-width: 4;
+    transition:
+        fill 180ms ease,
+        stroke 180ms ease,
+        transform 180ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.route-node-santorini .route-node-dot {
+    fill: var(--coral);
+    stroke: var(--coral);
+}
+
+.route-node-label {
+    pointer-events: none;
+}
+
+.route-node-name {
+    fill: var(--ink);
+    font: 600 22px "Playfair Display", serif;
+}
+
+.route-node-date {
+    fill: var(--coral);
+    font: 500 9px "DM Mono", monospace;
+    letter-spacing: 0.11em;
+}
+
+.route-node-detail {
+    fill: #68757e;
+    font: 500 9px "DM Sans", sans-serif;
+    letter-spacing: 0.025em;
+}
+
+.route-node:hover .route-node-halo,
+.route-node:focus-visible .route-node-halo {
+    fill: rgba(84, 185, 192, 0.11);
+    stroke: rgba(25, 90, 112, 0.2);
+    transform: scale(1.08);
+}
+
+.route-node:hover .route-node-dot,
+.route-node:focus-visible .route-node-dot {
+    fill: var(--ink);
+    stroke: var(--ink);
+    transform: scale(1.12);
+}
+
+.route-node-santorini:hover .route-node-halo,
+.route-node-santorini:focus-visible .route-node-halo {
+    fill: rgba(223, 121, 92, 0.12);
+    stroke: rgba(223, 121, 92, 0.28);
+}
+
+.route-node-santorini:hover .route-node-dot,
+.route-node-santorini:focus-visible .route-node-dot {
+    fill: var(--ink);
+    stroke: var(--ink);
+}
+
+.route-node:focus-visible .route-node-name {
+    text-decoration: underline;
+}
+
+.route-map-footer {
+    padding: 17px 22px;
+    border-top: 1px solid rgba(23, 35, 59, 0.1);
+}
+
+.route-map-footer p {
     margin: 0;
-    font: 600 23px "Playfair Display"
+    color: #68757e;
+    font: 500 10px/1.4 "DM Mono", monospace;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
 }
 
-.route-stops p {
-    margin: 0;
-    color: #65717a;
-    font-size: 13px
+.route-map-footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
 }
 
-.route-stops .highlight h3 {
-    color: var(--coral)
+.route-map-footer a span {
+    display: inline-block;
+    transition: transform 180ms ease;
 }
+
+.route-map-footer a:hover span,
+.route-map-footer a:focus-visible span {
+    transform: translateY(3px);
+}
+
+.route-map-footer a:focus-visible {
+    outline: 2px solid var(--coral);
+    outline-offset: 4px;
+}
+
+/* =========================================================
+   ROUTE MAP REVEAL AND MOTION
+   ========================================================= */
+
+.route-map-card {
+    --route-reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * JS adds this class before observing the route.
+ * Without JS, the complete static map remains visible.
+ */
+.route-motion-ready .route-map-card:not(.is-route-active) .route-map-grid,
+.route-motion-ready .route-map-card:not(.is-route-active) .route-map-sea-shape,
+.route-motion-ready .route-map-card:not(.is-route-active) .route-land,
+.route-motion-ready .route-map-card:not(.is-route-active) .route-transport-label,
+.route-motion-ready .route-map-card:not(.is-route-active) .route-node,
+.route-motion-ready .route-map-card:not(.is-route-active) .route-vehicle {
+    opacity: 0;
+}
+
+.route-motion-ready .route-map-grid,
+.route-motion-ready .route-map-sea-shape,
+.route-motion-ready .route-land {
+    transition:
+        opacity 700ms var(--route-reveal-ease),
+        transform 900ms var(--route-reveal-ease);
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.route-motion-ready .route-map-card:not(.is-route-active) .route-map-sea-shape {
+    transform: scale(0.985);
+}
+
+.route-motion-ready .route-map-card:not(.is-route-active) .route-land {
+    transform: translateY(5px);
+}
+
+.route-map-card.is-route-active .route-map-grid,
+.route-map-card.is-route-active .route-map-sea-shape,
+.route-map-card.is-route-active .route-land {
+    opacity: 1;
+    transform: none;
+}
+
+.route-map-card.is-route-active .route-map-grid {
+    transition-delay: 40ms;
+}
+
+.route-map-card.is-route-active .route-map-sea-shape {
+    transition-delay: 80ms;
+}
+
+.route-map-card.is-route-active .route-land-mainland {
+    transition-delay: 160ms;
+}
+
+.route-map-card.is-route-active .route-land-crete {
+    transition-delay: 230ms;
+}
+
+.route-map-card.is-route-active .route-land-santorini {
+    transition-delay: 300ms;
+}
+
+/* Paths are prepared with exact lengths by JavaScript. */
+.route-motion-ready .route-path {
+    transition: stroke-dashoffset var(--route-duration, 1000ms) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Nodes begin muted and settle in only when reached. */
+.route-motion-ready .route-node {
+    opacity: 0.2;
+    transition: opacity 260ms ease;
+}
+
+.route-motion-ready .route-node .route-node-halo,
+.route-motion-ready .route-node .route-node-dot,
+.route-motion-ready .route-node .route-node-label {
+    transition:
+        opacity 360ms ease,
+        transform 520ms var(--route-reveal-ease),
+        fill 180ms ease,
+        stroke 180ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.route-motion-ready .route-node:not(.is-route-reached) .route-node-halo,
+.route-motion-ready .route-node:not(.is-route-reached) .route-node-dot {
+    transform: scale(0.65);
+}
+
+.route-motion-ready .route-node:not(.is-route-reached) .route-node-label {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.route-motion-ready .route-node.is-route-reached {
+    opacity: 1;
+}
+
+.route-motion-ready .route-node.is-route-reached .route-node-halo,
+.route-motion-ready .route-node.is-route-reached .route-node-dot,
+.route-motion-ready .route-node.is-route-reached .route-node-label {
+    opacity: 1;
+    transform: none;
+}
+
+.route-motion-ready .route-node.is-route-current .route-node-halo {
+    fill: rgba(84, 185, 192, 0.13);
+    stroke: rgba(25, 90, 112, 0.22);
+    animation: route-node-arrival 700ms var(--route-reveal-ease);
+}
+
+.route-motion-ready .route-node-santorini.is-route-current .route-node-halo {
+    fill: rgba(223, 121, 92, 0.14);
+    stroke: rgba(223, 121, 92, 0.3);
+}
+
+/* Labels appear after their related segment begins. */
+.route-motion-ready .route-transport-label {
+    opacity: 0;
+    transform: translateY(4px);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+        opacity 300ms ease,
+        transform 480ms var(--route-reveal-ease);
+}
+
+.route-motion-ready .route-transport-label.is-route-label-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Vehicles remain hidden until their section starts. */
+.route-motion-ready .route-vehicle {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.route-motion-ready .route-vehicle.is-route-vehicle-visible {
+    opacity: 1;
+}
+
+/*
+ * Small secondary motion is placed on the inner artwork so it does not
+ * interfere with the outer group's path transform.
+ */
+.route-ferry-art {
+    transform-origin: center;
+    animation: route-ferry-float 900ms ease-in-out infinite;
+}
+
+.route-car-art {
+    transform-origin: center;
+    animation: route-car-road 520ms ease-in-out infinite;
+}
+
+@keyframes route-node-arrival {
+    0% {
+        transform: scale(0.72);
+        opacity: 0;
+    }
+
+    55% {
+        transform: scale(1.13);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes route-ferry-float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-1deg);
+    }
+
+    50% {
+        transform: translateY(-1.5px) rotate(1deg);
+    }
+}
+
+@keyframes route-car-road {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-0.8px);
+    }
+}
+
 
 .itinerary {
     background: #e5f0ed;
@@ -1649,6 +2159,7 @@ footer span {
     background: linear-gradient(145deg, rgba(103, 165, 178, .92), rgba(37, 91, 112, .95));
     box-shadow: 0 9px 20px rgba(16, 29, 49, .27), inset 0 1px rgba(255, 255, 255, .34);
 }
+
 .journey-image:after {
     content: "";
     position: absolute;
@@ -1773,39 +2284,39 @@ footer span {
 
 /* clickable journey cards*/
 .journey-card {
-  position: relative;
-  cursor: pointer;
+    position: relative;
+    cursor: pointer;
 }
 
 .journey-card-link {
-  position: static;
+    position: static;
 }
 
 .journey-card-link::after {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    content: "";
 }
 
 .journey-map-button {
-  position: absolute;
-  z-index: 2;
+    position: absolute;
+    z-index: 2;
 }
 
-.journey-card-link > span {
-  display: inline-block;
-  transition: transform 180ms ease;
+.journey-card-link>span {
+    display: inline-block;
+    transition: transform 180ms ease;
 }
 
-.journey-card:hover .journey-card-link > span,
-.journey-card:has(.journey-card-link:focus-visible) .journey-card-link > span {
-  transform: translateX(0.25rem);
+.journey-card:hover .journey-card-link>span,
+.journey-card:has(.journey-card-link:focus-visible) .journey-card-link>span {
+    transform: translateX(0.25rem);
 }
 
 .journey-card:has(.journey-card-link:focus-visible) {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
 }
 
 @media(prefers-reduced-motion:reduce) {
@@ -2071,4 +2582,206 @@ footer {
     color: #fff;
 }
 
-[data-theme="dark"] .darkmode-text { color:#3a92c5 }
+[data-theme="dark"] .darkmode-text {
+    color: #3a92c5
+}
+
+
+[data-theme="dark"] .route-summary,
+[data-theme="dark"] .route-legend span,
+[data-theme="dark"] .route-node-detail,
+[data-theme="dark"] .route-map-footer p {
+    color: #a9b8c5;
+}
+
+[data-theme="dark"] .route-map-card {
+    border-color: rgba(220, 232, 242, 0.12);
+    background:
+        linear-gradient(145deg,
+            rgba(20, 37, 54, 0.96),
+            rgba(12, 26, 40, 0.98));
+    box-shadow:
+        0 32px 76px rgba(0, 0, 0, 0.28),
+        inset 0 1px rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .route-map-card::before {
+    background:
+        radial-gradient(circle at 81% 22%,
+            rgba(84, 185, 192, 0.12),
+            transparent 31%),
+        radial-gradient(circle at 19% 77%,
+            rgba(232, 212, 165, 0.07),
+            transparent 32%);
+}
+
+[data-theme="dark"] .route-map-topline,
+[data-theme="dark"] .route-map-footer {
+    border-color: rgba(220, 232, 242, 0.1);
+}
+
+[data-theme="dark"] .route-map-topline {
+    color: #9eafbd;
+}
+
+[data-theme="dark"] .route-land {
+    fill: rgba(139, 122, 89, 0.17);
+    stroke: rgba(218, 228, 237, 0.12);
+}
+
+[data-theme="dark"] .route-land-crete {
+    fill: rgba(139, 122, 89, 0.25);
+}
+
+[data-theme="dark"] .route-transport-label rect {
+    fill: rgba(13, 22, 36, 0.9);
+    stroke: rgba(220, 232, 242, 0.12);
+}
+
+[data-theme="dark"] .route-transport-label text {
+    fill: #a9b8c5;
+}
+
+[data-theme="dark"] .route-node-dot {
+    fill: #111e2d;
+    stroke: #e9eef5;
+}
+
+[data-theme="dark"] .route-node-name {
+    fill: #e9eef5;
+}
+
+[data-theme="dark"] .route-node-detail {
+    fill: #9eafbd;
+}
+
+[data-theme="dark"] .route-vehicle-body {
+    fill: #e1e9ef;
+}
+
+[data-theme="dark"] .route-car-icon circle {
+    fill: #111e2d;
+    stroke: #e1e9ef;
+}
+
+[data-theme="dark"] .route-vehicle-window {
+    fill: #29465a;
+}
+
+[data-theme="dark"] .route-map-footer a {
+    color: #e9eef5;
+}
+
+@media (max-width: 980px) {
+    .route {
+        grid-template-columns: 1fr;
+        gap: 54px;
+    }
+
+    .route-intro {
+        max-width: 680px;
+    }
+
+    .route-summary {
+        max-width: 620px;
+    }
+
+    .route-map-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 620px) {
+    .route {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .route-map-topline {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+
+    @media (max-width: 620px) {
+        .route-map-visual {
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 8px 0 4px;
+
+            scroll-behavior: smooth;
+            scroll-snap-type: none;
+            overscroll-behavior-inline: contain;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .route-map-svg {
+            width: 690px;
+            max-width: none;
+        }
+
+        /*
+   * Gentle edge shading makes it clear that the diagram continues
+   * horizontally without adding a separate instructional message.
+   */
+        .route-map-card::after {
+            content: "";
+            position: absolute;
+            z-index: 3;
+            top: 47px;
+            right: 0;
+            bottom: 55px;
+            width: 34px;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    rgba(251, 247, 237, 0.82));
+        }
+
+        [data-theme="dark"] .route-map-card::after {
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    rgba(12, 26, 40, 0.9));
+        }
+    }
+
+    .route-map-svg {
+        width: 690px;
+        max-width: none;
+        shape-rendering: geometricPrecision;
+        text-rendering: geometricPrecision;
+    }
+
+    .route-map-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 13px;
+    }
+
+    .route-legend {
+        gap: 13px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .route-map-grid,
+    .route-map-sea-shape,
+    .route-land,
+    .route-path,
+    .route-node,
+    .route-node-halo,
+    .route-node-dot,
+    .route-node-label,
+    .route-transport-label,
+    .route-vehicle,
+    .route-vehicle-art {
+        animation: none !important;
+        transition: none !important;
+    }
+}

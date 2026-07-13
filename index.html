@@ -53,44 +53,286 @@
       <div><strong>01</strong><span>overnight ferry</span></div>
       <div><strong>01</strong><span>island road trip</span></div>
     </section>
+
+
     <section id="route" class="section route">
-      <div class="section-head">
+      <div class="section-head route-intro">
         <p class="eyebrow darkmode-text">The shape of the journey</p>
-        <h2>Athens first.<br>Crete from west to east.</h2>
+
+        <h2>
+          Athens first.<br>
+          Crete from west to east.
+        </h2>
+
+        <p class="route-summary">
+          The overnight ferry handles the longest crossing while we sleep.
+          From Chania, the journey continues naturally across Crete, with
+          Santorini as a one-day branch from Heraklion.
+        </p>
+
+        <div class="route-legend" aria-label="Route transport types">
+          <span>
+            <i class="route-legend-line route-legend-ferry" aria-hidden="true"></i>
+            Overnight ferry
+          </span>
+
+          <span>
+            <i class="route-legend-line route-legend-drive" aria-hidden="true"></i>
+            Road route
+          </span>
+
+          <span>
+            <i class="route-legend-line route-legend-daytrip" aria-hidden="true"></i>
+            Day trip
+          </span>
+        </div>
       </div>
-      <div class="route-panel">
-        <p>The overnight ferry handles the longest crossing while we sleep. From Chania, the route moves naturally
-          across Crete through Rethymno to Heraklion. No unnecessary return journeys and no full day sacrificed to
-          getting back where we started.</p>
-        <div class="route-stops">
-          <article><span></span>
-            <h3>Athens</h3>
-            <p>10–11 Oct · ancient city opener</p>
-            <a class="route-stop-hit" href="#journey-day-01" aria-label="Jump to the Athens daily guide"></a>
-          </article>
-          <article><span></span>
-            <h3>Chania</h3>
-            <p>12–13 Oct · west Crete coast</p>
-            <a class="route-stop-hit" href="#journey-day-03" aria-label="Jump to the Chania daily guide"></a>
-          </article>
-          <article><span></span>
-            <h3>Rethymno</h3>
-            <p>14 Oct · Venetian stopover</p>
-            <a class="route-stop-hit" href="#journey-day-05" aria-label="Jump to the Rethymno daily guide"></a>
-          </article>
-          <article><span></span>
-            <h3>Heraklion</h3>
-            <p>14–16 Oct · the easy finish</p>
-            <a class="route-stop-hit" href="#journey-day-05" aria-label="Jump to the first Heraklion daily guide"></a>
-          </article>
-          <article class="highlight"><span></span>
-            <h3>Santorini</h3>
-            <p>15 Oct · high-speed day trip</p>
-            <a class="route-stop-hit" href="#journey-day-06" aria-label="Jump to the Santorini daily guide"></a>
-          </article>
+
+        <div class="route-map-card" data-route-map>
+        <div class="route-map-topline">
+          <span>Aegean route</span>
+          <span>10–16 October 2026</span>
+        </div>
+
+       <div class="route-map-visual" data-route-viewport>
+          <svg class="route-map-svg" viewBox="0 0 760 520" role="img"
+            aria-labelledby="route-map-title route-map-description">
+            <title id="route-map-title">
+              Route from Athens to Crete and Santorini
+            </title>
+
+            <desc id="route-map-description">
+              The trip begins in Athens, continues by overnight ferry to Chania,
+              then travels by road through Rethymno to Heraklion, with a day trip
+              from Heraklion to Santorini.
+            </desc>
+
+            <defs>
+              <filter id="route-node-shadow" x="-60%" y="-60%" width="220%" height="220%">
+                <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#17233b" flood-opacity=".18" />
+              </filter>
+
+              <linearGradient id="route-sea-gradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#54b9c0" stop-opacity=".14" />
+                <stop offset="100%" stop-color="#195a70" stop-opacity=".03" />
+              </linearGradient>
+
+              <pattern id="route-grid" width="36" height="36" patternUnits="userSpaceOnUse">
+                <path d="M 36 0 L 0 0 0 36" fill="none" stroke="currentColor" stroke-opacity=".055" stroke-width="1" />
+              </pattern>
+            </defs>
+
+            <!-- Background cartographic texture -->
+            <rect class="route-map-grid" width="760" height="520" fill="url(#route-grid)" />
+
+            <path class="route-map-sea-shape" d="
+            M38 55
+            C180 10 375 35 500 85
+            C638 140 725 225 748 350
+            C700 458 534 510 360 488
+            C205 470 82 385 40 270
+            C10 185 12 105 38 55Z
+          " fill="url(#route-sea-gradient)" />
+
+            <!-- Very abstract land silhouettes -->
+            <path class="route-land route-land-mainland" d="
+            M42 56
+            C100 38 157 47 196 77
+            C219 95 225 128 205 150
+            C183 173 143 167 112 153
+            C81 140 51 121 37 92
+            C30 77 31 65 42 56Z
+          " />
+
+            <path class="route-land route-land-crete" d="
+            M135 345
+            C220 328 302 334 375 345
+            C452 356 536 351 631 329
+            C660 322 685 331 690 345
+            C696 362 674 376 645 379
+            C555 389 478 392 398 386
+            C304 378 220 389 151 378
+            C122 373 107 358 135 345Z
+          " />
+
+            <path class="route-land route-land-santorini" d="
+            M609 176
+            C628 166 646 172 651 186
+            C656 200 645 219 628 230
+            C614 239 602 235 602 222
+            C603 207 612 197 609 176Z
+          " />
+
+            <!-- Transport routes -->
+            <path id="route-path-ferry" class="route-path route-path-ferry" d="M151 126 C205 185 224 262 218 350" />
+
+            <path id="route-path-road" class="route-path route-path-road" d="M218 350 C320 345 430 362 573 354" />
+
+            <path id="route-path-santorini" class="route-path route-path-daytrip"
+              d="M573 354 C632 321 658 264 629 204" />
+
+            <!-- Route labels -->
+            <g class="route-transport-label route-ferry-label">
+              <rect x="154" y="222" width="124" height="29" rx="14.5" />
+              <text x="216" y="241" text-anchor="middle">
+                Overnight ferry
+              </text>
+            </g>
+
+            <g class="route-transport-label route-road-label">
+              <rect x="341" y="320" width="105" height="29" rx="14.5" />
+              <text x="393.5" y="339" text-anchor="middle">
+                Road trip
+              </text>
+            </g>
+
+            <g class="route-transport-label route-daytrip-label">
+              <rect x="608" y="270" width="92" height="29" rx="14.5" />
+              <text x="654" y="289" text-anchor="middle">
+                Day trip
+              </text>
+            </g>
+
+            <!-- Static ferry icon -->
+            <!--  <g class="route-vehicle route-ferry-icon" transform="translate(190 226) rotate(67)" aria-hidden="true">
+              <path d="M-17 2 H17 L11 10 H-11 Z" class="route-vehicle-body" />
+              <path d="M-9 2 V-7 H8 V2" class="route-vehicle-body" />
+              <circle cx="-4" cy="-3" r="1.5" />
+              <circle cx="3" cy="-3" r="1.5" />
+            </g>
+ -->
+
+            <g id="route-ferry-vehicle" class="route-vehicle route-ferry-icon" aria-hidden="true">
+              <g class="route-vehicle-art route-ferry-art">
+                <path d="M-17 2 H17 L11 10 H-11 Z" class="route-vehicle-body" />
+                <path d="M-9 2 V-7 H8 V2" class="route-vehicle-body" />
+                <circle cx="-4" cy="-3" r="1.5" />
+                <circle cx="3" cy="-3" r="1.5" />
+              </g>
+            </g>
+
+            <!-- Static car icon -->
+          <!--   <g class="route-vehicle route-car-icon" transform="translate(402 355)" aria-hidden="true">
+              <path d="M-17 4 L-12 -5 H8 L15 4 V10 H-17 Z" class="route-vehicle-body" />
+              <circle cx="-10" cy="10" r="3" />
+              <circle cx="9" cy="10" r="3" />
+              <path d="M-8 -3 H5 L9 4 H-12 Z" class="route-vehicle-window" />
+            </g>
+ -->
+            <g id="route-car-vehicle" class="route-vehicle route-car-icon" aria-hidden="true">
+              <g class="route-vehicle-art route-car-art">
+                <path d="M-17 4 L-12 -5 H8 L15 4 V10 H-17 Z" class="route-vehicle-body" />
+                <circle cx="-10" cy="10" r="3" />
+                <circle cx="9" cy="10" r="3" />
+                <path d="M-8 -3 H5 L9 4 H-12 Z" class="route-vehicle-window" />
+              </g>
+            </g>
+
+            <!-- Athens -->
+            <a class="route-node route-node-athens"   data-route-stage="athens" href="#journey-day-01" aria-label="Jump to Day 1 in Athens">
+              <circle class="route-node-halo" cx="151" cy="126" r="24" />
+              <circle class="route-node-dot" cx="151" cy="126" r="9" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(151 78)">
+                <text class="route-node-date" text-anchor="middle">
+                  10–11 OCT
+                </text>
+                <text class="route-node-name" y="24" text-anchor="middle">
+                  Athens
+                </text>
+                <text class="route-node-detail" y="44" text-anchor="middle">
+                  Arrival · Acropolis
+                </text>
+              </g>
+            </a>
+
+            <!-- Chania -->
+            <a class="route-node route-node-chania"  data-route-stage="chania" href="#journey-day-03" aria-label="Jump to Day 3 in Chania">
+              <circle class="route-node-halo" cx="218" cy="350" r="24" />
+              <circle class="route-node-dot" cx="218" cy="350" r="9" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(218 407)">
+                <text class="route-node-name" text-anchor="middle">
+                  Chania
+                </text>
+                <text class="route-node-date" y="21" text-anchor="middle">
+                  12–13 OCT
+                </text>
+                <text class="route-node-detail" y="41" text-anchor="middle">
+                  Western Crete
+                </text>
+              </g>
+            </a>
+
+            <!-- Rethymno -->
+            <a class="route-node route-node-rethymno"  data-route-stage="rethymno" href="#journey-day-05" aria-label="Jump to Day 5 in Rethymno">
+              <circle class="route-node-halo" cx="388" cy="356" r="24" />
+              <circle class="route-node-dot" cx="388" cy="356" r="9" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(388 407)">
+                <text class="route-node-name" text-anchor="middle">
+                  Rethymno
+                </text>
+                <text class="route-node-date" y="21" text-anchor="middle">
+                  14 OCT
+                </text>
+                <text class="route-node-detail" y="41" text-anchor="middle">
+                  Venetian stop
+                </text>
+              </g>
+            </a>
+
+            <!-- Heraklion -->
+            <a class="route-node route-node-heraklion" data-route-stage="heraklion" href="#journey-day-05" aria-label="Jump to Day 5 in Heraklion">
+              <circle class="route-node-halo" cx="573" cy="354" r="24" />
+              <circle class="route-node-dot" cx="573" cy="354" r="9" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(573 407)">
+                <text class="route-node-name" text-anchor="middle">
+                  Heraklion
+                </text>
+                <text class="route-node-date" y="21" text-anchor="middle">
+                  14–16 OCT
+                </text>
+                <text class="route-node-detail" y="41" text-anchor="middle">
+                  Eastern base
+                </text>
+              </g>
+            </a>
+
+            <!-- Santorini -->
+            <a class="route-node route-node-santorini"  data-route-stage="santorini" href="#journey-day-06" aria-label="Jump to Day 6 in Santorini">
+              <circle class="route-node-halo" cx="629" cy="204" r="26" />
+              <circle class="route-node-dot" cx="629" cy="204" r="10" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(629 128)">
+                <text class="route-node-date" text-anchor="middle">
+                  15 OCT
+                </text>
+                <text class="route-node-name" y="24" text-anchor="middle">
+                  Santorini
+                </text>
+                <text class="route-node-detail" y="44" text-anchor="middle">
+                  Caldera day trip
+                </text>
+              </g>
+            </a>
+          </svg>
+        </div>
+
+        <div class="route-map-footer">
+          <p>
+            Five principal stops · three transport modes
+          </p>
+
+          <a href="#itinerary">
+            View the daily route
+            <span aria-hidden="true">↓</span>
+          </a>
         </div>
       </div>
     </section>
+
     <section id="itinerary" class="section itinerary journey-itinerary">
       <div class="journey-heading">
         <p class="eyebrow darkmode-text">The daily guide</p>

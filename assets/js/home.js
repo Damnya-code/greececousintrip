@@ -1,30 +1,352 @@
 (function () {
   "use strict";
 
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   document.querySelectorAll("[data-scroll]").forEach((control) => {
     control.addEventListener("click", () => {
       const target = document.querySelector(control.dataset.scroll);
-      target?.scrollIntoView({ behavior: "smooth" });
+      target?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     });
   });
 
-  const journeyCards = document.querySelectorAll(".journey-card");
-  if (!journeyCards.length) return;
+  initRouteMap();
+  initJourneyCards();
 
-  document.documentElement.classList.add("journey-ready");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!("IntersectionObserver" in window) || reduceMotion) {
-    journeyCards.forEach((card) => card.classList.add("is-visible"));
-    return;
+  function initRouteMap() {
+    const card = document.querySelector("[data-route-map]");
+    const viewport = document.querySelector("[data-route-viewport]");
+    const svg = card?.querySelector(".route-map-svg");
+
+    if (!card || !viewport || !svg) return;
+
+    const ferryPath = svg.querySelector("#route-path-ferry");
+    const roadPath = svg.querySelector("#route-path-road");
+    const santoriniPath = svg.querySelector("#route-path-santorini");
+    const ferryVehicle = svg.querySelector("#route-ferry-vehicle");
+    const carVehicle = svg.querySelector("#route-car-vehicle");
+
+    const nodes = {
+      athens: svg.querySelector('[data-route-stage="athens"]'),
+      chania: svg.querySelector('[data-route-stage="chania"]'),
+      rethymno: svg.querySelector('[data-route-stage="rethymno"]'),
+      heraklion: svg.querySelector('[data-route-stage="heraklion"]'),
+      santorini: svg.querySelector('[data-route-stage="santorini"]'),
+    };
+
+    const labels = {
+      ferry: svg.querySelector(".route-ferry-label"),
+      road: svg.querySelector(".route-road-label"),
+      daytrip: svg.querySelector(".route-daytrip-label"),
+    };
+
+    const paths = [ferryPath, roadPath, santoriniPath].filter(Boolean);
+
+    if (
+      paths.length !== 3 ||
+      !ferryVehicle ||
+      !carVehicle ||
+      Object.values(nodes).some((node) => !node)
+    ) {
+      return;
+    }
+
+    let userControlledViewport = false;
+    let animationStarted = false;
+
+    /*
+     * Manual interaction permanently disables guided horizontal following.
+     * The user remains in control after touching or scrolling the map.
+     */
+    ["pointerdown", "touchstart", "wheel"].forEach((eventName) => {
+      viewport.addEventListener(
+        eventName,
+        () => {
+          userControlledViewport = true;
+        },
+        { passive: true }
+      );
+    });
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      card.classList.add("is-route-active");
+      paths.forEach(showPathImmediately);
+      Object.values(nodes).forEach((node) => {
+        node.classList.add("is-route-reached");
+      });
+      Object.values(labels).forEach((label) => {
+        label?.classList.add("is-route-label-visible");
+      });
+      placeVehicleAt(ferryVehicle, ferryPath, 0.54, 0);
+      placeVehicleAt(carVehicle, roadPath, 0.52, 0);
+      ferryVehicle.classList.add("is-route-vehicle-visible");
+      carVehicle.classList.add("is-route-vehicle-visible");
+      return;
+    }
+
+    document.documentElement.classList.add("route-motion-ready");
+
+    paths.forEach(preparePath);
+    placeVehicleAt(ferryVehicle, ferryPath, 0, 0);
+    placeVehicleAt(carVehicle, roadPath, 0, 0);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (!entry?.isIntersecting || animationStarted) return;
+
+        animationStarted = true;
+        observer.disconnect();
+        runRouteSequence();
+      },
+      {
+        threshold: 0.35,
+        rootMargin: "0px 0px -8% 0px",
+      }
+    );
+
+    observer.observe(card);
+
+    async function runRouteSequence() {
+      card.classList.add("is-route-active");
+
+      await wait(520);
+      reachNode(nodes.athens);
+
+      await wait(340);
+      labels.ferry?.classList.add("is-route-label-visible");
+      ferryVehicle.classList.add("is-route-vehicle-visible");
+
+      await Promise.all([
+        drawPath(ferryPath, 1450),
+        moveVehicle({
+          vehicle: ferryVehicle,
+          path: ferryPath,
+          duration: 1450,
+          followViewport: true,
+        }),
+      ]);
+
+      reachNode(nodes.chania);
+
+      await wait(320);
+      labels.road?.classList.add("is-route-label-visible");
+      carVehicle.classList.add("is-route-vehicle-visible");
+
+      const roadDuration = 1850;
+
+      await Promise.all([
+        drawPath(roadPath, roadDuration),
+        moveVehicle({
+          vehicle: carVehicle,
+          path: roadPath,
+          duration: roadDuration,
+          followViewport: true,
+          onProgress(progress) {
+            if (progress >= 0.45) {
+              reachNode(nodes.rethymno);
+            }
+
+            if (progress >= 0.96) {
+              reachNode(nodes.heraklion);
+            }
+          },
+        }),
+      ]);
+
+      await wait(300);
+      labels.daytrip?.classList.add("is-route-label-visible");
+
+      await drawPath(santoriniPath, 1050, {
+        onProgress(progress) {
+          if (isMobileMap() && !userControlledViewport) {
+            guideViewportToPoint(
+              santoriniPath.getPointAtLength(
+                santoriniPath.getTotalLength() * progress
+              )
+            );
+          }
+        },
+      });
+
+      reachNode(nodes.santorini);
+
+      /*
+       * Leave the mobile viewport at a balanced final position rather than
+       * snapping back to the beginning.
+       */
+      if (isMobileMap() && !userControlledViewport) {
+        await wait(360);
+        viewport.scrollTo({
+          left: Math.max(0, viewport.scrollWidth - viewport.clientWidth - 18),
+          behavior: "smooth",
+        });
+      }
+    }
+
+    function preparePath(path) {
+      const length = path.getTotalLength();
+
+      path.style.setProperty("--route-length", length);
+      path.style.strokeDasharray = `${length}`;
+      path.style.strokeDashoffset = `${length}`;
+    }
+
+    function showPathImmediately(path) {
+      const length = path.getTotalLength();
+
+      path.style.strokeDasharray = `${length}`;
+      path.style.strokeDashoffset = "0";
+    }
+
+    function drawPath(path, duration, options = {}) {
+      return animateProgress(duration, (progress) => {
+        const length = path.getTotalLength();
+        const eased = easeInOutCubic(progress);
+
+        path.style.strokeDashoffset = `${length * (1 - eased)}`;
+        options.onProgress?.(eased);
+      });
+    }
+
+    function moveVehicle({
+      vehicle,
+      path,
+      duration,
+      followViewport = false,
+      onProgress,
+    }) {
+      return animateProgress(duration, (progress) => {
+        const eased = easeInOutCubic(progress);
+        const point = placeVehicleAt(vehicle, path, eased, 0);
+
+        onProgress?.(eased);
+
+        if (
+          followViewport &&
+          isMobileMap() &&
+          !userControlledViewport
+        ) {
+          guideViewportToPoint(point);
+        }
+      });
+    }
+
+    function placeVehicleAt(vehicle, path, progress, rotationOffset = 0) {
+      const length = path.getTotalLength();
+      const distance = Math.max(0, Math.min(length, length * progress));
+      const point = path.getPointAtLength(distance);
+      const nextPoint = path.getPointAtLength(
+        Math.min(length, distance + 1.5)
+      );
+
+      const angle =
+        Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) *
+          (180 / Math.PI) +
+        rotationOffset;
+
+      vehicle.setAttribute(
+        "transform",
+        `translate(${point.x} ${point.y}) rotate(${angle})`
+      );
+
+      return point;
+    }
+
+    function guideViewportToPoint(svgPoint) {
+      const viewBox = svg.viewBox.baseVal;
+      const scale = svg.clientWidth / viewBox.width;
+      const pointInPixels = svgPoint.x * scale;
+      const desiredLeft =
+        pointInPixels - viewport.clientWidth * 0.48;
+
+      const maximumLeft =
+        viewport.scrollWidth - viewport.clientWidth;
+
+      viewport.scrollLeft = Math.max(
+        0,
+        Math.min(maximumLeft, desiredLeft)
+      );
+    }
+
+    function reachNode(node) {
+      if (node.classList.contains("is-route-reached")) return;
+
+      Object.values(nodes).forEach((candidate) => {
+        candidate.classList.remove("is-route-current");
+      });
+
+      node.classList.add("is-route-reached", "is-route-current");
+
+      window.setTimeout(() => {
+        node.classList.remove("is-route-current");
+      }, 760);
+    }
+
+    function isMobileMap() {
+      return window.matchMedia("(max-width: 620px)").matches;
+    }
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-visible");
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.12 });
+  function initJourneyCards() {
+    const journeyCards = document.querySelectorAll(".journey-card");
 
-  journeyCards.forEach((card) => observer.observe(card));
+    if (!journeyCards.length) return;
+
+    document.documentElement.classList.add("journey-ready");
+
+    if (!("IntersectionObserver" in window) || reduceMotion) {
+      journeyCards.forEach((card) => card.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    journeyCards.forEach((card) => observer.observe(card));
+  }
+
+  function animateProgress(duration, update) {
+    return new Promise((resolve) => {
+      const start = performance.now();
+
+      function frame(now) {
+        const progress = Math.min(1, (now - start) / duration);
+        update(progress);
+
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+          return;
+        }
+
+        resolve();
+      }
+
+      requestAnimationFrame(frame);
+    });
+  }
+
+  function easeInOutCubic(value) {
+    return value < 0.5
+      ? 4 * value * value * value
+      : 1 - Math.pow(-2 * value + 2, 3) / 2;
+  }
+
+  function wait(duration) {
+    return new Promise((resolve) => {
+      window.setTimeout(resolve, duration);
+    });
+  }
 })();
