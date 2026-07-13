@@ -207,6 +207,29 @@ Open `http://127.0.0.1:5500/index.html`. Test at least:
 - reduced motion
 - narrow mobile widths without horizontal scrolling
 
+### Automated smoke tests
+
+The repository has a small Playwright suite under `tests/`. It runs against Chromium and starts `tests/static-server.js` automatically, so no development server or build step is required.
+
+Install the dependency and Chromium once:
+
+```powershell
+npm.cmd install
+npx.cmd playwright install chromium
+```
+
+Run the suite:
+
+```powershell
+npm.cmd test
+```
+
+`npm.cmd run test:smoke` runs the same suite explicitly. Tests cover the homepage, Essentials, all seven daily pages, the representative Day 1 capsule and Days-menu flows, persistence, deterministic mocked weather, ARIA state, and responsive overflow at 320, 390, 768 and 1440 pixels wide.
+
+External map embeds, Google Translate, live internet availability, decorative animation timing, OCR accuracy, speech recognition, pixel-level appearance and the disabled Travel Log are intentionally outside this smoke suite. Manual visual review remains appropriate after CSS changes.
+
+When adding a trip day, add its current page filename to `DAY_PAGES` in `tests/smoke.spec.js`. Keep the deeper interaction scenario on one representative page unless the new day introduces unique behavior that warrants its own test.
+
 ## GitHub Pages
 
 No build command is required. In the repository’s GitHub settings, configure Pages to deploy the repository root from the intended branch. Relative URLs are used throughout, so the project remains compatible with the `/greececousintrip/` project path.

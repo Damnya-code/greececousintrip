@@ -1,0 +1,13 @@
+{
+  "name": "aegean-odyssey",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static trip microsite with a small Playwright smoke-test suite.",
+  "scripts": {
+    "test": "npm run test:smoke",
+    "test:smoke": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}

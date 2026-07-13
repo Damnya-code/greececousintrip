@@ -26,4 +26,24 @@ Opening files directly with `file://` is not recommended because browser securit
 
 The site is designed for GitHub Pages. Publish the repository root from the chosen branch in **Settings → Pages**. All internal links are relative, so the site works beneath the repository path as well as on a custom domain.
 
-No API keys, build output or package installation are required.
+No API keys, build output or package installation are required to preview or deploy the website. The optional smoke-test workflow below installs development-only test tooling.
+
+## Browser smoke tests
+
+The maintenance suite uses Playwright with headless Chromium. Install its small test dependency and browser once:
+
+```powershell
+npm.cmd install
+npx.cmd playwright install chromium
+```
+
+Run the complete suite with either command:
+
+```powershell
+npm.cmd test
+npm.cmd run test:smoke
+```
+
+Playwright starts and stops the repository's lightweight Node static server automatically on `http://127.0.0.1:4173`; do not start a preview server first. The suite covers core page loading, local assets, homepage persistence and theme switching, daily capsules and navigation, Essentials and Toolkit behavior, mocked weather responses, accessibility-oriented state, and four responsive viewport sizes.
+
+The suite intentionally does not test decorative animation timing, external Google Maps or Translate behavior, speech recognition, OCR accuracy, live weather availability, pixel-perfect screenshots, or the disabled Travel Log interface.

@@ -1,1 +1,6 @@
 day-03.webp
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+debug.log
