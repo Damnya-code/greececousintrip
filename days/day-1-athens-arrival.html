@@ -12,8 +12,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../day-page.css">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="../assets/css/day-page.css">
+  <link rel="stylesheet" href="../assets/css/trip-log.css">
   <script src="../assets/js/theme.js"></script>
 </head>
 
@@ -89,7 +90,7 @@
         <!-- ITINERARY -->
         <div id="panel-itinerary" class="day-panel day-panel-itinerary" role="tabpanel"
           aria-labelledby="day-tab-itinerary">
-          <section id="schedule" class="day-section day-container" aria-labelledby="schedule-title">
+          <section id="schedule" class="day-section day-container" aria-label="Itinerary">
             <ol class="editorial-timeline">
               <li class="reveal">
                 <time datetime="2026-10-10T14:00">
@@ -194,7 +195,7 @@
         <!-- HIGHLIGHTS -->
         <div id="panel-highlights" class="day-panel day-panel-highlights" role="tabpanel"
           aria-labelledby="day-tab-highlights" hidden>
-          <section id="highlights" class="day-section day-highlights" aria-labelledby="highlights-title">
+          <section id="highlights" class="day-section day-highlights" aria-label="Highlights">
             <div class="day-container">
               <div class="highlight-grid">
                 <article class="experience-card experience-card-featured reveal">
@@ -238,7 +239,7 @@
 
         <!-- FOOD -->
         <div id="panel-food" class="day-panel day-panel-food" role="tabpanel" aria-labelledby="day-tab-food" hidden>
-          <section class="day-section taste day-container reveal" aria-labelledby="taste-title">
+          <section class="day-section taste day-container reveal" aria-label="Food recommendation">
             <div class="taste-label">
               <span>ΑΘΗΝΑ</span>
             </div>
@@ -278,7 +279,7 @@
         <!-- ESSENTIALS -->
         <div id="panel-essentials" class="day-panel day-panel-essentials" role="tabpanel"
           aria-labelledby="day-tab-essentials" hidden>
-          <section id="practical" class="day-section practical" aria-labelledby="Essentials">
+          <section id="practical" class="day-section practical" aria-label="Essentials">
             <div class="day-container practical-grid">
               <div class="practical-list reveal">
                 <article>
@@ -314,7 +315,7 @@
 
     <section class="day-section route-overview day-container reveal" aria-labelledby="route-title">
       <div>
-        <h2 class="eyebrow">Location overview</h2>
+        <h2 id="route-title" class="eyebrow">Location overview</h2>
 
         <p>
           Start near Monastiraki, cross the Ancient Agora, continue to
@@ -362,9 +363,12 @@
     </div>
     <p>Day One<br><span>Athens awakens.</span></p>
   </footer>
+  <script src="../data/trip-config.js"></script>
   <script src="../data/trip-log-index.js"></script>
   <script src="../assets/js/trip-log.js"></script>
-  <script src="../day-page.js"></script>
+  <script src="../assets/js/day-navigation.js"></script>
+  <script src="../assets/js/day-route-map.js"></script>
+  <script src="../assets/js/day-page.js"></script>
 </body>
 
 </html>

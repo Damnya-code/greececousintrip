@@ -4,26 +4,15 @@
     const root = document.querySelector("[data-trip-toolkit]");
     if (!root) return;
 
-    const mapItems = [
-        { day: "Day 1", group: "Athens", title: "Athens arrival walk", description: "Monastiraki, the Ancient Agora, Philopappos Hill and Psyrri.", url: "https://www.google.com/maps/dir/?api=1&origin=Monastiraki%2C+Athens&destination=Psyrri%2C+Athens&waypoints=Ancient+Agora+of+Athens%7CPhilopappos+Hill" },
-        { day: "Day 2", group: "Athens", title: "Acropolis to Piraeus", description: "Acropolis Museum and Monastiraki before the overnight ferry.", url: "https://www.google.com/maps/dir/?api=1&origin=Acropolis%2C+Athens%2C+Greece&destination=Port+of+Piraeus%2C+Piraeus%2C+Greece&waypoints=Acropolis+Museum%2C+Athens%2C+Greece%7CMonastiraki%2C+Athens%2C+Greece" },
-        { day: "Day 3", group: "Chania", title: "Souda, Chania and Marathi", description: "Port arrival, Chania Old Town and the optional beach stop.", url: "https://www.google.com/maps/dir/?api=1&origin=Souda+Port&destination=Chania+Old+Town&waypoints=Marathi+Beach+Crete" },
-        { day: "Day 4", group: "Elafonisi", title: "Chania to Elafonisi", description: "The west-coast drive with Topolia Gorge on the way.", url: "https://www.google.com/maps/dir/?api=1&origin=Chania&destination=Elafonisi+Beach&waypoints=Topolia+Gorge" },
-        { day: "Day 5", group: "Rethymno", title: "Across Crete", description: "Chania to Heraklion with Rethymno as the central stop.", url: "https://www.google.com/maps/dir/?api=1&origin=Chania&destination=Heraklion&waypoints=Rethymno" },
-        { day: "Day 6", group: "Santorini", title: "Santorini island route", description: "Athinios Port, Oia and Fira, returning to the ferry.", url: "https://www.google.com/maps/dir/?api=1&origin=Athinios+Port+Santorini&destination=Athinios+Port+Santorini&waypoints=Oia+Santorini%7CFira+Santorini" },
-        { day: "Day 7", group: "Knossos", title: "Knossos and departure", description: "Heraklion, Knossos, Lions Square and the airport.", url: "https://www.google.com/maps/dir/?api=1&origin=Heraklion&destination=Heraklion+International+Airport&waypoints=Palace+of+Knossos%7CLions+Square+Heraklion" },
-        { day: "Place", group: "Heraklion", title: "Heraklion centre", description: "Open the practical eastern-Crete base directly.", url: "https://www.google.com/maps/search/?api=1&query=Heraklion+City+Centre" }
-    ];
-
-    const weatherLocations = {
-        Athens: { latitude: 37.9838, longitude: 23.7275 },
-        Chania: { latitude: 35.5138, longitude: 24.0180 },
-        Elafonisi: { latitude: 35.2710, longitude: 23.5412 },
-        Rethymno: { latitude: 35.3656, longitude: 24.4822 },
-        Heraklion: { latitude: 35.3387, longitude: 25.1442 },
-        Santorini: { latitude: 36.3932, longitude: 25.4615 }
-    };
-
+    const tripConfig = window.TRIP_CONFIG;
+    const mapItems = (tripConfig?.days || []).map((day) => ({
+        day: `Day ${day.number}`,
+        group: day.route.group,
+        title: day.route.title,
+        description: day.route.description,
+        url: day.route.mapsUrl
+    })).concat(tripConfig?.toolkit?.extraMapItems || []);
+    const weatherLocations = tripConfig?.toolkit?.weatherLocations || {};
     const phrases = [
         ["greetings", "Hello", "Hallo", "Γεια σας", "Yia sas"],
         ["greetings", "Good morning", "Guten Morgen", "Καλημέρα", "Kaliméra"],

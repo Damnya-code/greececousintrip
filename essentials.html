@@ -11,8 +11,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="essentials.css">
+    <link rel="stylesheet" href="assets/css/site.css">
+    <link rel="stylesheet" href="assets/css/essentials.css">
+    <link rel="stylesheet" href="assets/css/trip-toolkit.css">
     <script src="assets/js/theme.js"></script>
 </head>
 
@@ -26,11 +27,10 @@
     <main>
         <section class="essentials-hero">
             <div>
-                <h1 style="scale: 0.5; margin: auto; margin-top: -100px  ">Trip essentials.</h1>
+                <h1>Trip essentials.</h1>
             </div>
             <figure><img src="assets/essentials-hero.webp"
-                    alt="Travel notebook, folded map, sunglasses, coffee, camera and car keys arranged on a light table"
-                    style="scale: 0.7; margin-bottom: -100px; margin-top: -100px  ">
+                    alt="Travel notebook, folded map, sunglasses, coffee, camera and car keys arranged on a light table">
             </figure>
         </section>
 
@@ -124,7 +124,7 @@
                         <p class="eyebrow">Route at a glance</p>
                     </header>
                     <ol class="route-list">
-                        <li><b style="scale: 0.01;"></b>
+                        <li><b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Athens</h3>
                                 <p>Arrival, old-city walk and the Acropolis.</p><a
@@ -135,7 +135,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li><b style="scale: 0.01;"></b>
+                        <li><b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Piraeus / overnight ferry</h3>
                                 <p>Port connection and cabin crossing to Souda.</p><a
@@ -145,7 +145,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li> <b style="scale: 0.01;"></b>
+                        <li> <b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Souda / Chania</h3>
                                 <p>Ferry arrival, car collection and Venetian harbour.</p><a
@@ -156,7 +156,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li> <b style="scale: 0.01;"></b>
+                        <li> <b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Elafonisi</h3>
                                 <p>West-coast excursion, returning to Chania.</p><a
@@ -167,7 +167,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li> <b style="scale: 0.01;"></b>
+                        <li> <b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Rethymno</h3>
                                 <p>Fortezza stop on the drive east.</p><a href="days/day-5-rethymno-heraklion.html">View
@@ -178,7 +178,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li> <b style="scale: 0.01;"></b>
+                        <li> <b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Heraklion</h3>
                                 <p>Central base for the final part of the trip.</p><a
@@ -188,7 +188,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li> <b style="scale: 0.01;"></b>
+                        <li> <b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Santorini</h3>
                                 <p>Provisional ferry day for Oia, Fira and the caldera.</p><a
@@ -198,7 +198,7 @@
                                         tab</span></a>
                             </div>
                         </li>
-                        <li> <b style="scale: 0.01;"></b>
+                        <li> <b class="route-marker" aria-hidden="true"></b>
                             <div>
                                 <h3>Knossos / airport</h3>
                                 <p>Minoan history, a shared farewell and departures from Heraklion.</p><a
@@ -261,7 +261,9 @@
         </div>
         <p>The practical stuff<br></p>
     </footer>
-    <script src="essentials.js"></script>
+    <script src="data/trip-config.js"></script>
+    <script src="assets/js/essentials.js"></script>
+    <script src="assets/js/essentials-checklist.js"></script>
     <script src="assets/js/trip-toolkit.js"></script>
 </body>
 

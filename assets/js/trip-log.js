@@ -1,18 +1,16 @@
 (function () {
   "use strict";
 
+  const config = window.TRIP_CONFIG;
+  if (!config?.features?.travelLog) return;
+
   const index = window.TRIP_LOG_INDEX;
   if (!index || index.version !== 1 || !index.days || typeof index.days !== "object") return;
 
   const publishedDays = Object.entries(index.days).filter(([, day]) => day && day.published === true);
   if (!publishedDays.length) return;
 
-  const paths = {
-    "day-01": "day-1-athens-arrival.html", "day-02": "day-2-acropolis-ferry.html",
-    "day-03": "day-3-chania.html", "day-04": "day-4-elafonisi.html",
-    "day-05": "day-5-rethymno-heraklion.html", "day-06": "day-6-santorini.html",
-    "day-07": "day-7-knossos.html"
-  };
+  const paths = Object.fromEntries(config.days.map((day) => [day.id, day.path]));
 
   const dayId = document.body.dataset.tripDay;
   if (!dayId) {

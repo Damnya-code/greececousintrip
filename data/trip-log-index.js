@@ -5,7 +5,7 @@
     days: {
       "day-01": { published: false },
       "day-02": { published: false },
-      "day-03": { published: falso },
+      "day-03": { published: false },
       "day-04": { published: false },
       "day-05": { published: false },
       "day-06": { published: false },
