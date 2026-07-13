@@ -215,7 +215,6 @@
 
     const feedback = document.querySelector("#checklist-feedback");
     const clearButton = document.querySelector("#clear-completed");
-    const resetButton = document.querySelector("#reset-checklist");
 
     if (!boxes.length) {
         return;
@@ -294,27 +293,6 @@
         if (feedback) {
             feedback.textContent =
                 "Completed items cleared.";
-        }
-    });
-
-    resetButton?.addEventListener("click", () => {
-        const confirmed = window.confirm(
-            "Reset the entire essentials checklist on this device?"
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
-        boxes.forEach((box) => {
-            box.checked = false;
-        });
-
-        localStorage.removeItem(checklistKey);
-
-        if (feedback) {
-            feedback.textContent =
-                "Checklist reset on this device.";
         }
     });
 

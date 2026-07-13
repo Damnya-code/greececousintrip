@@ -16,6 +16,76 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 
 document.documentElement.classList.add('day-page-ready');
 
+(() => {
+  const fallbackLink = document.querySelector('.day-nav > .nav-link-button');
+  const currentDayId = document.body.dataset.tripDay;
+  const days = [
+    ['day-01', 'day-1-athens-arrival.html', 'Athens'],
+    ['day-02', 'day-2-acropolis-ferry.html', 'Acropolis & ferry'],
+    ['day-03', 'day-3-chania.html', 'Chania'],
+    ['day-04', 'day-4-elafonisi.html', 'Elafonisi'],
+    ['day-05', 'day-5-rethymno-heraklion.html', 'Across Crete'],
+    ['day-06', 'day-6-santorini.html', 'Santorini'],
+    ['day-07', 'day-7-knossos.html', 'Knossos']
+  ];
+  const currentIndex = days.findIndex(([id]) => id === currentDayId);
+
+  if (!fallbackLink || currentIndex < 0) return;
+
+  const switcher = document.createElement('div');
+  switcher.className = 'day-jump';
+  const menuId = `day-jump-menu-${currentDayId}`;
+  const previous = days[currentIndex - 1];
+  const next = days[currentIndex + 1];
+  const step = (day, direction, symbol) => day
+    ? `<a class="day-jump-step" href="${day[1]}" aria-label="${direction}: ${day[2]}">${symbol}</a>`
+    : `<span class="day-jump-step" aria-disabled="true" aria-hidden="true">${symbol}</span>`;
+  const menuDays = days.map(([id, href, title], index) => `
+    <a href="${href}"${id === currentDayId ? ' aria-current="page"' : ''}>
+      <span>Day ${String(index + 1).padStart(2, '0')}</span>
+      <strong>${title}</strong>
+    </a>`).join('');
+
+  switcher.innerHTML = `
+    ${step(previous, 'Previous day', '‹')}
+    <button class="day-jump-current" type="button" aria-expanded="false" aria-controls="${menuId}"
+      aria-label="Choose a day. Currently Day ${currentIndex + 1}: ${days[currentIndex][2]}">
+      <span>Days</span>
+    </button>
+    ${step(next, 'Next day', '›')}
+    <div class="day-jump-menu" id="${menuId}" role="navigation" aria-label="Choose a day" hidden>
+      <a href="../index.html#itinerary">All days</a>
+      ${menuDays}
+    </div>`;
+
+  fallbackLink.replaceWith(switcher);
+
+  const button = switcher.querySelector('.day-jump-current');
+  const menu = switcher.querySelector('.day-jump-menu');
+  const closeMenu = ({ restoreFocus = false } = {}) => {
+    menu.hidden = true;
+    button.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) button.focus();
+  };
+
+  button.addEventListener('click', () => {
+    const opening = menu.hidden;
+    menu.hidden = !opening;
+    button.setAttribute('aria-expanded', String(opening));
+    if (opening) menu.querySelector('[aria-current="page"]')?.focus();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!switcher.contains(event.target)) closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !menu.hidden) {
+      closeMenu({ restoreFocus: true });
+    }
+  });
+})();
+
 const dayEnhancements = {
   'day-01': {
     phases: ['After-<br>noon', 'Once<br>settled', 'Late after-<br>noon', 'Before<br>sunset', 'Golden<br>hour', 'Evening'],

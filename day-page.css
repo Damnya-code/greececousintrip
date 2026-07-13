@@ -14,7 +14,12 @@
     --map-index: #fff;
     --map-link-hover: #f2d28d;
     --map-link-border: #173b4a;
-    --map-link-surface: linear-gradient(135deg, #18384a 0%, #112e42 55%, #16486e 100%)
+    --map-link-surface: linear-gradient(135deg, #18384a 0%, #112e42 55%, #16486e 100%);
+    --day-switcher-menu: #fbf7ed;
+    --day-switcher-border: rgba(16, 29, 49, .18);
+    --day-switcher-text: #101d31;
+    --day-switcher-muted: #6c756f;
+    --day-switcher-current: #e6efec
 }
 
 html[data-theme="dark"] {
@@ -30,7 +35,12 @@ html[data-theme="dark"] {
     --map-index: #fff;
     --map-link-hover: #f2d28d;
     --map-link-border: #f2d28d;
-    --map-link-surface: linear-gradient(135deg, #142935 0%, #082233 55%, #1d405a 100%)
+    --map-link-surface: linear-gradient(135deg, #142935 0%, #082233 55%, #1d405a 100%);
+    --day-switcher-menu: #152231;
+    --day-switcher-border: rgba(231, 237, 244, .18);
+    --day-switcher-text: #e7edf4;
+    --day-switcher-muted: #aebbc7;
+    --day-switcher-current: #22384a
 }
 
 [data-theme="dark"] .day-page {
@@ -144,13 +154,155 @@ html[data-theme="dark"] {
     background: rgba(255, 255, 255, .13)
 }
 
+.day-jump {
+    position: relative;
+    z-index: 32;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: auto;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 4px;
+    background: rgba(7, 23, 34, .68);
+    box-shadow: inset 0 1px rgba(255, 255, 255, .06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.day-nav .nav-tools {
+    margin-left: 9px;
+}
+
+.day-jump-step,
+.day-jump-current {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-grid;
+    place-items: center;
+    min-height: 38px;
+    border: 0;
+    background: transparent;
+    color: #f3f6f8;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .06);
+    transition: background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+
+.day-jump-step {
+    width: 36px;
+    padding: 0;
+    border-radius: 3px;
+    font-size: 18px;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.day-jump-step[aria-disabled="true"] {
+    opacity: .3;
+}
+
+.day-jump-current {
+    grid-auto-flow: column;
+    gap: 9px;
+    min-width: 72px;
+    padding: 0 12px;
+    border-radius: 3px;
+    font: 600 11px "DM Sans", sans-serif;
+    letter-spacing: .03em;
+    cursor: pointer;
+}
+
+.day-jump-current span {
+    color: #f3f6f8;
+}
+
+.day-jump-current::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform .18s ease, margin-top .18s ease;
+}
+
+.day-jump-current[aria-expanded="true"]::after {
+    margin-top: 3px;
+    transform: rotate(225deg);
+}
+
+.day-jump-step:hover,
+.day-jump-step:focus-visible,
+.day-jump-current:hover,
+.day-jump-current:focus-visible,
+.day-jump-current[aria-expanded="true"] {
+    border-color: rgba(255, 255, 255, .32);
+    background: rgba(255, 255, 255, .12);
+}
+
+.day-jump-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(290px, calc(100vw - 32px));
+    padding: 8px;
+    border: 1px solid var(--day-switcher-border);
+    background: var(--day-switcher-menu);
+    color: var(--day-switcher-text);
+    box-shadow: 0 16px 38px rgba(5, 18, 29, .2);
+}
+
+.day-jump-menu[hidden] {
+    display: none;
+}
+
+.day-jump-menu a {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 11px;
+    border: 1px solid transparent;
+    color: var(--day-switcher-text);
+    text-decoration: none;
+}
+
+.day-jump-menu a:first-child {
+    display: block;
+    margin-bottom: 5px;
+    border-bottom-color: var(--day-switcher-border);
+    color: var(--day-switcher-muted);
+    font: 600 10px "DM Mono", monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.day-jump-menu a span {
+    color: var(--day-switcher-muted);
+    font: 500 10px "DM Mono", monospace;
+}
+
+.day-jump-menu a strong {
+    font: 600 15px "Playfair Display", serif;
+}
+
+.day-jump-menu a:hover,
+.day-jump-menu a:focus-visible,
+.day-jump-menu a[aria-current="page"] {
+    border-color: var(--day-switcher-border);
+    background: var(--day-switcher-current);
+}
+
 
 .next-day {
     display: inline-block;
     transition:
         transform 0.2s ease,
         color 0.2s ease,
-        border-color 0.2s ease;
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .next-day:hover {
@@ -162,9 +314,10 @@ html[data-theme="dark"] {
 
 .next-day2:hover {
     transform: translateY(-1px);
-    color: var(--map-link-hover);
-    border-color: var(--map-link-border);
-    background: var(--map-link-surface)
+    color: var(--day-navy);
+    border-color: var(--day-gold);
+    background: color-mix(in srgb, var(--day-gold) 10%, var(--day-ivory));
+    box-shadow: inset 0 2px 0 color-mix(in srgb, var(--day-gold) 70%, transparent)
 }
 
 .day-hero {
@@ -263,21 +416,18 @@ html[data-theme="dark"] {
 }
 
 .day-intro {
-    width: min(1000px, calc(100% - 68px));
-    padding: 72px 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px;
-    gap: 64px;
-    align-items: center;
+    width: min(900px, calc(100% - 68px));
+    padding: 62px 0 66px;
+    display: block;
     border-bottom: 1px solid #d7d2c4
 }
 
 .day-intro-lead::before {
     content: "";
     display: block;
-    width: 64px;
-    height: 2px;
-    margin-bottom: 26px;
+    width: 46px;
+    height: 1px;
+    margin-bottom: 20px;
     background: var(--day-gold)
 }
 
@@ -288,33 +438,11 @@ html[data-theme="dark"] {
 }
 
 .day-intro .day-intro-lead {
-    max-width: 24ch;
-    font: 600 clamp(29px, 3.2vw, 38px)/1.28 "Playfair Display";
-    letter-spacing: -.6px;
+    max-width: 30ch;
+    font: 600 clamp(28px, 3vw, 38px)/1.32 "Playfair Display";
+    letter-spacing: -.45px;
     color: var(--day-navy);
     margin: 0
-}
-
-.intro-chapter {
-    padding-left: 28px;
-    border-left: 1px solid #d7d2c4
-}
-
-.intro-chapter .eyebrow {
-    margin-bottom: 12px
-}
-
-.intro-chapter a {
-    display: inline-block;
-    color: var(--day-navy);
-    font: 600 18px/1.35 "Playfair Display";
-    text-decoration: none;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 5px
-}
-
-.intro-chapter a:hover {
-    color: var(--day-gold)
 }
 
 .day-section {
@@ -809,6 +937,19 @@ html[data-theme="dark"] {
         display: none
     }
 
+    .day-jump-step {
+        display: none
+    }
+
+    .day-jump-current {
+        min-width: 68px;
+        padding-inline: 8px
+    }
+
+    .day-nav .nav-tools {
+        margin-left: 6px
+    }
+
     .day-hero {
         min-height: 680px
     }
@@ -849,8 +990,6 @@ html[data-theme="dark"] {
     }
 
     .day-intro {
-        grid-template-columns: 1fr;
-        gap: 32px;
         padding-top: 55px;
         padding-bottom: 55px
     }
@@ -858,13 +997,6 @@ html[data-theme="dark"] {
     .day-intro .day-intro-lead {
         max-width: none;
         font-size: 28px
-    }
-
-    .intro-chapter {
-        padding-top: 22px;
-        padding-left: 0;
-        border-top: 1px solid #d7d2c4;
-        border-left: 0
     }
 
     .offline-route-map {
@@ -971,31 +1103,6 @@ html[data-theme="dark"] {
     }
 }
 
-.next-chapter {
-    padding-top: 10px;
-    padding-bottom: 110px
-}
-
-.next-chapter blockquote {
-    max-width: 850px;
-    margin: 20px 0 32px;
-    font: 600 clamp(38px, 5vw, 65px)/1.05 "Playfair Display";
-    letter-spacing: -2px;
-    color: var(--day-navy)
-}
-
-.next-chapter>a {
-    color: var(--day-navy);
-    font-size: 13px;
-    font-weight: 700
-}
-
-@media(max-width:760px) {
-    .next-chapter {
-        padding-bottom: 80px
-    }
-}
-
 /* Day Two: Athens dissolves into the night crossing */
 .day-two .day-hero-shade {
     background: linear-gradient(90deg, rgba(8, 20, 38, .76), rgba(8, 20, 38, .12)), linear-gradient(0deg, rgba(8, 20, 38, .7), transparent 55%)
@@ -1078,24 +1185,6 @@ html[data-theme="dark"] {
     stroke-width: 2
 }
 
-.day-two .next-chapter {
-    background: #091528;
-    color: white;
-    width: 100%;
-    max-width: none;
-    padding-left: max(34px, calc((100vw - 1212px)/2 + 34px));
-    padding-right: max(34px, calc((100vw - 1212px)/2 + 34px))
-}
-
-.day-two .next-chapter blockquote,
-.day-two .next-chapter>a {
-    color: white
-}
-
-.day-two .next-chapter .eyebrow {
-    color: #d4b77e
-}
-
 @media(max-width:760px) {
     .night-crossing {
         padding: 85px 0
@@ -1110,10 +1199,6 @@ html[data-theme="dark"] {
         margin-top: 10px
     }
 
-    .day-two .next-chapter {
-        padding-left: 20px;
-        padding-right: 20px
-    }
 }
 
 /* Day Three: Chania harbour tones */
@@ -1134,10 +1219,6 @@ html[data-theme="dark"] {
 
 .day-three .practical {
     background: #e2f0ed
-}
-
-.day-three .next-chapter {
-    border-top: 1px solid #b8d3cd
 }
 
 .day-three .taste h2 em {
@@ -1170,10 +1251,6 @@ html[data-theme="dark"] {
 
 .day-four .taste h2 em {
     color: #b8766e
-}
-
-.day-four .next-chapter {
-    border-top: 1px solid #dfc5ba
 }
 
 /* Day Five: the west-to-east crossing */
@@ -1286,10 +1363,6 @@ html[data-theme="dark"] {
     font: 500 10px "DM Mono";
     text-transform: uppercase;
     color: #88765c
-}
-
-.day-five .next-chapter {
-    border-top: 1px solid #d5c8b3
 }
 
 @media(prefers-reduced-motion:reduce) {
@@ -1427,14 +1500,6 @@ html[data-theme="dark"] {
     color: #e5eef4
 }
 
-.day-six .next-chapter {
-    border-top: 1px solid #c8d8e2
-}
-
-.day-six .next-chapter blockquote {
-    color: #155f91
-}
-
 @media(prefers-reduced-motion:reduce) {
     .day-six .day-hero-image {
         transform: scale(1.02) !important
@@ -1510,21 +1575,6 @@ html[data-theme="dark"] {
 
 .day-seven .taste h2 em {
     color: #a35f3d
-}
-
-.day-seven .next-chapter {
-    background: linear-gradient(120deg, #faf3e7, #eac9ae);
-    width: 100%;
-    max-width: none;
-    padding-left: max(34px, calc((100vw - 1212px)/2 + 34px));
-    padding-right: max(34px, calc((100vw - 1212px)/2 + 34px))
-}
-
-@media(max-width:760px) {
-    .day-seven .next-chapter {
-        padding-left: 20px;
-        padding-right: 20px
-    }
 }
 
 /* Injected only after a Travel Log day is explicitly published. */
@@ -1961,55 +2011,6 @@ html[data-theme="dark"] {
         box-shadow 0.24s ease;
 }
 
-.day-tab::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-
-    background:
-        radial-gradient(
-            circle at 18% 10%,
-            rgba(255, 255, 255, 0.34),
-            transparent 38%
-        ),
-        linear-gradient(
-            135deg,
-            var(--coral) 0%,
-            #ec9670 48%,
-            #e6bd72 100%
-        );
-
-    opacity: 0;
-
-    transition: opacity 0.25s ease;
-}
-
-.day-tab::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -55%;
-
-    width: 34%;
-    height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.34),
-            transparent
-        );
-
-    opacity: 0;
-    transform: skewX(-18deg);
-
-    transition:
-        left 0.52s ease,
-        opacity 0.18s ease;
-}
-
 .day-tab small,
 .day-tab strong {
     position: relative;
@@ -2056,29 +2057,26 @@ html[data-theme="dark"] {
 }
 
 .day-tab[aria-selected="true"] {
-    transform: translateY(-1px);
-
-    border-color: transparent;
-    color: white;
-
+    transform: none;
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--day-tab-text);
     box-shadow:
-        0 10px 25px rgba(223, 121, 92, 0.27),
-        0 3px 8px rgba(16, 29, 49, 0.13),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.day-tab[aria-selected="true"]::before {
-    opacity: 1;
+        0 5px 12px rgba(23, 35, 59, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
 
 .day-tab[aria-selected="true"] small {
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--day-tab-text);
+    opacity: 0.68;
 }
 
-.day-tab[aria-selected="true"]:hover::after,
-.day-tab[aria-selected="true"]:focus-visible::after {
-    left: 125%;
-    opacity: 1;
+.day-tab[aria-selected="true"]:hover,
+.day-tab[aria-selected="true"]:focus-visible {
+    transform: none;
+    border-color: var(--accent-hover);
+    background: color-mix(in srgb, var(--accent-soft) 82%, var(--accent) 18%);
+    box-shadow: 0 6px 14px rgba(23, 35, 59, 0.1);
 }
 
 .day-tab:focus-visible {

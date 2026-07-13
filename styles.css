@@ -5,7 +5,13 @@
     --cream: #fbf7ed;
     --sand: #e8d4a5;
     --coral: #df795c;
-    --line: #d7d7d0
+    --line: #d7d7d0;
+    --action: #2b7488;
+    --action-hover: #225f72;
+    --accent: #cf765c;
+    --accent-hover: #bc654d;
+    --accent-soft: #f1ddd3;
+    --button-shadow: 0 7px 16px rgba(23, 35, 59, .12)
 }
 
 html[data-theme="dark"] {
@@ -15,7 +21,13 @@ html[data-theme="dark"] {
     --cream: #0d1624;
     --sand: #8b7a59;
     --coral: #d47b63;
-    --line: #2b3a4b
+    --line: #2b3a4b;
+    --action: #245f76;
+    --action-hover: #2d7088;
+    --accent: #d47b63;
+    --accent-hover: #df8d77;
+    --accent-soft: #34252a;
+    --button-shadow: 0 8px 20px rgba(0, 0, 0, .22)
 }
 
 * {
@@ -924,6 +936,21 @@ body {
     box-shadow: 0 7px 18px rgba(23, 35, 59, .08)
 }
 
+.hero-actions .booking-order {
+    isolation: isolate;
+    border-color: rgba(23, 35, 59, .34);
+    background: rgba(7, 24, 38, .1);
+    color: var(--ink);
+    box-shadow: 0 7px 18px rgba(28, 45, 78, .08), inset 0 1px rgba(255, 255, 255, .18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    filter: none
+}
+
+.hero-actions .booking-order::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .09), transparent)
+}
+
 .hero-actions .primary span {
     font-size: 17px
 }
@@ -949,6 +976,55 @@ body {
     box-shadow: 0 14px 28px rgba(23, 35, 59, .22)
 }
 
+.hero-actions .booking-order:hover,
+.hero-actions .booking-order:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, .36);
+    background: linear-gradient(135deg, rgba(8, 20, 30, .88), rgba(30, 60, 75, .8));
+    color: white;
+    box-shadow: 0 10px 22px rgba(8, 25, 40, .18), inset 0 1px rgba(255, 255, 255, .14);
+    filter: none
+}
+
+.hero-actions button.primary {
+    border-color: var(--action);
+    background: var(--action);
+    color: white;
+    box-shadow: var(--button-shadow);
+    filter: none;
+    transition: transform .22s ease, background-color .22s ease, border-color .22s ease, box-shadow .22s ease
+}
+
+.hero-actions button.primary::before {
+    display: block;
+    left: -45%;
+    width: 34%;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .22), transparent);
+    opacity: .72;
+    transition: left .55s ease
+}
+
+.hero-actions button.primary:hover::before,
+.hero-actions button.primary:focus-visible::before {
+    left: 115%
+}
+
+.hero-actions button.primary:hover,
+.hero-actions button.primary:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--action-hover);
+    background: var(--action-hover);
+    box-shadow: 0 11px 22px rgba(23, 35, 59, .18);
+    filter: none
+}
+
+[data-theme="dark"] .hero-actions .booking-order {
+    border-color: rgba(255, 255, 255, .3);
+    background: rgba(255, 255, 255, .055);
+    color: #f4f7f9
+}
+
 .hero-actions a:hover span,
 .hero-actions button:hover span,
 .trip-essentials-link:hover span {
@@ -960,6 +1036,7 @@ body {
     .hero-actions .primary,
     .hero-actions .text-link,
     .trip-essentials-link,
+    .trip-essentials-link::before,
     .hero-art img,
     .hero-actions span,
     .trip-essentials-link span {
@@ -1291,8 +1368,8 @@ body {
 .booking {
     --booking-bg: #f3e8d1;
     display: grid;
-    grid-template-columns: .85fr 1.15fr;
-    gap: 100px;
+    grid-template-columns: minmax(280px, .7fr) minmax(560px, 1.3fr);
+    gap: clamp(52px, 6vw, 88px);
     background: var(--booking-bg);
     max-width: none;
     padding-left: max(34px, calc((100vw - 1212px)/2 + 34px));
@@ -1300,47 +1377,70 @@ body {
 }
 
 .checklist {
+    width: 100%;
+    box-sizing: border-box;
     padding: 0;
     margin: 5px 0 0;
     list-style: none;
-    border-top: 1px solid #9d8d68
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: 6px;
+    background: rgba(7, 25, 39, .16);
+    box-shadow: 0 14px 34px rgba(5, 20, 34, .12), inset 0 1px rgba(255, 255, 255, .06)
 }
 
 .checklist li {
     display: grid;
-    grid-template-columns: 32px 1fr auto;
+    grid-template-columns: minmax(0, 1fr) 24px;
     align-items: center;
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 1px solid #b6a67e
+    gap: 24px;
+    min-height: 64px;
+    padding: 13px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, .16);
+    background: rgba(255, 255, 255, .035)
+}
+
+.checklist li:nth-child(even) {
+    background: rgba(4, 20, 33, .08)
+}
+
+.checklist li:last-child {
+    border-bottom: 0
+}
+
+.checklist label {
+    display: grid;
+    grid-template-columns: minmax(145px, .7fr) minmax(0, 1.3fr);
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+    cursor: pointer
 }
 
 .checklist input {
     appearance: none;
     width: 18px;
     height: 18px;
-    border: 1px solid var(--ink);
+    justify-self: end;
+    border: 1px solid rgba(255, 255, 255, .7);
     border-radius: 50%;
     cursor: pointer
 }
 
 .checklist input:checked {
-    background: var(--ink);
-    box-shadow: inset 0 0 0 4px var(--booking-bg)
+    background: #edc77c;
+    box-shadow: inset 0 0 0 4px #18384a
 }
 
 .checklist strong {
-    font-size: 14px
+    font-size: 14px;
+    line-height: 1.35
 }
 
 .checklist small {
     font-size: 12px;
-    color: #a2dfdc
-}
-
-.checklist .index {
-    font: 500 11px "DM Mono";
-    color: var(--coral)
+    line-height: 1.45;
+    color: #b9dfe2
 }
 
 footer {
@@ -1489,6 +1589,16 @@ dialog::backdrop {
         margin-top: 28px
     }
 
+    .checklist li {
+        gap: 16px;
+        padding: 14px 16px
+    }
+
+    .checklist label {
+        grid-template-columns: 1fr;
+        gap: 3px
+    }
+
     .sun {
         right: 12px;
         top: 130px;
@@ -1527,6 +1637,9 @@ dialog::backdrop {
 }
 
 .trip-essentials-link {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     gap: 20px;
@@ -1535,18 +1648,40 @@ dialog::backdrop {
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
-    border: 1px solid white ;
+    border: 1px solid rgba(255, 255, 255, .42);
+    border-radius: 3px;
     padding: 13px 17px;
-    box-shadow: 0 7px 18px rgba(28, 45, 78, 0.08);
-    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease
+    background: rgba(7, 24, 38, .12);
+    box-shadow: 0 7px 18px rgba(28, 45, 78, .08), inset 0 1px rgba(255, 255, 255, .08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, border-color .25s ease, color .25s ease
+}
+
+.trip-essentials-link::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0 auto 0 -45%;
+    width: 30%;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .09), transparent);
+    transform: skewX(-18deg);
+    transition: left .48s ease
 }
 
 .trip-essentials-link:hover,
 .trip-essentials-link:focus-visible {
-    transform: translateY(-3px);
-    background: var(--ink);
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, .6);
+    background: linear-gradient(135deg, rgba(5, 18, 29, .38), rgba(255, 255, 255, .1));
     color: white;
-    box-shadow: 0 14px 28px rgba(23, 35, 59, .2)
+    box-shadow: 0 10px 22px rgba(8, 25, 40, .18), inset 0 1px rgba(255, 255, 255, .14)
+}
+
+.trip-essentials-link:hover::before,
+.trip-essentials-link:focus-visible::before {
+    left: 120%
 }
 
 .hero-art {
@@ -1634,7 +1769,7 @@ dialog::backdrop {
 
 .journey-heading {
     max-width: 650px;
-    margin-bottom: 85px
+    margin-bottom: 45px
 }
 
 .journey-timeline {
@@ -1733,14 +1868,14 @@ dialog::backdrop {
 .journey-map-button {
     position: absolute;
     z-index: 3;
-    top: 14px;
-    right: 14px;
+    top: 12px;
+    right: 12px;
 
     display: grid;
     place-items: center;
 
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
 
     overflow: hidden;
     isolation: isolate;
@@ -1748,54 +1883,17 @@ dialog::backdrop {
     border: 1px solid rgba(255, 255, 255, 0.62);
     border-radius: 50%;
 
-    background: rgba(16, 29, 49, 0.72);
+    background: linear-gradient(145deg, rgba(75, 122, 137, .76), rgba(18, 49, 66, .84));
     color: white;
 
-    box-shadow: 0 6px 16px rgba(16, 29, 49, 0.18);
+    box-shadow: 0 7px 18px rgba(16, 29, 49, .22), inset 0 1px rgba(255, 255, 255, .24);
+    backdrop-filter: blur(8px) saturate(118%);
+    -webkit-backdrop-filter: blur(8px) saturate(118%);
 
     transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        filter 0.25s ease;
-}
-
-.journey-map-button::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--coral) 0%,
-            #ec9670 52%,
-            #e6bd72 100%
-        );
-
-    opacity: 0;
-    transition: opacity 0.25s ease;
-}
-
-.journey-map-button::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -65%;
-
-    width: 45%;
-    height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.32),
-            transparent
-        );
-
-    transform: skewX(-18deg);
-    transition: left 0.45s ease;
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .journey-map-button span {
@@ -1803,28 +1901,20 @@ dialog::backdrop {
     z-index: 2;
 
     display: block;
-    font-size: 15px;
-    transform: rotate(-45deg);
+}
+
+.journey-map-button svg {
+    display: block;
+    width: 18px;
+    height: 18px;
 }
 
 .journey-map-button:hover,
 .journey-map-button:focus-visible {
-    transform: translateY(-2px) scale(1.06);
-    filter: saturate(1.08) brightness(1.03);
-
-    box-shadow:
-        0 10px 22px rgba(223, 121, 92, 0.32),
-        inset 0 1px 0 rgba(255, 255, 255, 0.28);
-}
-
-.journey-map-button:hover::before,
-.journey-map-button:focus-visible::before {
-    opacity: 1;
-}
-
-.journey-map-button:hover::after,
-.journey-map-button:focus-visible::after {
-    left: 125%;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, .78);
+    background: linear-gradient(145deg, rgba(103, 165, 178, .92), rgba(37, 91, 112, .95));
+    box-shadow: 0 9px 20px rgba(16, 29, 49, .27), inset 0 1px rgba(255, 255, 255, .34);
 }
 .journey-image:after {
     content: "";
@@ -1976,7 +2066,7 @@ dialog::backdrop {
     }
 
     .journey-heading {
-        margin-bottom: 55px
+        margin-bottom: 32px
     }
 
     .journey-timeline {
@@ -2182,7 +2272,15 @@ footer {
 
 [data-theme="dark"] .booking .checklist,
 [data-theme="dark"] .booking .checklist li {
-    border-color: #cbd9e9
+    border-color: rgba(203, 217, 233, .24)
+}
+
+[data-theme="dark"] .booking .checklist li {
+    background: rgba(255, 255, 255, .035)
+}
+
+[data-theme="dark"] .booking .checklist li:nth-child(even) {
+    background: rgba(4, 15, 27, .16)
 }
 
 [data-theme="dark"] .booking .checklist small,
@@ -2196,12 +2294,12 @@ footer {
 }
 
 [data-theme="dark"] .trip-essentials-link:hover,
-.trip-essentials-link:focus-visible {
-    color: #5093a3;
+[data-theme="dark"] .trip-essentials-link:focus-visible {
+    color: #fff;
 }
 
 [data-theme="dark"] .booking-order:hover {
-    color: #5093a3;
+    color: #fff;
 }
 
 [data-theme="dark"] .darkmode-text { color:#3a92c5 } 
