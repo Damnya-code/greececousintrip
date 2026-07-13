@@ -1249,6 +1249,41 @@ body {
     color: var(--ink);
 }
 
+.route-compass {
+    pointer-events: none;
+}
+
+.route-compass circle {
+    fill: rgba(251, 247, 237, 0.82);
+    stroke: rgba(23, 35, 59, 0.18);
+    stroke-width: 1;
+}
+
+.route-compass text {
+    fill: var(--ink);
+    font: 600 9px "DM Mono", monospace;
+    letter-spacing: 0.08em;
+}
+
+.route-compass-needle {
+    fill: var(--coral);
+}
+
+.route-compass-tail {
+    fill: var(--ink);
+    opacity: 0.72;
+}
+
+[data-theme="dark"] .route-compass circle {
+    fill: rgba(13, 22, 36, 0.84);
+    stroke: rgba(233, 238, 245, 0.22);
+}
+
+[data-theme="dark"] .route-compass text,
+[data-theme="dark"] .route-compass-tail {
+    fill: #e9eef5;
+}
+
 .route-land {
     fill: rgba(232, 212, 165, 0.48);
     stroke: rgba(23, 35, 59, 0.16);
@@ -1477,6 +1512,10 @@ body {
     body.route-map-expanded {
         overflow: hidden;
         touch-action: none;
+    }
+
+    body.route-map-expanded .route {
+        z-index: 21;
     }
 }
 

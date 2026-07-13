@@ -23,6 +23,7 @@
 
     const daytripVehicle = svg.querySelector("#route-daytrip-vehicle");
     const expandButton = card.querySelector("[data-route-expand]");
+    const fullRouteLink = card.querySelector('.route-map-footer a[href="#itinerary"]');
     const ferryPath = svg.querySelector("#route-path-ferry");
     const roadPath = svg.querySelector("#route-path-road");
     const santoriniPath = svg.querySelector("#route-path-santorini");
@@ -80,6 +81,10 @@
     expandButton?.addEventListener("click", (event) => {
       event.stopPropagation();
       setExpanded(!card.classList.contains("is-route-expanded"));
+    });
+
+    fullRouteLink?.addEventListener("click", () => {
+      if (card.classList.contains("is-route-expanded")) setExpanded(false);
     });
 
     document.addEventListener("keydown", (event) => {

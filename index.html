@@ -168,6 +168,13 @@
     C10 185 12 105 38 55Z
   " fill="url(#route-sea-texture)" />
 
+            <g class="route-compass" transform="translate(704 82)" aria-hidden="true">
+              <circle r="21" />
+              <text y="-27" text-anchor="middle">N</text>
+              <path class="route-compass-needle" d="M0 -13 L4 3 L0 1 L-4 3 Z" />
+              <path class="route-compass-tail" d="M0 13 L-3 -2 L0 0 L3 -2 Z" />
+            </g>
+
 
             <!-- Simplified editorial land silhouettes -->
             <g class="route-landmass route-landmass-mainland" transform="translate(22 16) scale(.9)">
@@ -479,7 +486,7 @@
               <span aria-hidden="true">↓</span>
             </a>
 
-            <!-- <button class="route-map-expand" type="button" data-route-expand aria-label="Expand route map"
+            <button class="route-map-expand" type="button" data-route-expand aria-label="Expand route map"
               aria-controls="route-map-viewport" aria-expanded="false">
               <svg class="route-map-expand-icon" viewBox="0 0 24 24" aria-hidden="true">
                 <path class="route-map-icon-expand" d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -487,7 +494,7 @@
                 <path class="route-map-icon-close" d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8"
                   stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-            </button> -->
+            </button>
           </div>
         </div>
 
