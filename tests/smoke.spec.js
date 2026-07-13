@@ -556,6 +556,73 @@ test("Travel Log editor loads without exposing itself on the public site", async
   assertNoFailures();
 });
 
+test("editor preview remains dedicated and stable through its initial message lifecycle", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await page.goto("/editor/index.html");
+
+  const iframe = page.locator("#travel-log-editor-preview");
+  const preview = page.frameLocator("#travel-log-editor-preview");
+  await expect(iframe).toHaveCount(1);
+  await expect(page.locator(".editor-command-bar")).toHaveCount(1);
+
+  const skipLink = page.getByRole("link", { name: "Skip to editing workspace" });
+  await expect(skipLink).toHaveCSS("opacity", "0");
+  await page.keyboard.press("Tab");
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toHaveCSS("opacity", "1");
+
+  await expect.poll(() => iframe.evaluate((frame) => `${frame.contentWindow.location.pathname}${frame.contentWindow.location.search}`))
+    .toBe("/editor/preview.html?preview=editor");
+  await expect.poll(() => iframe.evaluate((frame) => frame.contentDocument.title))
+    .toBe("Travel Log editor preview");
+  await expect(preview.locator("body")).toHaveAttribute("data-travel-log-editor-preview", "");
+  await expect(preview.locator(".travel-log-editor-empty")).toHaveText("Add content to see the Travel Log preview.");
+  await expect(preview.locator(".editor-command-bar")).toHaveCount(0);
+  await expect(preview.locator("#travel-log-editor-preview")).toHaveCount(0);
+
+  await page.waitForTimeout(250);
+  await expect.poll(() => iframe.evaluate((frame) => `${frame.contentWindow.location.pathname}${frame.contentWindow.location.search}`))
+    .toBe("/editor/preview.html?preview=editor");
+
+  await page.getByLabel("Trip day", { exact: true }).selectOption("day-03");
+  await page.getByRole("button", { name: /Photo Story A paced visual chapter/ }).click();
+  await expect(page.locator("[data-block-id]")).toHaveCount(6);
+  await expect(preview.locator(".travel-log-editor-empty")).toBeVisible();
+  await expect.poll(() => iframe.evaluate((frame) => frame.contentWindow.location.pathname))
+    .toBe("/editor/preview.html");
+
+  await page.getByRole("button", { name: "Caption Add a short caption" }).click();
+  await page.locator('[data-settings-form] [data-editor-field="caption"]').fill("Temporary preview caption.");
+  await expect.poll(() => iframe.evaluate((frame) => frame.contentDocument.body.dataset.editorPreviewStatus))
+    .toBe("rendered");
+  await expect(preview.locator(".travel-log-chapter")).toHaveCount(1);
+  await expect(preview.locator(".log-caption")).toContainText("Temporary preview caption.");
+  await expect(page.locator(".editor-command-bar")).toHaveCount(1);
+  await expect(preview.locator(".editor-command-bar")).toHaveCount(0);
+  await expect.poll(() => iframe.evaluate((frame) => frame.contentWindow.location.pathname))
+    .toBe("/editor/preview.html");
+
+  assertNoFailures();
+});
+
+test("full editor refuses to initialise inside an iframe", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await page.goto("/editor/index.html");
+  await page.evaluate(() => {
+    const probe = document.createElement("iframe");
+    probe.id = "nested-editor-guard-probe";
+    probe.src = "/editor/index.html";
+    document.body.append(probe);
+  });
+
+  const nested = page.frameLocator("#nested-editor-guard-probe");
+  await expect(nested.locator("html")).toHaveAttribute("data-travel-log-editor-guarded", "");
+  await expect(nested.locator("body")).toBeHidden();
+  await expect(nested.locator(".editor-command-bar")).toHaveCount(0);
+  await expect(page.locator(".editor-command-bar")).toHaveCount(1);
+  assertNoFailures();
+});
+
 test("editor templates, block authoring and keyboard reorder controls work", async ({ page }) => {
   const assertNoFailures = monitorPage(page);
   await openEditor(page);

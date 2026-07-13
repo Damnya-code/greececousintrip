@@ -4,10 +4,11 @@
   const config = window.TRIP_CONFIG;
   const manifest = window.TRIP_LOG_INDEX;
   const pageIsLog = document.body.hasAttribute("data-travel-log-page");
+  const editorPreviewDocument = document.body.hasAttribute("data-travel-log-editor-preview");
   const localHost = location.hostname === "localhost" || location.hostname === "127.0.0.1";
   const previewMode = new URLSearchParams(location.search).get("preview");
   const preview = localHost && previewMode === "travel-log";
-  const editorPreview = localHost && previewMode === "editor" && window.parent !== window;
+  const editorPreview = editorPreviewDocument && window.parent !== window;
   const featureEnabled = config?.features?.travelLog === true;
   const blockRenderers = {
     photo: renderPhoto,
@@ -152,7 +153,7 @@
   function renderPage(logEntries, { editor = false } = {}) {
     const main = document.getElementById("travel-log-main");
     const feed = document.getElementById("travel-log-feed");
-    if (!main || !feed) return;
+    if (!main || !feed) return false;
 
     if (editor) feed.replaceChildren();
 
@@ -197,8 +198,12 @@
     }).filter(Boolean);
 
     if (!renderedChapters.length) {
+      if (editor) {
+        renderEditorPreviewEmpty(feed);
+        return false;
+      }
       returnToItinerary();
-      return;
+      return false;
     }
 
     const renderedEntries = renderedChapters.map(({ entry }) => entry);
@@ -212,6 +217,7 @@
     document.body.classList.add("travel-log-ready");
     setupRevealMotion();
     if (!editor) activateHashTarget();
+    return true;
   }
 
   function renderPhoto(block, context) {
@@ -567,12 +573,14 @@
   function setupEditorPreview() {
     const main = document.getElementById("travel-log-main");
     const feed = document.getElementById("travel-log-feed");
-    if (!main || !feed || !Array.isArray(config?.days)) return;
+    if (!main || !feed) return;
 
     main.hidden = false;
     document.body.classList.add("travel-log-editor-preview");
     document.body.dataset.editorPreviewStatus = "ready";
-    const configuredDays = new Map(config.days.map((day) => [day.id, day]));
+    const configuredDays = new Map((Array.isArray(config?.days) ? config.days : []).map((day) => [day.id, day]));
+
+    renderEditorPreviewEmpty(feed);
 
     window.addEventListener("message", (event) => {
       if (event.origin !== location.origin || event.source !== window.parent) return;
@@ -588,18 +596,23 @@
       feed.replaceChildren();
 
       if (valid && entry.blocks.length) {
-        renderPage([{ ...entry, day }], { editor: true });
-        document.body.dataset.editorPreviewStatus = "rendered";
+        if (renderPage([{ ...entry, day }], { editor: true })) {
+          document.body.dataset.editorPreviewStatus = "rendered";
+        }
       } else {
-        const empty = create("p", "travel-log-editor-empty", "Add content to see the Travel Log preview.");
-        feed.append(empty);
-        document.body.dataset.editorPreviewStatus = "empty";
+        renderEditorPreviewEmpty(feed);
       }
 
       window.parent.postMessage({ type: "travel-log-editor:rendered", dayId: entry?.dayId || "" }, event.origin);
     });
 
     window.parent.postMessage({ type: "travel-log-editor:ready" }, location.origin);
+  }
+
+  function renderEditorPreviewEmpty(feed) {
+    feed.replaceChildren(create("p", "travel-log-editor-empty", "Add content to see the Travel Log preview."));
+    document.body.classList.add("travel-log-ready");
+    document.body.dataset.editorPreviewStatus = "empty";
   }
 
   function activateHashTarget() {

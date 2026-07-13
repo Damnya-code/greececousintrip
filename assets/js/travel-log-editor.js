@@ -1,6 +1,13 @@
 (function () {
   "use strict";
 
+  if (window.parent !== window) {
+    document.body.replaceChildren();
+    document.body.hidden = true;
+    document.documentElement.dataset.travelLogEditorGuarded = "";
+    return;
+  }
+
   const config = window.TRIP_CONFIG;
   const manifest = window.TRIP_LOG_INDEX;
   if (!config || !Array.isArray(config.days)) return;
@@ -50,7 +57,6 @@
   let autosaveTimer = 0;
   let previewTimer = 0;
   let toastTimer = 0;
-  let previewReady = false;
   let draggedBlockId = "";
 
   const templates = {
@@ -238,17 +244,26 @@
     document.querySelectorAll("[data-preview-theme]").forEach((button) => button.addEventListener("click", () => setPreviewTheme(button.dataset.previewTheme)));
     setupMobileTabs();
     elements.preview.addEventListener("load", () => {
-      previewReady = true;
-      window.setTimeout(() => renderPreview(), 80);
+      connectPreviewFrame({ recover: true });
     });
     window.addEventListener("message", (event) => {
       if (event.origin !== location.origin || event.source !== elements.preview.contentWindow) return;
       if (event.data?.type === "travel-log-editor:ready") {
-        previewReady = true;
         renderPreview();
       }
     });
+    connectPreviewFrame();
     window.addEventListener("beforeunload", revokeAllRuntimeUrls);
+  }
+
+  function connectPreviewFrame({ recover = false } = {}) {
+    const previewBody = elements.preview.contentDocument?.body;
+    if (previewBody?.hasAttribute("data-travel-log-editor-preview")) {
+      renderPreview();
+      return;
+    }
+
+    if (recover) elements.preview.src = "preview.html?preview=editor";
   }
 
   function setupMobileTabs() {
@@ -1068,7 +1083,9 @@
 
   function renderPreview() {
     window.clearTimeout(previewTimer);
-    if (!previewReady || !elements.preview.contentWindow) return;
+    if (!elements.preview.contentWindow) return;
+    const previewBody = elements.preview.contentDocument?.body;
+    if (!previewBody?.hasAttribute("data-travel-log-editor-preview")) return;
     const entry = current.entry ? rendererEntry({ preview: true, includeInvalid: true }) : null;
     elements.preview.contentWindow.postMessage({
       type: "travel-log-editor:render",

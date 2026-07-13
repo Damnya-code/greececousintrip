@@ -24,6 +24,28 @@ html[data-theme="dark"] {
     overflow-x: hidden
 }
 
+.editor-skip-link {
+    position: fixed;
+    z-index: 100;
+    top: 8px;
+    left: 8px;
+    padding: 10px 14px;
+    border: 2px solid var(--accent);
+    border-radius: 3px;
+    background: var(--editor-surface);
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(calc(-100% - 16px));
+    transition: opacity .16s ease, transform .16s ease
+}
+
+.editor-skip-link:focus {
+    opacity: 1;
+    transform: none
+}
+
 .editor-sr-only {
     position: absolute;
     width: 1px;
@@ -781,6 +803,7 @@ html[data-theme="dark"] {
     .editor-command-bar button,
     .editor-panel button,
     .editor-preview-stage iframe,
+    .editor-skip-link,
     .editor-toast {
         transition: none
     }

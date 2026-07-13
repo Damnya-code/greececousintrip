@@ -266,7 +266,7 @@ Entry metadata autosaves per day in `localStorage` under `aegeanTravelLogEditor:
 
 ### Shared-renderer preview
 
-`editor/preview.html?preview=editor` is accepted only on `localhost` or `127.0.0.1` and only when embedded by another same-origin page. It loads `assets/js/trip-log.js`, then accepts a narrowly named same-origin `postMessage` containing a plain entry and theme. The existing block registry renders the preview, so editor and public output do not maintain competing renderers.
+`editor/preview.html?preview=editor` identifies itself with the `data-travel-log-editor-preview` body marker and is treated as the dedicated editor preview only while embedded (`window.parent !== window`). This detection deliberately does not depend on the hostname. It loads `assets/js/trip-log.js`, remains on the preview document while waiting for valid data, then accepts a narrowly named same-origin `postMessage` containing a plain entry and theme. The existing block registry renders the preview, so editor and public output do not maintain competing renderers. As a second boundary, the full editor script clears and hides its document rather than initialising when it is loaded inside any iframe.
 
 The renderer retains version 2 and now accepts optional controlled `width`, `spacing` and `cropMode` values. It also retains compatibility with the earlier `crop: true` field. Arbitrary coordinates, classes, styles and pixel widths are not accepted.
 
