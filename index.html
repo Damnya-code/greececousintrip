@@ -107,6 +107,15 @@
             </desc>
 
             <defs>
+              <pattern id="route-sea-texture" width="22" height="22" patternUnits="userSpaceOnUse">
+                <path d="M2 12 C6 9 10 9 14 12 C17 14 19 14 22 12" fill="none" stroke="#318da0" stroke-opacity=".09"
+                  stroke-width=".8" />
+              </pattern>
+
+              <pattern id="route-land-texture" width="16" height="16" patternUnits="userSpaceOnUse">
+                <circle cx="3" cy="4" r=".8" fill="#846f4d" fill-opacity=".13" />
+                <circle cx="11" cy="10" r=".65" fill="#846f4d" fill-opacity=".09" />
+              </pattern>
               <linearGradient id="route-sea-gradient" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#6fc6cb" stop-opacity=".18" />
                 <stop offset="45%" stop-color="#4eaab7" stop-opacity=".12" />
@@ -134,36 +143,83 @@
             C10 185 12 105 38 55Z
           " fill="url(#route-sea-gradient)" />
 
-            <path class="route-sea-contour" d="M38 55 ... 38 55Z" />
+            <path class="route-map-sea-texture" d="
+    M38 55
+    C180 10 375 35 500 85
+    C638 140 725 225 748 350
+    C700 458 534 510 360 488
+    C205 470 82 385 40 270
+    C10 185 12 105 38 55Z
+  " fill="url(#route-sea-texture)" />
+
 
             <!-- Very abstract land silhouettes -->
             <path class="route-land route-land-mainland" d="
-            M42 56
-            C100 38 157 47 196 77
-            C219 95 225 128 205 150
-            C183 173 143 167 112 153
-            C81 140 51 121 37 92
-            C30 77 31 65 42 56Z
-          " />
+    M34 54
+    C68 39 111 38 151 51
+    C185 62 211 82 221 105
+    C230 126 220 146 197 158
+    C172 171 137 168 105 155
+    C73 142 48 122 35 98
+    C26 81 25 64 34 54Z
+  " />
+
+            <path class="route-land-texture" d="
+    M34 54
+    C68 39 111 38 151 51
+    C185 62 211 82 221 105
+    C230 126 220 146 197 158
+    C172 171 137 168 105 155
+    C73 142 48 122 35 98
+    C26 81 25 64 34 54Z
+  " />
+
 
             <path class="route-land route-land-crete" d="
-            M135 345
-            C220 328 302 334 375 345
-            C452 356 536 351 631 329
-            C660 322 685 331 690 345
-            C696 362 674 376 645 379
-            C555 389 478 392 398 386
-            C304 378 220 389 151 378
-            C122 373 107 358 135 345Z
-          " />
+    M122 346
+    C191 334 258 333 326 340
+    C399 348 470 358 544 350
+    C591 345 634 333 672 330
+    C694 329 706 339 701 351
+    C696 364 674 374 646 378
+    C586 386 526 389 464 386
+    C392 382 324 376 254 382
+    C205 386 161 383 133 374
+    C111 367 103 354 122 346Z
+  " />
+
+            <path class="route-land-texture" d="
+    M122 346
+    C191 334 258 333 326 340
+    C399 348 470 358 544 350
+    C591 345 634 333 672 330
+    C694 329 706 339 701 351
+    C696 364 674 374 646 378
+    C586 386 526 389 464 386
+    C392 382 324 376 254 382
+    C205 386 161 383 133 374
+    C111 367 103 354 122 346Z
+  " />
 
             <path class="route-land route-land-santorini" d="
-            M609 176
-            C628 166 646 172 651 186
-            C656 200 645 219 628 230
-            C614 239 602 235 602 222
-            C603 207 612 197 609 176Z
-          " />
+    M615 174
+    C628 167 642 168 650 178
+    C659 190 656 205 647 218
+    C638 231 624 239 613 235
+    C602 231 599 219 604 207
+    C609 195 618 187 615 174Z
+  " />
+
+            <path class="route-land-texture" d="
+    M615 174
+    C628 167 642 168 650 178
+    C659 190 656 205 647 218
+    C638 231 624 239 613 235
+    C602 231 599 219 604 207
+    C609 195 618 187 615 174Z
+  " />
+
+
 
             <!-- Transport routes -->
             <path id="route-path-ferry" class="route-path route-path-ferry" d="M151 126 C205 185 224 262 218 350" />
@@ -194,6 +250,26 @@
                 Day trip
               </text>
             </g>
+
+
+            <!-- Athens -->
+            <a class="route-node route-node-athens" data-route-stage="athens" href="#journey-day-01"
+              aria-label="Jump to Day 1 in Athens">
+              <circle class="route-node-halo" cx="151" cy="126" r="24" />
+              <circle class="route-node-dot" cx="151" cy="126" r="9" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(151 66)">
+                <text class="route-node-date" text-anchor="middle">
+                  10–11 OCT
+                </text>
+                <text class="route-node-name" y="24" text-anchor="middle">
+                  Athens
+                </text>
+                <text class="route-node-detail" y="44" text-anchor="middle">
+                  Arrival · Acropolis
+                </text>
+              </g>
+            </a>
 
 
             <!-- Chania -->
@@ -272,6 +348,16 @@
               </g>
             </a>
 
+            <g class="route-stop-markers-front" aria-hidden="true">
+              <circle cx="151" cy="126" r="5.5" />
+              <circle cx="218" cy="350" r="5.5" />
+              <circle cx="388" cy="356" r="5.5" />
+              <circle cx="573" cy="354" r="5.5" />
+
+              <circle class="route-stop-marker-santorini" cx="629" cy="204" r="5.5" />
+            </g>
+
+
             <!-- Vehicles -->
 
             <!-- 1st ferry  -->
@@ -319,37 +405,30 @@
               </g>
             </g>
 
-            <!-- Athens -->
-            <a class="route-node route-node-athens" data-route-stage="athens" href="#journey-day-01"
-              aria-label="Jump to Day 1 in Athens">
-              <circle class="route-node-halo" cx="151" cy="126" r="24" />
-              <circle class="route-node-dot" cx="151" cy="126" r="9" filter="url(#route-node-shadow)" />
 
-              <g class="route-node-label" transform="translate(151 66)">
-                <text class="route-node-date" text-anchor="middle">
-                  10–11 OCT
-                </text>
-                <text class="route-node-name" y="24" text-anchor="middle">
-                  Athens
-                </text>
-                <text class="route-node-detail" y="44" text-anchor="middle">
-                  Arrival · Acropolis
-                </text>
-              </g>
-            </a>
 
           </svg>
         </div>
 
         <div class="route-map-footer">
-        
-          <a href="#itinerary">
-            View the daily route
-            <span aria-hidden="true">↓</span>
-          </a>  <span class="route-map-expand" type="button" data-route-expand aria-expanded="false">
-             ⤢
-          </span>
+
+          <div class="route-map-footer-actions">
+            <a href="#itinerary">
+              View the full route
+              <span aria-hidden="true">↓</span>
+            </a>
+
+            <button class="route-map-expand" type="button" data-route-expand aria-label="Expand route map"
+              aria-expanded="false">
+              <svg class="route-map-expand-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
         </div>
+
+
       </div>
     </section>
 

@@ -31,7 +31,19 @@
 
       document.body.classList.toggle("route-map-expanded", expanded);
       expandButton.setAttribute("aria-expanded", String(expanded));
-      expandButton.textContent = expanded ? "Close ✕" : "Expand ⤢";
+      expandButton?.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        const expanded = card.classList.toggle("is-route-expanded");
+
+        document.body.classList.toggle("route-map-expanded", expanded);
+
+        expandButton.setAttribute("aria-expanded", String(expanded));
+        expandButton.setAttribute(
+          "aria-label",
+          expanded ? "Close expanded route map" : "Expand route map"
+        );
+      });
     });
 
     const ferryPath = svg.querySelector("#route-path-ferry");
@@ -134,6 +146,20 @@
       if (routeIsAnimating) return;
 
       replayRouteSequence();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (
+        event.key !== "Escape" ||
+        !card.classList.contains("is-route-expanded")
+      ) {
+        return;
+      }
+
+      card.classList.remove("is-route-expanded");
+      document.body.classList.remove("route-map-expanded");
+      expandButton?.setAttribute("aria-expanded", "false");
+      expandButton?.setAttribute("aria-label", "Expand route map");
     });
 
     async function replayRouteSequence() {
