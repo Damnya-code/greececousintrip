@@ -107,14 +107,15 @@
             </desc>
 
             <defs>
-              <filter id="route-node-shadow" x="-60%" y="-60%" width="220%" height="220%">
-                <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#17233b" flood-opacity=".18" />
-              </filter>
-
               <linearGradient id="route-sea-gradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#54b9c0" stop-opacity=".14" />
-                <stop offset="100%" stop-color="#195a70" stop-opacity=".03" />
+                <stop offset="0%" stop-color="#6fc6cb" stop-opacity=".18" />
+                <stop offset="45%" stop-color="#4eaab7" stop-opacity=".12" />
+                <stop offset="100%" stop-color="#195a70" stop-opacity=".05" />
               </linearGradient>
+
+              <filter id="route-soft-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f2434" flood-opacity=".10" />
+              </filter>
 
               <pattern id="route-grid" width="36" height="36" patternUnits="userSpaceOnUse">
                 <path d="M 36 0 L 0 0 0 36" fill="none" stroke="currentColor" stroke-opacity=".055" stroke-width="1" />
@@ -132,6 +133,8 @@
             C205 470 82 385 40 270
             C10 185 12 105 38 55Z
           " fill="url(#route-sea-gradient)" />
+
+            <path class="route-sea-contour" d="M38 55 ... 38 55Z" />
 
             <!-- Very abstract land silhouettes -->
             <path class="route-land route-land-mainland" d="
@@ -192,54 +195,6 @@
               </text>
             </g>
 
-            <!-- 1st ferry  -->
-            <g id="route-ferry-vehicle" class="route-vehicle route-ferry-icon" aria-hidden="true">
-              <g class="route-vehicle-art route-ferry-art">
-                <path d="M-17 2 H17 L11 10 H-11 Z" class="route-vehicle-body" />
-                <path d="M-9 2 V-7 H8 V2" class="route-vehicle-body" />
-                <circle cx="-4" cy="-3" r="1.5" />
-                <circle cx="3" cy="-3" r="1.5" />
-              </g>
-            </g>
-
-            <!--  car  -->
-            <g id="route-car-vehicle" class="route-vehicle route-car-icon" aria-hidden="true">
-              <g class="route-vehicle-art route-car-art">
-                <path d="M-17 4 L-12 -5 H8 L15 4 V10 H-17 Z" class="route-vehicle-body" />
-                <circle cx="-10" cy="10" r="3" />
-                <circle cx="9" cy="10" r="3" />
-                <path d="M-8 -3 H5 L9 4 H-12 Z" class="route-vehicle-window" />
-              </g>
-            </g>
-
-            <!-- 2nd ferry -->
-            <g id="route-daytrip-vehicle" class="route-vehicle route-daytrip-ferry" aria-hidden="true">
-              <g class="route-vehicle-art route-daytrip-ferry-art">
-                <path d="M-14 2 H14 L9 9 H-9 Z" class="route-vehicle-body" />
-                <path d="M-7 2 V-6 H7 V2" class="route-vehicle-body" />
-                <circle cx="-3" cy="-2" r="1.3" />
-                <circle cx="3" cy="-2" r="1.3" />
-              </g>
-            </g>
-
-            <!-- Athens -->
-            <a class="route-node route-node-athens" data-route-stage="athens" href="#journey-day-01"
-              aria-label="Jump to Day 1 in Athens">
-              <circle class="route-node-halo" cx="151" cy="126" r="24" />
-              <circle class="route-node-dot" cx="151" cy="126" r="9" filter="url(#route-node-shadow)" />
-
-              <g class="route-node-label" transform="translate(151 66)">
-                <text class="route-node-date" text-anchor="middle">
-                  10–11 OCT
-                </text>
-                <text class="route-node-name" y="24" text-anchor="middle">
-                  Athens
-                </text>
-                <text class="route-node-detail" y="44" text-anchor="middle">
-                  Arrival · Acropolis
-                </text>
-              </g>
-            </a>
 
             <!-- Chania -->
             <a class="route-node route-node-chania" data-route-stage="chania" href="#journey-day-03"
@@ -316,15 +271,84 @@
                 </text>
               </g>
             </a>
+
+            <!-- Vehicles -->
+
+            <!-- 1st ferry  -->
+            <g id="route-ferry-vehicle" class="route-vehicle route-ferry-icon" aria-hidden="true">
+              <g class="route-vehicle-art route-ferry-art">
+                <path d="M-17 2 H17 L11 10 H-11 Z" class="route-vehicle-body" />
+                <path d="M-9 2 V-7 H8 V2" class="route-vehicle-body" />
+                <circle cx="-4" cy="-3" r="1.5" />
+                <circle cx="3" cy="-3" r="1.5" />
+              </g>
+              <g class="route-ferry-wakes" aria-hidden="true">
+                <path class="route-ferry-wake" d="M-24 8 C-31 10 -35 13 -40 16" />
+                <path class="route-ferry-wake" d="M-21 11 C-28 13 -32 16 -37 19" />
+              </g>
+            </g>
+
+            <!--  car  -->
+            <g id="route-car-vehicle" class="route-vehicle route-car-icon" aria-hidden="true">
+              <g class="route-vehicle-art route-car-art">
+                <path d="M-17 4 L-12 -5 H8 L15 4 V10 H-17 Z" class="route-vehicle-body" />
+                <g class="route-wheel route-wheel-left" transform="translate(-10 10)">
+                  <circle r="3" />
+                  <path d="M-1.8 0 H1.8 M0 -1.8 V1.8" class="route-wheel-spokes" />
+                </g>
+
+                <g class="route-wheel route-wheel-right" transform="translate(9 10)">
+                  <circle r="3" />
+                  <path d="M-1.8 0 H1.8 M0 -1.8 V1.8" class="route-wheel-spokes" />
+                </g>
+                <path d="M-8 -3 H5 L9 4 H-12 Z" class="route-vehicle-window" />
+              </g>
+            </g>
+
+            <!-- 2nd ferry -->
+            <g id="route-daytrip-vehicle" class="route-vehicle route-daytrip-ferry" aria-hidden="true">
+              <g class="route-vehicle-art route-daytrip-ferry-art">
+                <path d="M-14 2 H14 L9 9 H-9 Z" class="route-vehicle-body" />
+                <path d="M-7 2 V-6 H7 V2" class="route-vehicle-body" />
+                <circle cx="-3" cy="-2" r="1.3" />
+                <circle cx="3" cy="-2" r="1.3" />
+              </g>
+              <g class="route-ferry-wakes" aria-hidden="true">
+                <path class="route-ferry-wake" d="M-24 8 C-31 10 -35 13 -40 16" />
+                <path class="route-ferry-wake" d="M-21 11 C-28 13 -32 16 -37 19" />
+              </g>
+            </g>
+
+            <!-- Athens -->
+            <a class="route-node route-node-athens" data-route-stage="athens" href="#journey-day-01"
+              aria-label="Jump to Day 1 in Athens">
+              <circle class="route-node-halo" cx="151" cy="126" r="24" />
+              <circle class="route-node-dot" cx="151" cy="126" r="9" filter="url(#route-node-shadow)" />
+
+              <g class="route-node-label" transform="translate(151 66)">
+                <text class="route-node-date" text-anchor="middle">
+                  10–11 OCT
+                </text>
+                <text class="route-node-name" y="24" text-anchor="middle">
+                  Athens
+                </text>
+                <text class="route-node-detail" y="44" text-anchor="middle">
+                  Arrival · Acropolis
+                </text>
+              </g>
+            </a>
+
           </svg>
         </div>
 
         <div class="route-map-footer">
-       
+        
           <a href="#itinerary">
             View the daily route
             <span aria-hidden="true">↓</span>
-          </a>
+          </a>  <span class="route-map-expand" type="button" data-route-expand aria-expanded="false">
+             ⤢
+          </span>
         </div>
       </div>
     </section>

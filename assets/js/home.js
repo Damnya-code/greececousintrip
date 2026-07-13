@@ -20,8 +20,19 @@
     const viewport = document.querySelector("[data-route-viewport]");
     const svg = card?.querySelector(".route-map-svg");
     const daytripVehicle = svg.querySelector("#route-daytrip-vehicle");
+    const expandButton = card.querySelector("[data-route-expand]");
 
     if (!card || !viewport || !svg) return;
+
+    expandButton?.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      const expanded = card.classList.toggle("is-route-expanded");
+
+      document.body.classList.toggle("route-map-expanded", expanded);
+      expandButton.setAttribute("aria-expanded", String(expanded));
+      expandButton.textContent = expanded ? "Close ✕" : "Expand ⤢";
+    });
 
     const ferryPath = svg.querySelector("#route-path-ferry");
     const roadPath = svg.querySelector("#route-path-road");

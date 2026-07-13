@@ -1137,6 +1137,7 @@ body {
     margin-top: 36px;
     padding-top: 25px;
     border-top: 1px solid var(--line);
+    margin-bottom: 7px;
 }
 
 .route-legend span {
@@ -1236,26 +1237,42 @@ body {
     color: var(--ink);
 }
 
+
+.route-map-sea-shape {
+    stroke: rgba(25, 90, 112, 0.12);
+    stroke-width: 1.2;
+    filter: url(#route-soft-shadow);
+}
+
 .route-map-grid {
+    opacity: 0.9;
     color: var(--ink);
 }
 
 .route-land {
-    fill: rgba(232, 212, 165, 0.34);
-    stroke: rgba(23, 35, 59, 0.13);
+    fill: rgba(232, 212, 165, 0.48);
+    stroke: rgba(23, 35, 59, 0.16);
     stroke-width: 1.2;
+    filter: url(#route-soft-shadow);
 }
 
 .route-land-mainland {
-    fill: rgba(232, 212, 165, 0.28);
+    fill: rgba(232, 212, 165, 0.36);
 }
 
 .route-land-crete {
-    fill: rgba(232, 212, 165, 0.45);
+    fill: rgba(232, 212, 165, 0.56);
 }
 
 .route-land-santorini {
-    fill: rgba(232, 212, 165, 0.38);
+    fill: rgba(232, 212, 165, 0.52);
+}
+
+.route-sea-contour {
+    fill: none;
+    stroke: rgba(84, 185, 192, 0.12);
+    stroke-width: 16;
+    opacity: 0.35;
 }
 
 .route-path {
@@ -1265,33 +1282,16 @@ body {
     stroke-linejoin: round;
 }
 
-/* .route-path-ferry {
-    stroke: var(--sea);
-    stroke-width: 3;
-    stroke-dasharray: 4 10;
-}
- */
 .route-path-ferry {
     stroke: var(--sea);
     stroke-width: 3.2;
     stroke-dasharray: 3 9;
 }
 
-/* .route-path-road {
-    stroke: var(--ink);
-    stroke-width: 3.5;
-} */
-
 .route-path-road {
     stroke: var(--ink);
     stroke-width: 3.2;
 }
-
-/* .route-path-daytrip {
-    stroke: var(--coral);
-    stroke-width: 3;
-    stroke-dasharray: 1 10;
-} */
 
 .route-path-daytrip {
     stroke: var(--coral);
@@ -1343,6 +1343,120 @@ body {
 .route-ferry-icon circle {
     fill: var(--sand);
     stroke: none;
+}
+
+.route-wheel {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.route-wheel circle {
+    fill: var(--cream);
+    stroke: var(--ink);
+    stroke-width: 1.4;
+}
+
+.route-wheel-spokes {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1;
+    stroke-linecap: round;
+}
+
+.route-vehicle.is-route-moving .route-wheel {
+    animation: route-wheel-spin 420ms linear infinite;
+}
+
+@keyframes route-wheel-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.route-ferry-wake {
+    fill: none;
+    stroke: rgba(84, 185, 192, 0.82);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0;
+}
+
+.route-vehicle.is-route-moving .route-ferry-wake {
+    opacity: 0.9;
+    animation: route-ferry-wake 700ms ease-out infinite;
+}
+
+.route-vehicle.is-route-settled .route-ferry-wake {
+    opacity: 0.22;
+    animation: none;
+}
+
+@keyframes route-ferry-wake {
+    0% {
+        stroke-dasharray: 0 18;
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 0.8;
+    }
+
+    100% {
+        stroke-dasharray: 12 18;
+        opacity: 0;
+    }
+}
+
+.route-map-expand {
+    display: none;
+}
+
+@media (max-width: 620px) {
+    .route-map-expand {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(23, 35, 59, 0.14);
+        background: rgba(255, 255, 255, 0.75);
+        color: var(--ink);
+        padding: 6px 10px;
+        border-radius: 4px;
+        font: 500 10px/1 "DM Mono", monospace;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .route-map-card.is-route-expanded {
+        position: fixed;
+        inset: 0;
+        z-index: 1200;
+        width: 100vw;
+        height: 100dvh;
+        max-width: none;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .route-map-card.is-route-expanded .route-map-topline,
+    .route-map-card.is-route-expanded .route-map-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .route-map-card.is-route-expanded .route-map-visual {
+        height: calc(100dvh - 110px);
+        overflow: auto;
+        padding: 8px 0;
+    }
+
+    .route-map-card.is-route-expanded .route-map-svg {
+        width: 1000px;
+        max-width: none;
+    }
+
+    body.route-map-expanded {
+        overflow: hidden;
+    }
 }
 
 .route-node {
@@ -1613,13 +1727,13 @@ body {
 }
 
 .route-node-label text {
-  dominant-baseline: auto;
+    dominant-baseline: auto;
 }
 
 .route-node,
 .route-node-label,
 .route-node-label text {
-  margin: 0;
+    margin: 0;
 }
 
 /* Vehicles remain hidden until their section starts. */
@@ -1652,28 +1766,29 @@ body {
 }
 
 .route-daytrip-ferry .route-vehicle-body {
-  fill: var(--coral);
+    fill: var(--coral);
 }
 
 .route-daytrip-ferry circle {
-  fill: var(--sand);
-  stroke: none;
+    fill: var(--sand);
+    stroke: none;
 }
 
 .route-daytrip-ferry-art {
-  transform-origin: center;
-  animation: route-daytrip-ferry-float 850ms ease-in-out infinite;
+    transform-origin: center;
+    animation: route-daytrip-ferry-float 850ms ease-in-out infinite;
 }
 
 @keyframes route-daytrip-ferry-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-0.5deg);
-  }
 
-  50% {
-    transform: translateY(-1px) rotate(0.5deg);
-  }
+    0%,
+    100% {
+        transform: translateY(0) rotate(-0.5deg);
+    }
+
+    50% {
+        transform: translateY(-1px) rotate(0.5deg);
+    }
 }
 
 @keyframes route-node-arrival {
@@ -2715,6 +2830,10 @@ footer {
 
 [data-theme="dark"] .route-map-footer a {
     color: #e9eef5;
+}  
+
+[data-theme="dark"] .route-map-expand {
+    color: black;
 }
 
 @media (max-width: 980px) {
@@ -2832,11 +2951,11 @@ footer {
 }
 
 .route-map-card {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .route-map-card:has(.route-node:hover),
 .route-map-card:has(a:hover),
 .route-map-card:has(button:hover) {
-  cursor: default;
+    cursor: default;
 }
