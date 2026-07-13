@@ -263,6 +263,14 @@ html[data-theme="dark"] {
     margin-top: clamp(54px, 8vw, 112px)
 }
 
+.log-block--spacing-tight {
+    margin-top: clamp(28px, 4vw, 54px)
+}
+
+.log-block--spacing-spacious {
+    margin-top: clamp(82px, 11vw, 154px)
+}
+
 .log-media {
     margin-right: auto;
     margin-left: auto
@@ -312,6 +320,56 @@ html[data-theme="dark"] {
 
 .log-photo--quiet {
     width: min(76%, 820px)
+}
+
+.log-photo--width-full {
+    width: min(100%, 1680px)
+}
+
+.log-photo--width-wide {
+    width: min(100% - 40px, 1280px)
+}
+
+.log-photo--width-normal {
+    width: min(100% - 40px, 900px)
+}
+
+.log-photo--width-narrow {
+    width: min(100% - 40px, 620px)
+}
+
+.log-media--crop-landscape img {
+    aspect-ratio: 16 / 10;
+    object-fit: cover
+}
+
+.log-media--crop-square img {
+    aspect-ratio: 1;
+    object-fit: cover
+}
+
+.log-media--crop-portrait img {
+    aspect-ratio: 3 / 4;
+    object-fit: cover
+}
+
+.travel-log-editor-empty {
+    width: min(100% - 40px, 720px);
+    margin: 20vh auto;
+    color: var(--log-muted);
+    text-align: center
+}
+
+.travel-log-editor-frame {
+    min-height: 100vh
+}
+
+.travel-log-editor-frame #travel-log-main {
+    padding-top: 1px
+}
+
+.travel-log-editor-frame .travel-log-chapter {
+    padding-top: clamp(32px, 6vw, 72px)
 }
 
 .log-caption {

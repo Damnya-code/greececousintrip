@@ -27,6 +27,7 @@ assets/
     essentials.css                 Essentials layout and outer capsules
     trip-toolkit.css               Toolkit-only components
     trip-log.css                   Travel Log feed and block presentations only
+    travel-log-editor.css          Local no-code editor layout and controls
   js/
     theme.js                       Theme initialization and toggle
     home.js                        Homepage scrolling and journey reveals
@@ -38,6 +39,7 @@ assets/
     essentials-checklist.js        Essentials checklist persistence
     trip-toolkit.js                Maps, weather, translate, speech and OCR
     trip-log.js                    Travel Log visibility, loading and block rendering
+    travel-log-editor.js           Editor state, templates, media, preview and import/export
 
   log/
     README.md                      Media naming and preparation guidance
@@ -47,6 +49,10 @@ data/
   trip-config.js                   Shared trip metadata and feature flags
   trip-log-index.js                Publication manifest
   trip-log/day-03.js               Temporary draft block-model prototype
+
+editor/
+  index.html                       No-code Travel Log editor
+  preview.html                     Local iframe host for the shared renderer
 ```
 
 ## CSS responsibilities and loading order
@@ -101,6 +107,14 @@ Travel Log scripts:
 1. `data/trip-config.js`
 2. `data/trip-log-index.js`
 3. `assets/js/trip-log.js`
+
+Editor scripts:
+
+1. `data/trip-config.js`
+2. `data/trip-log-index.js`
+3. `assets/js/travel-log-editor.js`
+
+The editor preview iframe loads the same trip configuration and `assets/js/trip-log.js` renderer through `editor/preview.html`.
 
 All behavior scripts use private function scopes. The deliberate public configuration objects are `window.TRIP_CONFIG`, `window.TRIP_LOG_INDEX` and the temporary `window.TRIP_LOG_ENTRIES` registry while eligible day files load.
 
@@ -225,7 +239,46 @@ Non-decorative photographs require alt text or are skipped. Captions use `figure
 
 The content-focused editing workflow and copyable examples are in `docs/TRAVEL_LOG_GUIDE.md`.
 
-Deferred work includes real trip media, an image-optimization command, video caption tracks, the controlled no-code editor and any authenticated/private distribution approach. The future editor will select from the renderer's controlled block, presentation and layout values rather than writing HTML, CSS coordinates or arbitrary layout dimensions. No upload system, database or social interaction is planned in this static phase.
+## Travel Log editor
+
+`editor/index.html` is a local no-code authoring tool and is not linked from public navigation. It carries `noindex, nofollow, noarchive`, which is indexing guidance rather than authentication. Open it through the normal local HTTP server at `/editor/index.html`.
+
+### Responsibilities and state
+
+`assets/js/travel-log-editor.js` owns day selection, starter templates, ordered blocks, controlled settings, validation, bounded undo/redo, local persistence, media metadata and import/export. Editor-specific presentation stays in `assets/css/travel-log-editor.css`; the public log does not load that file.
+
+One editor state contains:
+
+- the stable trip day ID
+- a version 2 renderer entry
+- ordered blocks with stable `moment-*` IDs
+- a media manifest keyed by stable `media-*` IDs
+- the selected block
+- preview width and theme
+
+Dates, destination names and itinerary paths continue to come from `data/trip-config.js`. The editor does not duplicate them.
+
+### Media manifest and storage
+
+While editing, blocks may reference a media ID. Its manifest record contains the original filename, suggested output filename, repository path, MIME type, dimensions and file size. Temporary object URLs exist only in runtime memory and are revoked when their media is no longer referenced or the page closes.
+
+Entry metadata autosaves per day in `localStorage` under `aegeanTravelLogEditor:v1:<day-id>`. Selected local blobs are stored in the `aegeanTravelLogEditor` IndexedDB database when available. The last selected day is remembered separately. Storage errors remain non-fatal and prompt the user to export; browser storage is not described as a backup.
+
+### Shared-renderer preview
+
+`editor/preview.html?preview=editor` identifies itself with the `data-travel-log-editor-preview` body marker and is treated as the dedicated editor preview only while embedded (`window.parent !== window`). This detection deliberately does not depend on the hostname. It loads `assets/js/trip-log.js`, remains on the preview document while waiting for valid data, then accepts a narrowly named same-origin `postMessage` containing a plain entry and theme. The existing block registry renders the preview, so editor and public output do not maintain competing renderers. As a second boundary, the full editor script clears and hides its document rather than initialising when it is loaded inside any iframe.
+
+The renderer retains version 2 and now accepts optional controlled `width`, `spacing` and `cropMode` values. It also retains compatibility with the earlier `crop: true` field. Arbitrary coordinates, classes, styles and pixel widths are not accepted.
+
+### Import and export
+
+Editor imports use pure JSON only. Imported values pass through allow-lists for block types, states, layouts, presentations, crop modes and URLs. HTML and JavaScript are never evaluated.
+
+Editor JSON exports use `editorVersion: 1` and `schemaVersion: 2`, plus the clean entry, a media manifest and an export timestamp. Renderer export produces a safely serialised `day-0X.js` registry assignment. Temporary object URLs and image binaries are excluded from both formats.
+
+The deferred publishing workflow still needs media copying/optimisation, a final package or ZIP, manifest updates, feature-flag changes, repository writes and deployment. The MVP performs none of those operations.
+
+Deferred work includes real trip media, an image-optimization command, video caption tracks, automated publishing and any authenticated/private distribution approach. The local editor selects from the renderer's controlled block, presentation and layout values rather than writing HTML, CSS coordinates or arbitrary layout dimensions. No upload system, database or social interaction is planned in this static phase.
 
 ## Adding another trip day
 

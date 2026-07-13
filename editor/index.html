@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="description" content="Local visual editor for Aegean Odyssey Travel Log entries.">
+  <title>Travel Log Editor | Aegean Odyssey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="../assets/css/travel-log-editor.css">
+  <script src="../assets/js/theme.js"></script>
+</head>
+
+<body class="travel-log-editor-page">
+  <a class="editor-skip-link" href="#editor-main">Skip to editing workspace</a>
+  <header class="nav editor-nav">
+    <a class="logo" href="../index.html">Aegean <i>Odyssey</i></a>
+    <p>Local editor <span aria-hidden="true">·</span> browser-only drafts</p>
+  </header>
+
+  <main id="editor-main" class="editor-main">
+    <header class="editor-command-bar">
+      <div>
+        <p class="eyebrow">Editor preview</p>
+        <h1>Travel Log editor</h1>
+      </div>
+      <p class="editor-save-state" data-save-state role="status">Saved locally</p>
+      <div class="editor-command-actions" aria-label="Editor file actions">
+        <button type="button" data-action="undo" disabled>Undo</button>
+        <button type="button" data-action="redo" disabled>Redo</button>
+        <button type="button" data-action="import">Import JSON</button>
+        <button type="button" data-action="copy">Copy data</button>
+        <button type="button" data-action="export-json">Export JSON</button>
+        <button type="button" data-action="export-renderer">Export renderer data</button>
+        <input id="editor-import-file" type="file" accept="application/json,.json" hidden>
+      </div>
+    </header>
+
+    <div class="editor-mobile-tabs" role="tablist" aria-label="Editor areas">
+      <button type="button" role="tab" aria-selected="true" aria-controls="editor-content-panel" data-editor-area="content">Content</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="editor-preview-panel" data-editor-area="preview">Preview</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="editor-settings-panel" data-editor-area="settings">Settings</button>
+    </div>
+
+    <div class="editor-workspace">
+      <aside id="editor-content-panel" class="editor-panel editor-content-panel" data-editor-panel="content">
+        <div class="editor-panel-heading">
+          <p class="eyebrow">Entry</p>
+          <h2>Content</h2>
+        </div>
+
+        <label for="editor-day">Trip day</label>
+        <select id="editor-day"></select>
+
+        <div class="editor-entry-summary" data-entry-summary></div>
+
+        <label for="editor-entry-state">Entry state</label>
+        <select id="editor-entry-state">
+          <option value="hidden">Hidden</option>
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+        </select>
+
+        <div class="editor-inline-actions">
+          <button type="button" data-action="load-existing">Load existing entry</button>
+          <button type="button" data-action="duplicate-entry">Duplicate entry</button>
+          <button type="button" data-action="clear-draft">Clear local draft</button>
+        </div>
+        <p class="field-help">Export before clearing if this draft matters.</p>
+
+        <section class="editor-section" aria-labelledby="template-title">
+          <div class="editor-section-heading">
+            <h3 id="template-title">Start from a layout</h3>
+            <p>Templates add editable placeholders.</p>
+          </div>
+          <div class="template-grid" data-template-grid></div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="add-title">
+          <div class="editor-section-heading">
+            <h3 id="add-title">Add content</h3>
+          </div>
+          <div class="add-block-grid" data-add-blocks></div>
+        </section>
+
+        <section class="editor-section editor-blocks" aria-labelledby="blocks-title">
+          <div class="editor-section-heading">
+            <h3 id="blocks-title">Story order</h3>
+            <p data-block-count>No blocks yet</p>
+          </div>
+          <ol class="editor-block-list" data-block-list></ol>
+          <p class="editor-empty" data-block-empty>Add your first photograph or choose a template.</p>
+        </section>
+      </aside>
+
+      <section id="editor-preview-panel" class="editor-panel editor-preview-panel" data-editor-panel="preview" aria-labelledby="preview-title">
+        <div class="editor-preview-toolbar">
+          <div>
+            <p class="eyebrow">Live renderer</p>
+            <h2 id="preview-title">Preview</h2>
+          </div>
+          <div class="editor-segmented" role="group" aria-label="Preview width">
+            <button type="button" aria-pressed="true" data-preview-width="desktop">Desktop</button>
+            <button type="button" aria-pressed="false" data-preview-width="tablet">Tablet</button>
+            <button type="button" aria-pressed="false" data-preview-width="mobile">Mobile</button>
+          </div>
+          <div class="editor-segmented" role="group" aria-label="Preview theme">
+            <button type="button" aria-pressed="true" data-preview-theme="light">Light</button>
+            <button type="button" aria-pressed="false" data-preview-theme="dark">Dark</button>
+          </div>
+        </div>
+        <div class="editor-preview-stage" data-preview-stage="desktop">
+          <iframe id="travel-log-editor-preview" title="Travel Log live preview" src="preview.html?preview=editor"></iframe>
+        </div>
+      </section>
+
+      <aside id="editor-settings-panel" class="editor-panel editor-settings-panel" data-editor-panel="settings">
+        <div class="editor-panel-heading">
+          <p class="eyebrow">Selected block</p>
+          <h2>Settings</h2>
+        </div>
+        <p class="editor-sr-only" data-selected-announcement aria-live="polite"></p>
+        <div data-settings-empty class="editor-empty">Select a block to edit its content and presentation.</div>
+        <form data-settings-form novalidate></form>
+      </aside>
+    </div>
+  </main>
+
+  <div class="editor-toast" data-editor-status aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../data/trip-config.js"></script>
+  <script src="../data/trip-log-index.js"></script>
+  <script src="../assets/js/travel-log-editor.js"></script>
+</body>
+
+</html>

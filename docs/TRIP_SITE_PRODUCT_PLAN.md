@@ -350,4 +350,16 @@ Do not yet build:
 - booking integrations,
 - supplier management,
 - payment processing,
-- a complex visual editor.
+- an unrestricted general-purpose page builder.
+
+---
+
+## Current implementation status
+
+- Maintenance architecture refactor: complete.
+- Photo-first Travel Log renderer: complete and publicly feature-flagged off.
+- Mixed-media visual validation: complete with temporary Day 3 prototype media.
+- No-code Travel Log editor MVP: in progress on the dedicated editor branch.
+- Automated media packaging, repository publishing and ZIP workflow: deferred.
+
+The editor MVP remains a controlled Travel Log authoring tool, not a general page builder or hosted SaaS product. It uses the existing renderer for preview and exports data for a deliberate later publishing step.

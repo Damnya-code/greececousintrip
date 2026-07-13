@@ -183,7 +183,7 @@ The sticky Travel Log header is generated from the entries that are eligible for
 
 The active chapter changes as the reader scrolls, without continuously rewriting browser history. Direct hashes such as `#day-03` still open the matching chapter. At the end of each chapter, `Open Day 3 Guide` returns to the permanent itinerary and `Continue to Day 4` moves to the next available log entry.
 
-Ordinary editing never requires changing this navigation. A future no-code editor will expose the controlled photo presentations and collage layouts already documented here; it will not require direct CSS editing or free-position coordinates.
+Ordinary editing never requires changing this navigation. The local no-code editor at `editor/index.html` exposes the controlled photo presentations and collage layouts documented here; it does not require direct CSS editing or free-position coordinates.
 
 ## Video and pauses
 
