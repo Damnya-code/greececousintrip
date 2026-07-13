@@ -113,27 +113,27 @@ On screens up to 760px, every collage becomes one column in its original data or
 
 For a swipeable chronological group, use `type: "sequence"` with the same `label` and `images` fields.
 
-## Captions and notes
+## Captions, notes and journal writing
 
-A short standalone caption:
+Use `caption` for a short, reel-like line that can stand between images without a title:
 
 ```js
 {
   type: "caption",
-  text: "We missed the beach and found a better table instead."
+  text: "First coffee after leaving the ferry."
 }
 ```
 
-A short note:
+Use `note` for a brief observation. It does not need a heading:
 
 ```js
 {
   type: "note",
-  text: "The rental pickup took longer than expected, so the afternoon became coffee and Old Town."
+  text: "The road looked shorter on the map."
 }
 ```
 
-A longer journal entry:
+For a longer journal or blog passage, keep using `note` with an ordered array of plain-text paragraphs. The heading remains optional:
 
 ```js
 {
@@ -151,21 +151,13 @@ The renderer treats all writing as plain text. Do not add HTML tags.
 
 Add an optional ID such as `id: "moment-harbour-sunset"` to any block when it needs a direct URL anchor. IDs must begin with `moment-` and contain only lowercase letters, numbers and hyphens.
 
-## Quotes, comparisons and places
+## Quotes and places
 
 ```js
 {
   type: "quote",
   text: "This was definitely the correct amount of breakfast.",
   attribution: "Recorded at the table"
-}
-```
-
-```js
-{
-  type: "comparison",
-  planned: "Marathi Beach before dinner.",
-  actual: "Coffee, Old Town and considerably less driving."
 }
 ```
 
@@ -179,6 +171,19 @@ Add an optional ID such as `id: "moment-harbour-sunset"` to any block when it ne
 ```
 
 These are optional secondary details. Photographs should remain the main structure.
+
+## Travel Log navigation
+
+The sticky Travel Log header is generated from the entries that are eligible for the current public or local-preview mode. It provides:
+
+- the previous available log chapter
+- a current-day chooser containing only available chapters
+- the next available log chapter
+- a Day Guide link that follows the chapter currently in view
+
+The active chapter changes as the reader scrolls, without continuously rewriting browser history. Direct hashes such as `#day-03` still open the matching chapter. At the end of each chapter, `Open Day 3 Guide` returns to the permanent itinerary and `Continue to Day 4` moves to the next available log entry.
+
+Ordinary editing never requires changing this navigation. A future no-code editor will expose the controlled photo presentations and collage layouts already documented here; it will not require direct CSS editing or free-position coordinates.
 
 ## Video and pauses
 

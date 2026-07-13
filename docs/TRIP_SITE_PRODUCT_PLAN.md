@@ -164,44 +164,37 @@ After the Greece project is stable:
 
 ## Travel Log direction
 
-The Travel Log should show the relationship between the planned trip and the trip that actually happened.
+The Travel Log should be a photo-first chronological record that complements the permanent itinerary without turning each day into a structured report.
 
 Possible content per day:
 
-- short recap,
-- plan changes,
-- places actually visited,
-- photos and captions,
-- favourite meal,
-- memorable quote,
-- weather,
-- personal highlight,
-- optional expenses,
-- planned route versus actual route.
+- photographs and collages,
+- short standalone captions,
+- brief notes,
+- optional multi-paragraph journal writing,
+- memorable quotes,
+- optional place links.
 
 Example data shape:
 
 ```js
 {
   dayId: "day-03",
-  status: "published",
-  summary: "We arrived later than expected but still reached Marathi.",
-  changes: [
+  state: "published",
+  date: "2026-10-12",
+  place: "Chania",
+  blocks: [
     {
-      planned: "Old Town before lunch",
-      actual: "Old Town in the afternoon"
-    }
-  ],
-  highlights: [
-    "First breakfast on Crete",
-    "Swimming at Marathi",
-    "Dinner beside the harbour"
-  ],
-  photos: [
-    {
-      src: "assets/log/day-03/harbour.webp",
+      type: "photo",
+      presentation: "full",
+      src: "assets/log/day-03/01-harbour.webp",
       alt: "Chania harbour shortly after sunrise",
-      caption: "The first view after leaving the ferry."
+      width: 2200,
+      height: 1467
+    },
+    {
+      type: "caption",
+      text: "First coffee after leaving the ferry."
     }
   ]
 }

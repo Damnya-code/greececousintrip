@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  // Blocks: photo, collage, sequence, caption, note, quote, video, pause, comparison, place.
+  // Blocks: photo, collage, sequence, caption, note, quote, video, pause, place.
   // Photo presentations: full, contained, portrait, quiet.
   // Collage layouts: two-up, feature-left, feature-right, film-strip.
   const entries = window.TRIP_LOG_ENTRIES || (window.TRIP_LOG_ENTRIES = Object.create(null));
@@ -155,11 +155,6 @@
         type: "quote",
         text: "Temporary quote placeholder—not a recorded cousin verdict.",
         attribution: "Prototype only"
-      },
-      {
-        type: "comparison",
-        planned: "Example plan: collect the car, explore Chania and keep a beach stop available.",
-        actual: "Temporary example only: the beach becomes coffee when the practical parts take longer."
       },
       {
         type: "place",

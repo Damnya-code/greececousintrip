@@ -134,12 +134,11 @@
   function renderPage(logEntries) {
     const main = document.getElementById("travel-log-main");
     const feed = document.getElementById("travel-log-feed");
-    const dayIndex = document.getElementById("travel-log-index");
-    if (!main || !feed || !dayIndex) return;
+    if (!main || !feed) return;
 
     if (preview) document.getElementById("travel-log-preview-note").hidden = false;
 
-    logEntries.forEach((entry, entryIndex) => {
+    const renderedChapters = logEntries.map((entry, entryIndex) => {
       const chapter = create("article", "travel-log-chapter");
       chapter.id = entry.dayId;
       chapter.dataset.tripDay = entry.dayId;
@@ -165,23 +164,29 @@
         rendered.classList.add("log-block");
         rendered.dataset.blockType = block.type;
         rendered.dataset.blockIndex = String(blockIndex);
-        if (/^moment-[a-z0-9-]+$/.test(block.id || "") && !document.getElementById(block.id)) {
-          rendered.id = block.id;
-        }
+        const generatedId = `${entry.dayId}-block-${String(blockIndex + 1).padStart(2, "0")}`;
+        const requestedId = /^moment-[a-z0-9-]+$/.test(block.id || "") ? block.id : generatedId;
+        rendered.id = document.getElementById(requestedId) ? generatedId : requestedId;
         renderedBlocks.push(rendered);
         chapter.append(rendered);
       });
 
-      if (!renderedBlocks.length) return;
+      return renderedBlocks.length ? { chapter, entry } : null;
+    }).filter(Boolean);
 
-      const indexLink = create("a", "", `${formatDate(entry.date, { short: true })} · ${entry.place}`);
-      indexLink.href = `#${entry.dayId}`;
-      dayIndex.append(indexLink);
-      chapter.append(renderChapterNavigation(entry, logEntries, entryIndex));
+    if (!renderedChapters.length) {
+      returnToItinerary();
+      return;
+    }
+
+    const renderedEntries = renderedChapters.map(({ entry }) => entry);
+    renderedChapters.forEach(({ chapter, entry }, index) => {
+      chapter.append(renderChapterNavigation(entry, renderedEntries, index));
       feed.append(chapter);
     });
 
     main.hidden = false;
+    setupDayNavigation(renderedEntries);
     document.body.classList.add("travel-log-ready");
     setupRevealMotion();
     activateHashTarget();
@@ -196,7 +201,6 @@
     quote: renderQuote,
     video: renderVideo,
     pause: renderPause,
-    comparison: renderComparison,
     place: renderPlace
   };
 
@@ -305,21 +309,6 @@
     return pause;
   }
 
-  function renderComparison(block) {
-    const planned = text(block.planned);
-    const actual = text(block.actual);
-    if (!planned && !actual) return null;
-    const section = create("section", "log-comparison");
-    section.setAttribute("aria-label", "Plan versus reality");
-    [["Planned", planned], ["Actually", actual]].forEach(([label, value]) => {
-      if (!value) return;
-      const column = create("div", "");
-      column.append(create("h2", "", label), create("p", "", value));
-      section.append(column);
-    });
-    return section;
-  }
-
   function renderPlace(block) {
     const name = text(block.name);
     if (!name) return null;
@@ -391,18 +380,156 @@
   function renderChapterNavigation(entry, allEntries, index) {
     const nav = create("nav", "travel-log-chapter-nav");
     nav.setAttribute("aria-label", `${entry.place} chapter navigation`);
-    const planLink = create("a", "", "View the planned day");
+    const planLink = create("a", "", `Open Day ${entry.day.number} Guide`);
     planLink.href = `days/${entry.day.path}`;
     nav.append(planLink);
     const next = allEntries[index + 1];
     if (next) {
-      const nextLink = create("a", "", `Next · ${next.place}`);
+      const nextLink = create("a", "", `Continue to Day ${next.day.number}`);
       nextLink.href = `#${next.dayId}`;
       nav.append(nextLink);
     } else {
-      nav.append(create("span", "", "Latest chapter"));
+      const finalConfiguredDay = config.days[config.days.length - 1];
+      const tripIsComplete = entry.state === "published" && entry.day.id === finalConfiguredDay?.id;
+      nav.append(create("span", "", tripIsComplete ? "End of the Travel Log" : "Latest chapter"));
     }
     return nav;
+  }
+
+  function setupDayNavigation(logEntries) {
+    const nav = document.getElementById("travel-log-day-nav");
+    const fallback = document.querySelector(".travel-log-fallback-nav");
+    if (!nav || !logEntries.length) return;
+
+    const previous = create("a", "travel-log-day-step travel-log-day-step--previous");
+    previous.dataset.logPrevious = "";
+    previous.append(
+      create("span", "travel-log-day-arrow", "←"),
+      create("span", "travel-log-day-step-label", "Previous")
+    );
+    previous.querySelector(".travel-log-day-arrow").setAttribute("aria-hidden", "true");
+
+    const chooser = create("div", "travel-log-day-chooser");
+    const chooserButton = create("button", "travel-log-day-current");
+    chooserButton.type = "button";
+    chooserButton.id = "travel-log-day-button";
+    chooserButton.setAttribute("aria-expanded", "false");
+    chooserButton.setAttribute("aria-controls", "travel-log-day-menu");
+    chooserButton.setAttribute("aria-haspopup", "true");
+    const currentNumber = create("span", "travel-log-current-number");
+    const currentPlace = create("span", "travel-log-current-place");
+    const chevron = create("span", "travel-log-day-chevron");
+    chevron.setAttribute("aria-hidden", "true");
+    chooserButton.append(currentNumber, currentPlace, chevron);
+
+    const menu = create("div", "travel-log-day-menu");
+    menu.id = "travel-log-day-menu";
+    menu.hidden = true;
+    menu.setAttribute("aria-label", "Available Travel Log chapters");
+    const menuLinks = new Map();
+    logEntries.forEach((entry) => {
+      const link = create("a", "", `Day ${entry.day.number} · ${entry.place}`);
+      link.href = `#${entry.dayId}`;
+      link.dataset.logDay = entry.dayId;
+      menu.append(link);
+      menuLinks.set(entry.dayId, link);
+    });
+    chooser.append(chooserButton, menu);
+
+    const next = create("a", "travel-log-day-step travel-log-day-step--next");
+    next.dataset.logNext = "";
+    next.append(
+      create("span", "travel-log-day-step-label", "Next"),
+      create("span", "travel-log-day-arrow", "→")
+    );
+    next.querySelector(".travel-log-day-arrow").setAttribute("aria-hidden", "true");
+
+    const guide = create("a", "travel-log-day-guide", "Day guide");
+    guide.dataset.logGuide = "";
+    nav.replaceChildren(previous, chooser, next, guide);
+    nav.hidden = false;
+    if (fallback) fallback.hidden = true;
+
+    const entryIndex = new Map(logEntries.map((entry, index) => [entry.dayId, index]));
+    let activeDayId = "";
+
+    function setStep(link, entry, direction) {
+      if (!entry) {
+        link.removeAttribute("href");
+        link.setAttribute("aria-disabled", "true");
+        link.setAttribute("tabindex", "-1");
+        link.setAttribute("aria-label", `No ${direction} log day`);
+        return;
+      }
+      link.href = `#${entry.dayId}`;
+      link.removeAttribute("aria-disabled");
+      link.removeAttribute("tabindex");
+      link.setAttribute("aria-label", `${direction[0].toUpperCase()}${direction.slice(1)} log day: Day ${entry.day.number}, ${entry.place}`);
+    }
+
+    function setActiveChapter(dayId) {
+      const index = entryIndex.get(dayId);
+      if (index === undefined || activeDayId === dayId) return;
+      activeDayId = dayId;
+      const entry = logEntries[index];
+      currentNumber.textContent = `Day ${entry.day.number}`;
+      currentPlace.textContent = entry.place;
+      chooserButton.setAttribute("aria-label", `Choose Travel Log day. Current: Day ${entry.day.number}, ${entry.place}`);
+      guide.href = `days/${entry.day.path}`;
+      guide.setAttribute("aria-label", `Open Day ${entry.day.number} Guide`);
+      setStep(previous, logEntries[index - 1], "previous");
+      setStep(next, logEntries[index + 1], "next");
+      menuLinks.forEach((link, linkDayId) => {
+        if (linkDayId === dayId) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+    }
+
+    function closeMenu({ restoreFocus = false } = {}) {
+      menu.hidden = true;
+      chooserButton.setAttribute("aria-expanded", "false");
+      if (restoreFocus) chooserButton.focus();
+    }
+
+    chooserButton.addEventListener("click", () => {
+      const opening = menu.hidden;
+      menu.hidden = !opening;
+      chooserButton.setAttribute("aria-expanded", String(opening));
+    });
+    menu.addEventListener("click", (event) => {
+      const link = event.target.closest("a[data-log-day]");
+      if (!link) return;
+      setActiveChapter(link.dataset.logDay);
+      closeMenu();
+    });
+    document.addEventListener("click", (event) => {
+      if (!menu.hidden && !chooser.contains(event.target)) closeMenu();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !menu.hidden) closeMenu({ restoreFocus: true });
+    });
+    window.addEventListener("hashchange", () => {
+      const dayId = location.hash.slice(1);
+      if (entryIndex.has(dayId)) setActiveChapter(dayId);
+    });
+
+    const initialDayId = entryIndex.has(location.hash.slice(1)) ? location.hash.slice(1) : logEntries[0].dayId;
+    setActiveChapter(initialDayId);
+
+    if (!("IntersectionObserver" in window)) return;
+    const visibleChapters = new Map();
+    const chapterObserver = new IntersectionObserver((observations) => {
+      observations.forEach((observation) => visibleChapters.set(observation.target, observation.isIntersecting));
+      const closest = [...visibleChapters]
+        .filter(([, isVisible]) => isVisible)
+        .map(([chapter]) => chapter)
+        .sort((a, b) => Math.abs(a.getBoundingClientRect().top - 58) - Math.abs(b.getBoundingClientRect().top - 58))[0];
+      if (closest?.dataset.tripDay) setActiveChapter(closest.dataset.tripDay);
+    }, { rootMargin: "-58px 0px -68% 0px", threshold: 0 });
+    logEntries.forEach((entry) => {
+      const chapter = document.getElementById(entry.dayId);
+      if (chapter) chapterObserver.observe(chapter);
+    });
   }
 
   function setupRevealMotion() {

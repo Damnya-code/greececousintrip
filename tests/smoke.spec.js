@@ -86,6 +86,39 @@ async function expectValidTabSet(page, tabListName) {
   }
 }
 
+async function mockThreeChapterPreview(page) {
+  await page.route("**/data/trip-log-index.js", async (route) => {
+    const response = await route.fetch();
+    const source = (await response.text())
+      .replace('"day-02": { state: "hidden" }', '"day-02": { state: "draft", file: "trip-log/day-02.js" }')
+      .replace('"day-04": { state: "hidden" }', '"day-04": { state: "draft", file: "trip-log/day-04.js" }');
+    await route.fulfill({ response, body: source });
+  });
+
+  const entrySource = (dayId, date, place, text) => `(function () {
+    const entries = window.TRIP_LOG_ENTRIES || (window.TRIP_LOG_ENTRIES = Object.create(null));
+    entries["${dayId}"] = {
+      version: 2,
+      dayId: "${dayId}",
+      state: "draft",
+      date: "${date}",
+      place: "${place}",
+      blocks: [{ type: "caption", text: "${text}" }]
+    };
+  })();`;
+
+  await page.route("**/data/trip-log/day-02.js", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/javascript",
+    body: entrySource("day-02", "2026-10-11", "Athens to Crete", "Temporary Day 2 navigation fixture.")
+  }));
+  await page.route("**/data/trip-log/day-04.js", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/javascript",
+    body: entrySource("day-04", "2026-10-13", "Elafonisi", "Temporary Day 4 navigation fixture.")
+  }));
+}
+
 test.beforeEach(async ({ page }) => {
   await blockOptionalExternalResources(page);
 });
@@ -124,7 +157,7 @@ test("Travel Log stays public-disabled and local preview renders ordered blocks"
   const blockTypes = await page.locator("#day-03 > [data-block-type]").evaluateAll((blocks) => blocks.map((block) => block.dataset.blockType));
   expect(blockTypes).toEqual([
     "photo", "caption", "collage", "note", "photo", "note",
-    "collage", "caption", "collage", "quote", "comparison", "place", "pause"
+    "collage", "caption", "collage", "quote", "place", "pause"
   ]);
 
   await expect(page.locator('[data-block-type="photo"]').first()).toHaveClass(/log-photo--full/);
@@ -134,10 +167,17 @@ test("Travel Log stays public-disabled and local preview renders ordered blocks"
   await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("width", "1920");
   await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("height", "1080");
   await expect(page.locator('[data-block-type="collage"]')).toHaveCount(3);
+  await expect(page.locator('[data-block-type="caption"]').first()).toContainText("Temporary prototype only");
+  await expect(page.locator('[data-block-type="note"]').first()).toContainText("Prototype note");
   await expect(page.locator('[data-block-type="note"]').nth(1).locator("p")).toHaveCount(3);
   await expect(page.locator('[data-block-type="quote"]')).toContainText("Temporary quote placeholder");
-  await expect(page.locator('[data-block-type="comparison"]')).toContainText("Planned");
-  await expect(page.locator('[data-block-type="comparison"]')).toContainText("Actually");
+  await expect(page.locator('[data-block-type="comparison"], .log-comparison')).toHaveCount(0);
+  await expect(page.getByText("Plan versus reality", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Actually", { exact: true })).toHaveCount(0);
+
+  const renderedBlockIds = await page.locator("#day-03 > [data-block-type]").evaluateAll((blocks) => blocks.map((block) => block.id));
+  expect(renderedBlockIds.every(Boolean)).toBeTruthy();
+  expect(new Set(renderedBlockIds).size).toBe(renderedBlockIds.length);
 
   const emptyHeadingCount = await page.locator("#day-03 h1, #day-03 h2, #day-03 h3, #day-03 h4").evaluateAll((headings) => headings.filter((heading) => !heading.textContent.trim()).length);
   expect(emptyHeadingCount).toBe(0);
@@ -154,7 +194,11 @@ test("Travel Log stays public-disabled and local preview renders ordered blocks"
     expect(rendered?.height).toBeGreaterThan(0);
   }
 
-  await expect(page.getByRole("link", { name: "View the planned day" })).toHaveAttribute("href", "days/day-3-chania.html");
+  await expect(page.locator("[data-log-guide]")).toHaveAttribute("href", "days/day-3-chania.html");
+  await expect(page.getByRole("button", { name: "Choose Travel Log day. Current: Day 3, Chania" })).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("[data-log-previous]")).toHaveAttribute("aria-disabled", "true");
+  await expect(page.locator("[data-log-next]")).toHaveAttribute("aria-disabled", "true");
+  await expect(page.locator(".travel-log-chapter-nav")).toContainText("Latest chapter");
   expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(true);
   await expect(page.locator('[data-block-type="collage"]').first()).toHaveCSS("transition-duration", "0s");
 
@@ -164,9 +208,53 @@ test("Travel Log stays public-disabled and local preview renders ordered blocks"
   await expect(page.locator("html")).not.toHaveAttribute("data-theme", initialTheme);
   await expect.poll(() => page.locator("body").evaluate((body) => getComputedStyle(body).backgroundColor)).not.toBe(initialBackground);
 
-  await page.getByRole("link", { name: "View the planned day" }).click();
+  await page.locator("#day-03 .travel-log-chapter-nav a").click();
   await expect(page).toHaveURL(/\/days\/day-3-chania\.html$/);
   await page.evaluate(() => localStorage.removeItem("aegeanTheme"));
+  assertNoFailures();
+});
+
+test("Travel Log day navigation follows the active chapter", async ({ page }) => {
+  const assertNoFailures = monitorPage(page);
+  await mockThreeChapterPreview(page);
+  await page.goto("/travel-log.html?preview=travel-log#day-03");
+
+  const chooser = page.getByRole("button", { name: "Choose Travel Log day. Current: Day 3, Chania" });
+  await expect(chooser).toBeVisible();
+  await expect(chooser).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator('[data-log-day="day-03"]')).toHaveAttribute("aria-current", "page");
+  await expect(page.locator("#day-03 .travel-log-chapter-nav")).toContainText("Continue to Day 4");
+
+  await chooser.click();
+  await expect(chooser).toHaveAttribute("aria-expanded", "true");
+  await page.keyboard.press("Escape");
+  await expect(chooser).toHaveAttribute("aria-expanded", "false");
+  await expect(chooser).toBeFocused();
+
+  await chooser.click();
+  await page.mouse.click(8, 160);
+  await expect(chooser).toHaveAttribute("aria-expanded", "false");
+
+  await page.locator("#day-04").scrollIntoViewIfNeeded();
+  const dayFourChooser = page.getByRole("button", { name: "Choose Travel Log day. Current: Day 4, Elafonisi" });
+  await expect(dayFourChooser).toBeVisible();
+  await expect(page.locator("[data-log-guide]")).toHaveAttribute("href", "days/day-4-elafonisi.html");
+  await expect(page.locator("[data-log-previous]")).toHaveAttribute("href", "#day-03");
+
+  await page.locator("[data-log-previous]").click();
+  await expect(page).toHaveURL(/#day-03$/);
+  await expect(page.getByRole("button", { name: "Choose Travel Log day. Current: Day 3, Chania" })).toBeVisible();
+  await expect(page.locator("[data-log-next]")).toHaveAttribute("href", "#day-04");
+
+  await page.locator("[data-log-next]").click();
+  await expect(page).toHaveURL(/#day-04$/);
+  await expect(page.getByRole("button", { name: "Choose Travel Log day. Current: Day 4, Elafonisi" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Choose Travel Log day. Current: Day 4, Elafonisi" }).click();
+  await page.locator('[data-log-day="day-02"]').click();
+  await expect(page).toHaveURL(/#day-02$/);
+  await expect(page.locator('[data-log-day="day-02"]')).toHaveAttribute("aria-current", "page");
+  await expect(page.locator("[data-log-guide]")).toHaveAttribute("href", "days/day-2-acropolis-ferry.html");
   assertNoFailures();
 });
 
@@ -243,9 +331,15 @@ test("Travel Log preview has no horizontal overflow", async ({ page }) => {
       }));
       expect(widths.scroll).toBeLessThanOrEqual(widths.client);
       await expect(page.locator("header.nav")).toBeVisible();
-      await expect(page.locator(".travel-log-index")).toBeVisible();
+      await expect(page.locator(".travel-log-day-nav")).toBeVisible();
       if (viewport.width <= 430) {
         await expect.poll(() => page.locator("#day-03 img").first().evaluate((image) => image.currentSrc)).toMatch(/-960\.webp$/);
+        const mobileChooser = page.locator("#travel-log-day-button");
+        await mobileChooser.click();
+        const menuBounds = await page.locator("#travel-log-day-menu").boundingBox();
+        expect(menuBounds?.x).toBeGreaterThanOrEqual(0);
+        expect((menuBounds?.x || 0) + (menuBounds?.width || 0)).toBeLessThanOrEqual(viewport.width);
+        await mobileChooser.click();
       }
     });
   }

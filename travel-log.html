@@ -19,10 +19,11 @@
   <div class="grain" aria-hidden="true"></div>
   <header class="nav travel-log-nav">
     <a class="logo" href="index.html">Aegean <i>Odyssey</i></a>
-    <nav aria-label="Main navigation">
-      <a href="index.html#itinerary">The plan</a>
-      <a href="essentials.html">Essentials</a>
+    <nav class="travel-log-fallback-nav" aria-label="Travel Log navigation">
+      <a href="#travel-log-main">Chapters</a>
+      <a href="index.html#itinerary">Day guides</a>
     </nav>
+    <nav id="travel-log-day-nav" class="travel-log-day-nav" aria-label="Travel Log day navigation" hidden></nav>
   </header>
 
   <main id="travel-log-main" hidden>
@@ -32,7 +33,6 @@
       <p id="travel-log-preview-note" class="travel-log-preview-note" hidden>
         Local draft preview · temporary content
       </p>
-      <nav id="travel-log-index" class="travel-log-index" aria-label="Travel Log chapters"></nav>
     </header>
 
     <div id="travel-log-feed" aria-live="polite"></div>

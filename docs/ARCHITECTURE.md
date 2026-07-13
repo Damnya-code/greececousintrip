@@ -196,12 +196,11 @@ Supported blocks:
 - `quote`: quoted text and optional attribution.
 - `video`: user-controlled video with optional poster and caption; no autoplay.
 - `pause`: a restrained divider and optional label.
-- `comparison`: optional planned and actual text.
 - `place`: optional place name, note and external map link.
 
-Collage presets are `two-up`, `feature-left`, `feature-right`, `film-strip` and `scrapbook`. Mobile reduces these to logical single-column reading order rather than preserving fragile desktop geometry.
+Collage presets are `two-up`, `feature-left`, `feature-right` and `film-strip`. Mobile reduces these to logical single-column reading order rather than preserving fragile desktop geometry.
 
-All fields beyond `dayId`, `state`, `date`, `place` and at least one valid block are optional. Empty fields do not create headings or containers.
+All fields beyond `dayId`, `state`, `date`, `place` and at least one valid block are optional. Empty fields do not create headings or containers. Ordered array position remains the source of reading order. Each rendered block receives a stable ID derived from its day and array position unless it supplies a valid explicit `moment-*` ID.
 
 ### Loading and navigation
 
@@ -210,7 +209,9 @@ All fields beyond `dayId`, `state`, `date`, `place` and at least one valid block
 1. On normal pages, add Travel Log navigation only when the central flag is enabled and at least one manifest entry is published.
 2. On `travel-log.html`, load only eligible per-day files and render their blocks in shared trip-day order.
 
-The feed provides a compact chapter index, anchors such as `#day-03`, a link back to each planned day and next-chapter or end-state navigation. Ordinary log editing never requires editing HTML.
+The sticky header provides previous and next chapter controls, a current-day chooser and a contextual Day Guide link. It lists only entries eligible under the active publication or local-preview rules. An `IntersectionObserver` updates the active chapter as the feed scrolls without continuously changing browser history; anchors such as `#day-03` remain directly linkable.
+
+Each chapter ends with a clearer guide link and a next-chapter or intentional end state. A draft or still-growing feed uses `Latest chapter`; a published entry matching the final configured trip day uses `End of the Travel Log`. Ordinary log editing never requires editing HTML.
 
 ### Media and performance
 
@@ -224,7 +225,7 @@ Non-decorative photographs require alt text or are skipped. Captions use `figure
 
 The content-focused editing workflow and copyable examples are in `docs/TRAVEL_LOG_GUIDE.md`.
 
-Deferred work includes real trip media, an image-optimization command, video caption tracks, richer multi-day navigation once several entries exist and any authenticated/private distribution approach. No upload system, editor, database or social interaction is planned in this static phase.
+Deferred work includes real trip media, an image-optimization command, video caption tracks, the controlled no-code editor and any authenticated/private distribution approach. The future editor will select from the renderer's controlled block, presentation and layout values rather than writing HTML, CSS coordinates or arbitrary layout dimensions. No upload system, database or social interaction is planned in this static phase.
 
 ## Adding another trip day
 

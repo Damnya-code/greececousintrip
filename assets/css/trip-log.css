@@ -50,8 +50,134 @@ html[data-theme="dark"] {
 }
 
 .travel-log-nav .logo,
-.travel-log-nav nav a {
+.travel-log-nav nav a,
+.travel-log-nav nav button {
     color: #f6f2e8
+}
+
+.travel-log-fallback-nav[hidden],
+.travel-log-day-nav[hidden],
+.travel-log-day-menu[hidden] {
+    display: none
+}
+
+.travel-log-nav .travel-log-day-nav {
+    gap: 5px
+}
+
+.travel-log-nav .travel-log-day-nav a,
+.travel-log-nav .travel-log-day-nav button {
+    min-height: 36px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    color: #edf2f5;
+    font: 500 12px/1 "DM Sans", sans-serif;
+    text-decoration: none
+}
+
+.travel-log-nav .travel-log-day-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 10px
+}
+
+.travel-log-nav .travel-log-day-nav a+a {
+    margin-left: 0
+}
+
+.travel-log-nav .travel-log-day-nav a+a::before {
+    content: none
+}
+
+.travel-log-nav .travel-log-day-nav a:hover,
+.travel-log-nav .travel-log-day-nav a:focus-visible,
+.travel-log-nav .travel-log-day-nav button:hover,
+.travel-log-nav .travel-log-day-nav button:focus-visible {
+    border-color: rgba(255, 255, 255, .16);
+    background: rgba(255, 255, 255, .07);
+    color: #fff
+}
+
+.travel-log-day-step[aria-disabled="true"] {
+    opacity: .3;
+    pointer-events: none
+}
+
+.travel-log-day-arrow {
+    font: 500 15px/1 "DM Sans", sans-serif
+}
+
+.travel-log-day-chooser {
+    position: relative
+}
+
+.travel-log-nav .travel-log-day-current {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 11px;
+    border-color: rgba(255, 255, 255, .18);
+    background: rgba(255, 255, 255, .08);
+    cursor: pointer
+}
+
+.travel-log-current-number {
+    font-weight: 600
+}
+
+.travel-log-current-place {
+    padding-left: 7px;
+    border-left: 1px solid rgba(255, 255, 255, .2);
+    color: rgba(237, 242, 245, .72)
+}
+
+.travel-log-day-chevron {
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    color: rgba(237, 242, 245, .72);
+    transform: rotate(45deg);
+    transition: transform .18s ease, margin-top .18s ease
+}
+
+.travel-log-day-current[aria-expanded="true"] .travel-log-day-chevron {
+    margin-top: 3px;
+    transform: rotate(225deg)
+}
+
+.travel-log-day-menu {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 8px);
+    left: 50%;
+    width: min(270px, calc(100vw - 32px));
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, .15);
+    background: #0d1b28;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .28);
+    transform: translateX(-50%)
+}
+
+.travel-log-nav .travel-log-day-menu a {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 11px;
+    font-size: 12px
+}
+
+.travel-log-nav .travel-log-day-menu a[aria-current="page"] {
+    border-color: rgba(120, 197, 212, .34);
+    background: rgba(120, 197, 212, .12);
+    color: #fff
+}
+
+.travel-log-day-guide {
+    margin-left: 4px;
+    border-left-color: rgba(255, 255, 255, .18) !important
 }
 
 .travel-log-masthead {
@@ -90,33 +216,6 @@ html[data-theme="dark"] {
 
 .travel-log-preview-note[hidden] {
     display: none
-}
-
-.travel-log-index {
-    display: flex;
-    gap: 10px;
-    margin-top: 42px;
-    padding-bottom: 8px;
-    overflow-x: auto;
-    scrollbar-width: none
-}
-
-.travel-log-index::-webkit-scrollbar {
-    display: none
-}
-
-.travel-log-index a {
-    flex: 0 0 auto;
-    padding: 9px 0 5px;
-    border-bottom: 1px solid var(--log-line);
-    color: var(--log-ink);
-    font: 500 12px/1.2 "DM Mono", monospace;
-    text-decoration: none
-}
-
-.travel-log-index a:hover {
-    border-color: var(--coral);
-    color: var(--coral)
 }
 
 .travel-log-chapter {
@@ -382,37 +481,6 @@ html[data-theme="dark"] {
     background: #07111c
 }
 
-.log-comparison {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: min(100% - 40px, 900px);
-    margin-right: auto;
-    margin-left: auto;
-    border-top: 1px solid var(--log-line);
-    border-bottom: 1px solid var(--log-line)
-}
-
-.log-comparison>div {
-    padding: clamp(26px, 4vw, 46px)
-}
-
-.log-comparison>div+div {
-    border-left: 1px solid var(--log-line)
-}
-
-.log-comparison h2 {
-    margin: 0 0 18px;
-    color: var(--coral);
-    font: 500 10px/1.4 "DM Mono", monospace;
-    letter-spacing: .1em;
-    text-transform: uppercase
-}
-
-.log-comparison p {
-    margin: 0;
-    font: 500 17px/1.65 "DM Sans", sans-serif
-}
-
 .log-place {
     width: min(100% - 40px, 620px);
     margin-right: auto;
@@ -535,10 +603,6 @@ html[data-theme="dark"] {
         font-size: clamp(42px, 14vw, 62px)
     }
 
-    .travel-log-index {
-        margin-top: 30px
-    }
-
     .travel-log-chapter {
         padding-bottom: 80px
     }
@@ -558,7 +622,6 @@ html[data-theme="dark"] {
     .log-note,
     .log-quote,
     .log-video,
-    .log-comparison,
     .log-place,
     .log-pause,
     .travel-log-chapter-nav {
@@ -612,15 +675,6 @@ html[data-theme="dark"] {
         padding-left: 20px
     }
 
-    .log-comparison {
-        grid-template-columns: 1fr
-    }
-
-    .log-comparison>div+div {
-        border-top: 1px solid var(--log-line);
-        border-left: 0
-    }
-
     .travel-log-chapter-nav,
     .travel-log-end {
         align-items: flex-start;
@@ -629,6 +683,68 @@ html[data-theme="dark"] {
 
     .travel-log-end {
         padding: 44px 20px
+    }
+}
+
+@media (max-width: 600px) {
+    .travel-log-nav {
+        height: 96px;
+        align-items: flex-start;
+        padding: 10px 8px 0
+    }
+
+    .travel-log-nav .logo {
+        font-size: 19px
+    }
+
+    .travel-log-nav .nav-tools {
+        position: absolute;
+        top: 9px;
+        right: 8px
+    }
+
+    .travel-log-nav .travel-log-day-nav,
+    .travel-log-nav .travel-log-fallback-nav {
+        top: 49px;
+        right: 8px;
+        left: 8px;
+        width: auto;
+        justify-content: center;
+        transform: none
+    }
+
+    .travel-log-day-step-label,
+    .travel-log-current-place {
+        display: none
+    }
+
+    .travel-log-nav .travel-log-day-step {
+        justify-content: center;
+        width: 34px;
+        padding: 8px
+    }
+
+    .travel-log-nav .travel-log-day-current {
+        min-width: 76px;
+        justify-content: center
+    }
+
+    .travel-log-day-menu {
+        position: fixed;
+        top: 100px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+        transform: none
+    }
+
+    .travel-log-nav .travel-log-day-guide {
+        padding-right: 8px;
+        padding-left: 8px
+    }
+
+    .travel-log-masthead {
+        padding-top: 76px
     }
 }
 
