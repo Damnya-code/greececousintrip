@@ -211,7 +211,7 @@
   }
 
   function renderCollage(block) {
-    const layouts = ["two-up", "feature-left", "feature-right", "film-strip", "scrapbook"];
+    const layouts = ["two-up", "feature-left", "feature-right", "film-strip"];
     const layout = layouts.includes(block.layout) ? block.layout : "two-up";
     const images = Array.isArray(block.images) ? block.images.slice(0, 5) : [];
     const collage = create("section", `log-collage log-collage--${layout}`);
@@ -221,6 +221,7 @@
       const figure = renderFigure(image, { priority: false, compact: true });
       if (figure) collage.append(figure);
     });
+    collage.dataset.count = collage.children.length;
     return collage.children.length ? collage : null;
   }
 

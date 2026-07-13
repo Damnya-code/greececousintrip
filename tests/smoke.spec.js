@@ -13,6 +13,7 @@ const DAY_PAGES = [
 const VIEWPORTS = [
   { width: 320, height: 800 },
   { width: 390, height: 844 },
+  { width: 430, height: 932 },
   { width: 768, height: 1024 },
   { width: 1440, height: 900 }
 ];
@@ -122,18 +123,18 @@ test("Travel Log stays public-disabled and local preview renders ordered blocks"
 
   const blockTypes = await page.locator("#day-03 > [data-block-type]").evaluateAll((blocks) => blocks.map((block) => block.dataset.blockType));
   expect(blockTypes).toEqual([
-    "photo", "caption", "photo", "collage", "note",
-    "collage", "quote", "comparison", "place", "pause"
+    "photo", "caption", "collage", "note", "photo", "note",
+    "collage", "caption", "collage", "quote", "comparison", "place", "pause"
   ]);
 
   await expect(page.locator('[data-block-type="photo"]').first()).toHaveClass(/log-photo--full/);
   await expect(page.locator("#moment-chania-harbour")).toHaveCount(1);
   await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("loading", "eager");
   await expect(page.locator('[data-block-type="photo"] img').nth(1)).toHaveAttribute("loading", "lazy");
-  await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("width", "1536");
-  await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("height", "1024");
-  await expect(page.locator('[data-block-type="collage"]')).toHaveCount(2);
-  await expect(page.locator('[data-block-type="note"] p')).toHaveCount(3);
+  await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("width", "1920");
+  await expect(page.locator('[data-block-type="photo"] img').first()).toHaveAttribute("height", "1080");
+  await expect(page.locator('[data-block-type="collage"]')).toHaveCount(3);
+  await expect(page.locator('[data-block-type="note"]').nth(1).locator("p")).toHaveCount(3);
   await expect(page.locator('[data-block-type="quote"]')).toContainText("Temporary quote placeholder");
   await expect(page.locator('[data-block-type="comparison"]')).toContainText("Planned");
   await expect(page.locator('[data-block-type="comparison"]')).toContainText("Actually");
@@ -143,10 +144,14 @@ test("Travel Log stays public-disabled and local preview renders ordered blocks"
   await expect(page.locator("#day-03")).not.toContainText("undefined");
 
   const images = page.locator("#day-03 img");
+  expect(await images.count()).toBe(10);
   for (let index = 0; index < await images.count(); index += 1) {
     const image = images.nth(index);
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate((node) => node.complete && node.naturalWidth > 0)).toBe(true);
+    const rendered = await image.boundingBox();
+    expect(rendered?.width).toBeGreaterThan(0);
+    expect(rendered?.height).toBeGreaterThan(0);
   }
 
   await expect(page.getByRole("link", { name: "View the planned day" })).toHaveAttribute("href", "days/day-3-chania.html");
@@ -169,7 +174,9 @@ test("Travel Log skips an unsupported block without breaking the chapter", async
   const assertNoFailures = monitorPage(page);
   await page.route("**/data/trip-log/day-03.js", async (route) => {
     const response = await route.fetch();
-    const source = (await response.text()).replace("blocks: [", 'blocks: [{ type: "unsupported-test-block" },');
+    const source = (await response.text())
+      .replace("blocks: [", 'blocks: [{ type: "unsupported-test-block" },')
+      .replace('layout: "feature-left"', 'layout: "feature-right"');
     await route.fulfill({ response, body: source });
   });
 
@@ -177,6 +184,10 @@ test("Travel Log skips an unsupported block without breaking the chapter", async
   await expect(page.locator("#day-03")).toBeVisible();
   await expect(page.locator('[data-block-type="unsupported-test-block"]')).toHaveCount(0);
   await expect(page.locator('[data-block-type="photo"]')).toHaveCount(2);
+  await expect(page.locator(".log-collage--feature-right")).toHaveCount(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    await page.evaluate(() => document.documentElement.clientWidth)
+  );
   assertNoFailures();
 });
 
@@ -233,6 +244,9 @@ test("Travel Log preview has no horizontal overflow", async ({ page }) => {
       expect(widths.scroll).toBeLessThanOrEqual(widths.client);
       await expect(page.locator("header.nav")).toBeVisible();
       await expect(page.locator(".travel-log-index")).toBeVisible();
+      if (viewport.width <= 430) {
+        await expect.poll(() => page.locator("#day-03 img").first().evaluate((image) => image.currentSrc)).toMatch(/-960\.webp$/);
+      }
     });
   }
   assertNoFailures();

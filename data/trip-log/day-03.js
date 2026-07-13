@@ -3,8 +3,20 @@
 
   // Blocks: photo, collage, sequence, caption, note, quote, video, pause, comparison, place.
   // Photo presentations: full, contained, portrait, quiet.
-  // Collage layouts: two-up, feature-left, feature-right, film-strip, scrapbook.
+  // Collage layouts: two-up, feature-left, feature-right, film-strip.
   const entries = window.TRIP_LOG_ENTRIES || (window.TRIP_LOG_ENTRIES = Object.create(null));
+
+  const media = (name, width, height, alt, extra = {}) => ({
+    src: `assets/log/day-03/${name}.webp`,
+    sources: [{
+      type: "image/webp",
+      srcset: `assets/log/day-03/${name}-960.webp 960w, assets/log/day-03/${name}.webp ${width}w`
+    }],
+    width,
+    height,
+    alt,
+    ...extra
+  });
 
   entries["day-03"] = Object.freeze({
     version: 2,
@@ -18,93 +30,125 @@
         type: "photo",
         id: "moment-chania-harbour",
         presentation: "full",
-        src: "assets/days/day-03-chania.webp",
-        alt: "Chania Venetian Harbour, its lighthouse and ochre waterfront reflected in calm water",
-        caption: "Temporary prototype image from the existing itinerary artwork.",
-        location: "Chania",
-        width: 1536,
-        height: 1024
+        ...media(
+          "01-landscape",
+          1920,
+          1080,
+          "Temporary wide test artwork showing figures overlooking a ruined city filled with blue crystal formations",
+          { caption: "Temporary prototype media used to test a wide, detailed opening image." }
+        )
       },
       {
         type: "caption",
-        text: "Temporary prototype: this chapter demonstrates visual rhythm only. Replace every image and memory after the trip."
-      },
-      {
-        type: "photo",
-        presentation: "portrait",
-        src: "assets/days/day-03-chania.webp",
-        alt: "A portrait crop of Chania Harbour used to demonstrate a tall photographic moment",
-        caption: "The Chania image is intentionally reused to test a portrait crop.",
-        focalPoint: "52% 48%",
-        crop: true,
-        width: 1536,
-        height: 1024
+        text: "Temporary prototype only. These images test layout, loading and visual rhythm; none records the Greece trip."
       },
       {
         type: "collage",
-        layout: "feature-left",
-        label: "Temporary three-image feature collage",
+        layout: "two-up",
+        label: "Temporary two-image contrast test",
         images: [
-          {
-            src: "assets/days/day-03-chania.webp",
-            alt: "Chania Venetian Harbour in calm morning light",
-            caption: "Temporary Chania artwork",
-            width: 1536,
-            height: 1024,
-            crop: true,
-            focalPoint: "50% 50%"
-          },
-          {
-            src: "assets/days/day-04-elafonisi.webp",
-            alt: "Turquoise shallows and pale sand at Elafonisi",
-            caption: "Temporary coastal artwork",
-            width: 1536,
-            height: 1024
-          },
-          {
-            src: "assets/days/day-05-rethymno.webp",
-            alt: "Warm Venetian stone buildings beside the sea in Rethymno",
-            caption: "Temporary road-trip artwork",
-            width: 1536,
-            height: 1024
-          }
+          media(
+            "02-landscape",
+            1920,
+            1409,
+            "Temporary dark fantasy artwork of a winged skeletal figure suspended above a cavern floor",
+            { caption: "A darker, near-four-by-three frame tests shadow detail." }
+          ),
+          media(
+            "09-low-light",
+            1920,
+            1080,
+            "Temporary low-light artwork of a crystal-armoured figure moving through a blue-green cavern",
+            { caption: "A wide low-light frame tests tonal separation in both themes." }
+          )
         ]
       },
       {
         type: "note",
-        heading: "Where a longer entry can breathe",
+        text: "Prototype note: the pair above deliberately combines different proportions and brightness levels."
+      },
+      {
+        type: "photo",
+        presentation: "portrait",
+        ...media(
+          "05-portrait",
+          1920,
+          1500,
+          "Temporary warm-toned artwork of a suspended sphere above a reflective surface under several suns",
+          {
+            caption: "A deliberately cropped portrait presentation tests whether a central subject keeps enough space around it.",
+            focalPoint: "50% 48%",
+            crop: true
+          }
+        )
+      },
+      {
+        type: "note",
+        heading: "A realistic writing interval",
         paragraphs: [
-          "This is temporary prototype writing, not a record of the trip. It demonstrates how a longer journal passage can sit between photographs without turning the chapter into a conventional blog post.",
-          "A real entry could describe the ferry arrival, the first walk around the harbour or the café that replaced an over-ambitious beach plan. Paragraphs remain plain text so editing stays safe and uncomplicated.",
-          "Nothing here is mandatory. If the photographs tell the day properly, this entire block can be removed."
+          "This is temporary prototype writing, not a record of the trip. It checks that a longer journal passage can interrupt the photographs without turning the chapter into a conventional blog article.",
+          "The source set is intentionally inconsistent: wide frames, dark scenes, detailed edges and subjects that do not all sit neatly in the centre. The layout should accommodate that variation instead of pretending every phone photograph arrives perfectly composed.",
+          "When genuine Greece photographs replace these files, the writing can be shortened, expanded or removed. The photographs remain the structure; text is present only when it adds something worth keeping."
         ]
       },
       {
         type: "collage",
-        layout: "film-strip",
-        label: "Temporary three-image film strip",
+        layout: "feature-left",
+        label: "Temporary feature image with two supporting frames",
         images: [
-          {
-            src: "assets/hero-aegean.webp",
-            alt: "Golden-hour view across the sea with white architecture and a hilltop temple",
-            caption: "Temporary atmosphere",
-            width: 1536,
-            height: 1024
-          },
-          {
-            src: "assets/days/santorini-athinios.webp",
-            alt: "A ferry approaching Santorini beneath dark volcanic cliffs",
-            caption: "Temporary ferry detail",
-            width: 1536,
-            height: 1024
-          },
-          {
-            src: "assets/essentials-hero.webp",
-            alt: "Travel notebook, map, sunglasses, coffee, camera and car keys on a table",
-            caption: "Temporary travel detail",
-            width: 1536,
-            height: 1024
-          }
+          media(
+            "08-food-detail",
+            1280,
+            960,
+            "Temporary detailed artwork of a winged figure holding a set of bronze scales",
+            { caption: "The larger frame tests a detailed, imperfectly labelled source without forced cropping." }
+          ),
+          media(
+            "04-portrait",
+            1920,
+            869,
+            "Temporary unusually wide artwork of a mage facing a white dragon beneath a bright moon",
+            { caption: "An unusually wide supporting image." }
+          ),
+          media(
+            "07-square",
+            1920,
+            1080,
+            "Temporary dark artwork of an armoured figure framed by floating blades in a forest",
+            { caption: "A darker supporting frame with an off-centre subject." }
+          )
+        ]
+      },
+      {
+        type: "caption",
+        text: "Longer prototype caption: this feature layout keeps the main frame readable while the two supporting images retain their natural proportions and remain in the same logical order on small screens."
+      },
+      {
+        type: "collage",
+        layout: "film-strip",
+        label: "Temporary three-image closing sequence",
+        images: [
+          media(
+            "03-landscape",
+            1920,
+            1080,
+            "Temporary wide artwork of two large creatures confronting one another",
+            { caption: "Wide action frame" }
+          ),
+          media(
+            "06-portrait",
+            1920,
+            1080,
+            "Temporary artwork of an armoured figure reaching forward amid floating blades",
+            { caption: "Edge-weighted figure" }
+          ),
+          media(
+            "10-unusual-ratio",
+            1280,
+            960,
+            "Temporary warm artwork of a spellcaster surrounded by flowing fabric and orange light",
+            { caption: "Near-four-by-three closing frame" }
+          )
         ]
       },
       {

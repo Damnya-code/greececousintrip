@@ -76,9 +76,17 @@ Available layouts:
 - `feature-left`
 - `feature-right`
 - `film-strip`
-- `scrapbook`
 
 Use one to five images. Mobile automatically simplifies the composition.
+
+Choose the smallest layout that suits the photographs:
+
+- `two-up` pairs two images of similar importance. It tolerates different ratios and is useful for a place/detail or light/dark comparison.
+- `feature-left` gives the first image more weight, with up to two supporting images on the right.
+- `feature-right` mirrors that emphasis when the dominant photograph reads better from the opposite side.
+- `film-strip` creates a compact chronological run of three to five images. Natural ratios are preserved unless an individual image explicitly uses `crop: true`.
+
+On screens up to 760px, every collage becomes one column in its original data order. Desktop overlap and asymmetry are intentionally removed rather than squeezed onto a phone.
 
 ```js
 {
@@ -207,14 +215,41 @@ Add captions or a text description when a real video needs them. A quiet visual 
 ## Image preparation
 
 - Prefer WebP or AVIF.
-- Use roughly 1600–2400 pixels on the long edge for primary images.
-- Keep portrait images genuinely portrait where possible.
+- For landscape photographs, aim for about `1920 × 1080` to `2200 × 1467` pixels. A full-width opener benefits from the upper end of that range.
+- For portrait photographs, aim for about `1400 × 2100` to `1600 × 2400` pixels. Keep the original portrait orientation rather than creating a tall crop from a wide photograph.
+- Keep repository derivatives to roughly 2400 pixels on the long edge at most. Larger camera originals add download weight without a visible benefit on this layout.
 - Record real `width` and `height` values to prevent layout shift.
 - Use ordered, descriptive filenames.
 - Keep full-resolution originals outside the repository.
 - Do not commit passport details, booking references, access information, unwanted licence plates or photographs the group has not approved.
 
-For responsive variants, add a `sources` array with normal HTML `srcset` values. The original `src` remains the fallback.
+For responsive variants, add a 960-pixel derivative for phones and a 1920–2400-pixel fallback for larger screens. Put both in a `sources` array with normal HTML `srcset` values; the original `src` remains the fallback.
+
+```js
+sources: [{
+  type: "image/webp",
+  srcset: "assets/log/day-03/01-harbour-960.webp 960w, assets/log/day-03/01-harbour.webp 1920w"
+}]
+```
+
+### Cropping and focal points
+
+Natural proportions are the default. Add `crop: true` only when a controlled presentation—usually a portrait moment—needs it. Pair it with a focal point:
+
+- `"50% 30%"` keeps a face or skyline near the upper centre.
+- `"35% 50%"` protects a subject standing left of centre.
+- `"75% 45%"` protects an edge-weighted subject on the right.
+
+Check the crop at both 320px and desktop width. A focal point cannot rescue an image whose important subjects sit on opposite edges; use the natural ratio instead.
+
+### Common image problems
+
+- Do not trust filenames such as `portrait` or `square`; verify the actual pixel dimensions.
+- Avoid placing logos, timestamps or important faces near an edge that a crop may remove.
+- Do not combine several very dark images without a lighter pause between them.
+- Avoid upscaling small sources. A clean 1280-pixel image is preferable to an artificial 2400-pixel derivative.
+- Keep captions concise in dense collages. Longer context works better as a standalone caption or note.
+- Do not force wide photographs into the film-strip portrait ratio. Cropping is opt-in per image.
 
 ## Publish an entry
 

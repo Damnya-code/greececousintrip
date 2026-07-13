@@ -237,12 +237,21 @@ html[data-theme="dark"] {
     margin: 0
 }
 
+.log-collage picture {
+    overflow: hidden
+}
+
 .log-collage figcaption {
     padding: 8px 2px 0
 }
 
 .log-collage--two-up {
     grid-template-columns: repeat(2, minmax(0, 1fr))
+}
+
+.log-collage[data-count="1"] {
+    grid-template-columns: minmax(0, 820px);
+    justify-content: center
 }
 
 .log-collage--feature-left,
@@ -260,14 +269,17 @@ html[data-theme="dark"] {
     grid-column: 2
 }
 
-.log-collage--feature-left figure:first-child img,
-.log-collage--feature-right figure:first-child img {
+.log-collage--feature-left figure:first-child.log-media--crop picture,
+.log-collage--feature-left figure:first-child.log-media--crop img,
+.log-collage--feature-right figure:first-child.log-media--crop picture,
+.log-collage--feature-right figure:first-child.log-media--crop img {
     height: 100%;
     object-fit: cover
 }
 
 .log-collage--film-strip {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
     width: min(100% - 40px, 1360px);
     padding: clamp(12px, 2vw, 24px);
     background: var(--log-night)
@@ -281,29 +293,9 @@ html[data-theme="dark"] {
     color: rgba(233, 238, 245, .7)
 }
 
-.log-collage--film-strip img {
+.log-collage--film-strip .log-media--crop img {
     aspect-ratio: 3 / 4;
     object-fit: cover
-}
-
-.log-collage--scrapbook {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    padding: clamp(20px, 4vw, 55px);
-    background: var(--log-paper)
-}
-
-.log-collage--scrapbook figure {
-    grid-column: span 5
-}
-
-.log-collage--scrapbook figure:nth-child(even) {
-    grid-column: 7 / span 6;
-    transform: translateY(24px) rotate(1deg)
-}
-
-.log-collage--scrapbook figure:nth-child(3n) {
-    grid-column: 3 / span 7;
-    transform: rotate(-1deg)
 }
 
 .log-sequence {
@@ -589,28 +581,29 @@ html[data-theme="dark"] {
     .log-collage--two-up,
     .log-collage--feature-left,
     .log-collage--feature-right,
-    .log-collage--film-strip,
-    .log-collage--scrapbook {
+    .log-collage--film-strip {
         grid-template-columns: 1fr;
         grid-template-rows: auto
     }
 
     .log-collage--feature-left figure:first-child,
     .log-collage--feature-right figure:first-child,
-    .log-collage--scrapbook figure,
-    .log-collage--scrapbook figure:nth-child(n) {
+    .log-collage[data-count] figure {
         grid-column: auto;
         grid-row: auto;
         transform: none
     }
 
+    .log-collage--feature-left figure:first-child picture,
     .log-collage--feature-left figure:first-child img,
+    .log-collage--feature-right figure:first-child picture,
     .log-collage--feature-right figure:first-child img {
         height: auto;
         object-fit: contain
     }
 
-    .log-collage--film-strip img {
+    .log-collage--film-strip img,
+    .log-collage--film-strip .log-media--crop img {
         aspect-ratio: auto;
         object-fit: contain
     }
