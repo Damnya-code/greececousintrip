@@ -19,36 +19,16 @@
     const card = document.querySelector("[data-route-map]");
     const viewport = document.querySelector("[data-route-viewport]");
     const svg = card?.querySelector(".route-map-svg");
-    const daytripVehicle = svg.querySelector("#route-daytrip-vehicle");
-    const expandButton = card.querySelector("[data-route-expand]");
-
     if (!card || !viewport || !svg) return;
 
-    expandButton?.addEventListener("click", (event) => {
-      event.stopPropagation();
-
-      const expanded = card.classList.toggle("is-route-expanded");
-
-      document.body.classList.toggle("route-map-expanded", expanded);
-      expandButton.setAttribute("aria-expanded", String(expanded));
-      expandButton?.addEventListener("click", (event) => {
-        event.stopPropagation();
-
-        const expanded = card.classList.toggle("is-route-expanded");
-
-        document.body.classList.toggle("route-map-expanded", expanded);
-
-        expandButton.setAttribute("aria-expanded", String(expanded));
-        expandButton.setAttribute(
-          "aria-label",
-          expanded ? "Close expanded route map" : "Expand route map"
-        );
-      });
-    });
-
+    const daytripVehicle = svg.querySelector("#route-daytrip-vehicle");
+    const expandButton = card.querySelector("[data-route-expand]");
     const ferryPath = svg.querySelector("#route-path-ferry");
     const roadPath = svg.querySelector("#route-path-road");
     const santoriniPath = svg.querySelector("#route-path-santorini");
+    const ferryReveal = svg.querySelector("#route-reveal-ferry");
+    const roadReveal = svg.querySelector("#route-reveal-road");
+    const santoriniReveal = svg.querySelector("#route-reveal-santorini");
     const ferryVehicle = svg.querySelector("#route-ferry-vehicle");
     const carVehicle = svg.querySelector("#route-car-vehicle");
 
@@ -66,10 +46,13 @@
       daytrip: svg.querySelector(".route-daytrip-label"),
     };
 
-    const paths = [ferryPath, roadPath, santoriniPath].filter(Boolean);
+    const paths = [ferryReveal, roadReveal, santoriniReveal].filter(Boolean);
 
     if (
       paths.length !== 3 ||
+      !ferryPath ||
+      !roadPath ||
+      !santoriniPath ||
       !ferryVehicle ||
       !carVehicle ||
       !daytripVehicle ||
@@ -81,6 +64,34 @@
     let userControlledViewport = false;
     let animationStarted = false;
     let routeIsAnimating = false;
+
+    function setExpanded(expanded, { restoreFocus = false } = {}) {
+      card.classList.toggle("is-route-expanded", expanded);
+      document.body.classList.toggle("route-map-expanded", expanded);
+      expandButton?.setAttribute("aria-expanded", String(expanded));
+      expandButton?.setAttribute(
+        "aria-label",
+        expanded ? "Close expanded route map" : "Expand route map"
+      );
+
+      if (restoreFocus) expandButton?.focus();
+    }
+
+    expandButton?.addEventListener("click", (event) => {
+      event.stopPropagation();
+      setExpanded(!card.classList.contains("is-route-expanded"));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !card.classList.contains("is-route-expanded")) return;
+      setExpanded(false, { restoreFocus: true });
+    });
+
+    window.addEventListener("resize", () => {
+      if (!isMobileMap() && card.classList.contains("is-route-expanded")) {
+        setExpanded(false);
+      }
+    });
 
     /*
      * Manual interaction permanently disables guided horizontal following.
@@ -107,8 +118,10 @@
       });
       placeVehicleAt(ferryVehicle, ferryPath, 0.54, 0);
       placeVehicleAt(carVehicle, roadPath, 0.52, 0);
-      ferryVehicle.classList.add("is-route-vehicle-visible");
-      carVehicle.classList.add("is-route-vehicle-visible");
+      placeVehicleAt(daytripVehicle, santoriniPath, 0.54, 0);
+      [ferryVehicle, carVehicle, daytripVehicle].forEach((vehicle) => {
+        vehicle.classList.add("is-route-vehicle-visible", "is-route-settled");
+      });
       return;
     }
 
@@ -148,20 +161,6 @@
       replayRouteSequence();
     });
 
-    document.addEventListener("keydown", (event) => {
-      if (
-        event.key !== "Escape" ||
-        !card.classList.contains("is-route-expanded")
-      ) {
-        return;
-      }
-
-      card.classList.remove("is-route-expanded");
-      document.body.classList.remove("route-map-expanded");
-      expandButton?.setAttribute("aria-expanded", "false");
-      expandButton?.setAttribute("aria-label", "Expand route map");
-    });
-
     async function replayRouteSequence() {
       routeIsAnimating = true;
       userControlledViewport = false;
@@ -199,10 +198,10 @@
       await wait(340);
 
       labels.ferry?.classList.add("is-route-label-visible");
-      ferryVehicle.classList.add("is-route-vehicle-visible");
+      ferryVehicle.classList.add("is-route-vehicle-visible", "is-route-moving");
 
       await Promise.all([
-        drawPath(ferryPath, 1450),
+        drawPath(ferryReveal, 1450),
 
         moveVehicle({
           vehicle: ferryVehicle,
@@ -212,6 +211,7 @@
         }),
       ]);
 
+      ferryVehicle.classList.remove("is-route-moving");
       ferryVehicle.classList.add("is-route-settled");
       reachNode(nodes.chania);
 
@@ -221,12 +221,12 @@
       await wait(320);
 
       labels.road?.classList.add("is-route-label-visible");
-      carVehicle.classList.add("is-route-vehicle-visible");
+      carVehicle.classList.add("is-route-vehicle-visible", "is-route-moving");
 
       const roadDuration = 1850;
 
       await Promise.all([
-        drawPath(roadPath, roadDuration),
+        drawPath(roadReveal, roadDuration),
 
         moveVehicle({
           vehicle: carVehicle,
@@ -246,6 +246,7 @@
         }),
       ]);
 
+      carVehicle.classList.remove("is-route-moving");
       carVehicle.classList.add("is-route-settled");
 
       /*
@@ -254,10 +255,10 @@
       await wait(300);
 
       labels.daytrip?.classList.add("is-route-label-visible");
-      daytripVehicle.classList.add("is-route-vehicle-visible");
+      daytripVehicle.classList.add("is-route-vehicle-visible", "is-route-moving");
 
       await Promise.all([
-        drawPath(santoriniPath, 1200),
+        drawPath(santoriniReveal, 1200),
 
         moveVehicle({
           vehicle: daytripVehicle,
@@ -267,6 +268,7 @@
         }),
       ]);
 
+      daytripVehicle.classList.remove("is-route-moving");
       daytripVehicle.classList.add("is-route-settled");
       reachNode(nodes.santorini);
 
@@ -332,6 +334,7 @@
       ].forEach((vehicle) => {
         vehicle.classList.remove(
           "is-route-vehicle-visible",
+          "is-route-moving",
           "is-route-settled"
         );
       });

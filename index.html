@@ -57,7 +57,6 @@
 
     <section id="route" class="section route">
       <div class="section-head route-intro">
-        <p class="eyebrow darkmode-text">The shape of the journey</p>
 
         <h2>
           Athens first.<br>
@@ -94,8 +93,8 @@
           <span>10–16 October 2026</span>
         </div>
 
-        <div class="route-map-visual" data-route-viewport>
-          <svg class="route-map-svg" viewBox="0 0 760 520" role="img"
+        <div class="route-map-visual" id="route-map-viewport" data-route-viewport>
+          <svg class="route-map-svg" viewBox="0 0 760 520" preserveAspectRatio="xMidYMid meet" role="img"
             aria-labelledby="route-map-title route-map-description">
             <title id="route-map-title">
             </title>
@@ -113,8 +112,8 @@
               </pattern>
 
               <pattern id="route-land-texture" width="16" height="16" patternUnits="userSpaceOnUse">
-                <circle cx="3" cy="4" r=".8" fill="#846f4d" fill-opacity=".13" />
-                <circle cx="11" cy="10" r=".65" fill="#846f4d" fill-opacity=".09" />
+                <circle cx="3" cy="4" r="1" fill="#846f4d" fill-opacity=".18" />
+                <circle cx="11" cy="10" r=".8" fill="#846f4d" fill-opacity=".13" />
               </pattern>
               <linearGradient id="route-sea-gradient" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#6fc6cb" stop-opacity=".18" />
@@ -126,9 +125,26 @@
                 <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f2434" flood-opacity=".10" />
               </filter>
 
+              <filter id="route-node-shadow" x="-80%" y="-80%" width="260%" height="260%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0f2434" flood-opacity=".18" />
+              </filter>
+
               <pattern id="route-grid" width="36" height="36" patternUnits="userSpaceOnUse">
-                <path d="M 36 0 L 0 0 0 36" fill="none" stroke="currentColor" stroke-opacity=".055" stroke-width="1" />
+                <path d="M 36 0 L 0 0 0 36" fill="none" stroke="currentColor" stroke-opacity=".155" stroke-width="1" />
               </pattern>
+
+              <mask id="route-ferry-reveal-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="760" height="520">
+                <path id="route-reveal-ferry" d="M151 126 C205 185 224 262 218 350" fill="none" stroke="white"
+                  stroke-width="8" stroke-linecap="round" />
+              </mask>
+              <mask id="route-road-reveal-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="760" height="520">
+                <path id="route-reveal-road" d="M218 350 C320 345 430 362 573 354" fill="none" stroke="white"
+                  stroke-width="8" stroke-linecap="round" />
+              </mask>
+              <mask id="route-daytrip-reveal-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="760" height="520">
+                <path id="route-reveal-santorini" d="M573 354 C632 321 658 264 629 204" fill="none" stroke="white"
+                  stroke-width="8" stroke-linecap="round" />
+              </mask>
             </defs>
 
             <!-- Background cartographic texture -->
@@ -153,81 +169,125 @@
   " fill="url(#route-sea-texture)" />
 
 
-            <!-- Very abstract land silhouettes -->
+            <!-- Simplified editorial land silhouettes -->
+            <g class="route-landmass route-landmass-mainland" transform="translate(22 16) scale(.9)">
             <path class="route-land route-land-mainland" d="
-    M34 54
-    C68 39 111 38 151 51
-    C185 62 211 82 221 105
-    C230 126 220 146 197 158
-    C172 171 137 168 105 155
-    C73 142 48 122 35 98
-    C26 81 25 64 34 54Z
+    M24 42
+    C58 30 95 34 123 47
+    C143 55 158 52 179 62
+    C205 74 226 93 230 114
+    C234 133 220 147 202 154
+    C184 161 169 155 153 163
+    C133 173 108 165 91 151
+    C76 139 59 137 45 121
+    C28 102 18 74 24 42Z
   " />
 
             <path class="route-land-texture" d="
-    M34 54
-    C68 39 111 38 151 51
-    C185 62 211 82 221 105
-    C230 126 220 146 197 158
-    C172 171 137 168 105 155
-    C73 142 48 122 35 98
-    C26 81 25 64 34 54Z
+    M24 42
+    C58 30 95 34 123 47
+    C143 55 158 52 179 62
+    C205 74 226 93 230 114
+    C234 133 220 147 202 154
+    C184 161 169 155 153 163
+    C133 173 108 165 91 151
+    C76 139 59 137 45 121
+    C28 102 18 74 24 42Z
   " />
+            </g>
 
 
+            <g class="route-landmass route-landmass-crete" transform="translate(28 12) scale(.92 .96)">
             <path class="route-land route-land-crete" d="
-    M122 346
-    C191 334 258 333 326 340
-    C399 348 470 358 544 350
-    C591 345 634 333 672 330
-    C694 329 706 339 701 351
-    C696 364 674 374 646 378
-    C586 386 526 389 464 386
-    C392 382 324 376 254 382
-    C205 386 161 383 133 374
-    C111 367 103 354 122 346Z
+    M103 329
+    C121 316 144 308 169 309
+    C190 309 205 318 226 320
+    C248 322 266 315 288 319
+    C309 322 326 331 348 331
+    C372 331 388 324 412 328
+    C438 333 459 329 483 326
+    C510 322 531 327 555 322
+    C582 317 603 305 630 305
+    C653 305 668 313 687 316
+    C702 318 719 315 728 322
+    C735 328 727 336 716 340
+    C701 346 686 346 673 352
+    C659 359 648 370 632 372
+    C615 375 601 368 584 372
+    C564 377 548 388 526 388
+    C504 389 487 380 466 381
+    C441 382 424 393 398 391
+    C374 389 356 378 333 379
+    C307 380 287 391 260 389
+    C235 387 216 378 193 381
+    C169 384 149 392 128 383
+    C109 375 94 359 94 345
+    C94 338 97 333 103 329Z
   " />
 
             <path class="route-land-texture" d="
-    M122 346
-    C191 334 258 333 326 340
-    C399 348 470 358 544 350
-    C591 345 634 333 672 330
-    C694 329 706 339 701 351
-    C696 364 674 374 646 378
-    C586 386 526 389 464 386
-    C392 382 324 376 254 382
-    C205 386 161 383 133 374
-    C111 367 103 354 122 346Z
+    M103 329
+    C121 316 144 308 169 309
+    C190 309 205 318 226 320
+    C248 322 266 315 288 319
+    C309 322 326 331 348 331
+    C372 331 388 324 412 328
+    C438 333 459 329 483 326
+    C510 322 531 327 555 322
+    C582 317 603 305 630 305
+    C653 305 668 313 687 316
+    C702 318 719 315 728 322
+    C735 328 727 336 716 340
+    C701 346 686 346 673 352
+    C659 359 648 370 632 372
+    C615 375 601 368 584 372
+    C564 377 548 388 526 388
+    C504 389 487 380 466 381
+    C441 382 424 393 398 391
+    C374 389 356 378 333 379
+    C307 380 287 391 260 389
+    C235 387 216 378 193 381
+    C169 384 149 392 128 383
+    C109 375 94 359 94 345
+    C94 338 97 333 103 329Z
   " />
+            </g>
 
+            <g class="route-landmass route-landmass-santorini" transform="translate(-2 5) scale(.98)">
             <path class="route-land route-land-santorini" d="
-    M615 174
-    C628 167 642 168 650 178
-    C659 190 656 205 647 218
-    C638 231 624 239 613 235
-    C602 231 599 219 604 207
-    C609 195 618 187 615 174Z
+    M620 167
+    C633 163 646 169 652 180
+    C658 191 655 204 648 216
+    C641 228 630 239 619 240
+    C609 241 601 234 601 224
+    C601 214 607 206 613 199
+    C620 190 621 181 616 176
+    C613 172 615 169 620 167Z
   " />
 
             <path class="route-land-texture" d="
-    M615 174
-    C628 167 642 168 650 178
-    C659 190 656 205 647 218
-    C638 231 624 239 613 235
-    C602 231 599 219 604 207
-    C609 195 618 187 615 174Z
+    M620 167
+    C633 163 646 169 652 180
+    C658 191 655 204 648 216
+    C641 228 630 239 619 240
+    C609 241 601 234 601 224
+    C601 214 607 206 613 199
+    C620 190 621 181 616 176
+    C613 172 615 169 620 167Z
   " />
+            </g>
 
 
 
             <!-- Transport routes -->
-            <path id="route-path-ferry" class="route-path route-path-ferry" d="M151 126 C205 185 224 262 218 350" />
+            <path id="route-path-ferry" class="route-path route-path-ferry" d="M151 126 C205 185 224 262 218 350"
+              mask="url(#route-ferry-reveal-mask)" />
 
-            <path id="route-path-road" class="route-path route-path-road" d="M218 350 C320 345 430 362 573 354" />
+            <path id="route-path-road" class="route-path route-path-road" d="M218 350 C320 345 430 362 573 354"
+              mask="url(#route-road-reveal-mask)" />
 
             <path id="route-path-santorini" class="route-path route-path-daytrip"
-              d="M573 354 C632 321 658 264 629 204" />
+              d="M573 354 C632 321 658 264 629 204" mask="url(#route-daytrip-reveal-mask)" />
 
             <!-- Route labels -->
             <g class="route-transport-label route-ferry-label">
@@ -348,29 +408,28 @@
               </g>
             </a>
 
+            <!-- Stop markers remain below moving vehicles. -->
             <g class="route-stop-markers-front" aria-hidden="true">
               <circle cx="151" cy="126" r="5.5" />
               <circle cx="218" cy="350" r="5.5" />
               <circle cx="388" cy="356" r="5.5" />
               <circle cx="573" cy="354" r="5.5" />
-
               <circle class="route-stop-marker-santorini" cx="629" cy="204" r="5.5" />
             </g>
-
 
             <!-- Vehicles -->
 
             <!-- 1st ferry  -->
             <g id="route-ferry-vehicle" class="route-vehicle route-ferry-icon" aria-hidden="true">
+              <g class="route-ferry-wakes" aria-hidden="true">
+                <path class="route-ferry-wake" d="M-24 8 C-31 10 -35 13 -40 16" />
+                <path class="route-ferry-wake" d="M-21 11 C-28 13 -32 16 -37 19" />
+              </g>
               <g class="route-vehicle-art route-ferry-art">
                 <path d="M-17 2 H17 L11 10 H-11 Z" class="route-vehicle-body" />
                 <path d="M-9 2 V-7 H8 V2" class="route-vehicle-body" />
                 <circle cx="-4" cy="-3" r="1.5" />
                 <circle cx="3" cy="-3" r="1.5" />
-              </g>
-              <g class="route-ferry-wakes" aria-hidden="true">
-                <path class="route-ferry-wake" d="M-24 8 C-31 10 -35 13 -40 16" />
-                <path class="route-ferry-wake" d="M-21 11 C-28 13 -32 16 -37 19" />
               </g>
             </g>
 
@@ -379,13 +438,17 @@
               <g class="route-vehicle-art route-car-art">
                 <path d="M-17 4 L-12 -5 H8 L15 4 V10 H-17 Z" class="route-vehicle-body" />
                 <g class="route-wheel route-wheel-left" transform="translate(-10 10)">
-                  <circle r="3" />
-                  <path d="M-1.8 0 H1.8 M0 -1.8 V1.8" class="route-wheel-spokes" />
+                  <g class="route-wheel-spin">
+                    <circle r="3" />
+                    <path d="M-1.8 0 H1.8 M0 -1.8 V1.8" class="route-wheel-spokes" />
+                  </g>
                 </g>
 
                 <g class="route-wheel route-wheel-right" transform="translate(9 10)">
-                  <circle r="3" />
-                  <path d="M-1.8 0 H1.8 M0 -1.8 V1.8" class="route-wheel-spokes" />
+                  <g class="route-wheel-spin">
+                    <circle r="3" />
+                    <path d="M-1.8 0 H1.8 M0 -1.8 V1.8" class="route-wheel-spokes" />
+                  </g>
                 </g>
                 <path d="M-8 -3 H5 L9 4 H-12 Z" class="route-vehicle-window" />
               </g>
@@ -393,19 +456,17 @@
 
             <!-- 2nd ferry -->
             <g id="route-daytrip-vehicle" class="route-vehicle route-daytrip-ferry" aria-hidden="true">
+              <g class="route-ferry-wakes" aria-hidden="true">
+                <path class="route-ferry-wake" d="M-24 8 C-31 10 -35 13 -40 16" />
+                <path class="route-ferry-wake" d="M-21 11 C-28 13 -32 16 -37 19" />
+              </g>
               <g class="route-vehicle-art route-daytrip-ferry-art">
                 <path d="M-14 2 H14 L9 9 H-9 Z" class="route-vehicle-body" />
                 <path d="M-7 2 V-6 H7 V2" class="route-vehicle-body" />
                 <circle cx="-3" cy="-2" r="1.3" />
                 <circle cx="3" cy="-2" r="1.3" />
               </g>
-              <g class="route-ferry-wakes" aria-hidden="true">
-                <path class="route-ferry-wake" d="M-24 8 C-31 10 -35 13 -40 16" />
-                <path class="route-ferry-wake" d="M-21 11 C-28 13 -32 16 -37 19" />
-              </g>
             </g>
-
-
 
           </svg>
         </div>
@@ -418,13 +479,15 @@
               <span aria-hidden="true">↓</span>
             </a>
 
-            <button class="route-map-expand" type="button" data-route-expand aria-label="Expand route map"
-              aria-expanded="false">
+            <!-- <button class="route-map-expand" type="button" data-route-expand aria-label="Expand route map"
+              aria-controls="route-map-viewport" aria-expanded="false">
               <svg class="route-map-expand-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                <path class="route-map-icon-expand" d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round" />
+                <path class="route-map-icon-close" d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8"
                   stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-            </button>
+            </button> -->
           </div>
         </div>
 
