@@ -19,6 +19,7 @@
     const card = document.querySelector("[data-route-map]");
     const viewport = document.querySelector("[data-route-viewport]");
     const svg = card?.querySelector(".route-map-svg");
+    const daytripVehicle = svg.querySelector("#route-daytrip-vehicle");
 
     if (!card || !viewport || !svg) return;
 
@@ -48,6 +49,7 @@
       paths.length !== 3 ||
       !ferryVehicle ||
       !carVehicle ||
+      !daytripVehicle ||
       Object.values(nodes).some((node) => !node)
     ) {
       return;
@@ -55,6 +57,7 @@
 
     let userControlledViewport = false;
     let animationStarted = false;
+    let routeIsAnimating = false;
 
     /*
      * Manual interaction permanently disables guided horizontal following.
@@ -91,6 +94,7 @@
     paths.forEach(preparePath);
     placeVehicleAt(ferryVehicle, ferryPath, 0, 0);
     placeVehicleAt(carVehicle, roadPath, 0, 0);
+    placeVehicleAt(daytripVehicle, santoriniPath, 0, 0);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -110,18 +114,59 @@
 
     observer.observe(card);
 
+    card.addEventListener("click", (event) => {
+      /*
+       * Preserve city links and any future interactive controls.
+       */
+      if (event.target.closest("a, button")) return;
+
+      if (routeIsAnimating) return;
+
+      replayRouteSequence();
+    });
+
+    async function replayRouteSequence() {
+      routeIsAnimating = true;
+      userControlledViewport = false;
+
+      resetRouteSequence();
+
+      if (isMobileMap()) {
+        viewport.scrollTo({
+          left: 0,
+          behavior: "auto",
+        });
+      }
+
+      /*
+       * Two animation frames ensure the browser paints the reset state before
+       * the sequence starts again.
+       */
+      await nextFrame();
+      await nextFrame();
+
+      await runRouteSequence();
+    }
+
     async function runRouteSequence() {
+
+      routeIsAnimating = true;
       card.classList.add("is-route-active");
 
       await wait(520);
       reachNode(nodes.athens);
 
+      /*
+       * Athens → Chania
+       */
       await wait(340);
+
       labels.ferry?.classList.add("is-route-label-visible");
       ferryVehicle.classList.add("is-route-vehicle-visible");
 
       await Promise.all([
         drawPath(ferryPath, 1450),
+
         moveVehicle({
           vehicle: ferryVehicle,
           path: ferryPath,
@@ -130,9 +175,14 @@
         }),
       ]);
 
+      ferryVehicle.classList.add("is-route-settled");
       reachNode(nodes.chania);
 
+      /*
+       * Chania → Rethymno → Heraklion
+       */
       await wait(320);
+
       labels.road?.classList.add("is-route-label-visible");
       carVehicle.classList.add("is-route-vehicle-visible");
 
@@ -140,11 +190,13 @@
 
       await Promise.all([
         drawPath(roadPath, roadDuration),
+
         moveVehicle({
           vehicle: carVehicle,
           path: roadPath,
           duration: roadDuration,
           followViewport: true,
+
           onProgress(progress) {
             if (progress >= 0.45) {
               reachNode(nodes.rethymno);
@@ -157,41 +209,51 @@
         }),
       ]);
 
+      carVehicle.classList.add("is-route-settled");
+
+      /*
+       * Heraklion → Santorini
+       */
       await wait(300);
+
       labels.daytrip?.classList.add("is-route-label-visible");
+      daytripVehicle.classList.add("is-route-vehicle-visible");
 
-      await drawPath(santoriniPath, 1050, {
-        onProgress(progress) {
-          if (isMobileMap() && !userControlledViewport) {
-            guideViewportToPoint(
-              santoriniPath.getPointAtLength(
-                santoriniPath.getTotalLength() * progress
-              )
-            );
-          }
-        },
-      });
+      await Promise.all([
+        drawPath(santoriniPath, 1200),
 
+        moveVehicle({
+          vehicle: daytripVehicle,
+          path: santoriniPath,
+          duration: 1200,
+          followViewport: true,
+        }),
+      ]);
+
+      daytripVehicle.classList.add("is-route-settled");
       reachNode(nodes.santorini);
 
       /*
-       * Leave the mobile viewport at a balanced final position rather than
-       * snapping back to the beginning.
+       * Leave the mobile viewport at the final part of the route.
        */
       if (isMobileMap() && !userControlledViewport) {
         await wait(360);
+
         viewport.scrollTo({
-          left: Math.max(0, viewport.scrollWidth - viewport.clientWidth - 18),
+          left: Math.max(
+            0,
+            viewport.scrollWidth - viewport.clientWidth - 18
+          ),
           behavior: "smooth",
         });
       }
-    }
 
+      routeIsAnimating = false;
+    }
     function preparePath(path) {
       const length = path.getTotalLength();
 
-      path.style.setProperty("--route-length", length);
-      path.style.strokeDasharray = `${length}`;
+      path.style.strokeDasharray = `${length} ${length}`;
       path.style.strokeDashoffset = `${length}`;
     }
 
@@ -210,6 +272,38 @@
         path.style.strokeDashoffset = `${length * (1 - eased)}`;
         options.onProgress?.(eased);
       });
+    }
+
+    function resetRouteSequence() {
+      card.classList.remove("is-route-active");
+
+      Object.values(nodes).forEach((node) => {
+        node.classList.remove(
+          "is-route-reached",
+          "is-route-current"
+        );
+      });
+
+      Object.values(labels).forEach((label) => {
+        label?.classList.remove("is-route-label-visible");
+      });
+
+      [
+        ferryVehicle,
+        carVehicle,
+        daytripVehicle,
+      ].forEach((vehicle) => {
+        vehicle.classList.remove(
+          "is-route-vehicle-visible",
+          "is-route-settled"
+        );
+      });
+
+      paths.forEach(preparePath);
+
+      placeVehicleAt(ferryVehicle, ferryPath, 0, 0);
+      placeVehicleAt(carVehicle, roadPath, 0, 0);
+      placeVehicleAt(daytripVehicle, santoriniPath, 0, 0);
     }
 
     function moveVehicle({
@@ -245,7 +339,7 @@
 
       const angle =
         Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) *
-          (180 / Math.PI) +
+        (180 / Math.PI) +
         rotationOffset;
 
       vehicle.setAttribute(
@@ -347,6 +441,12 @@
   function wait(duration) {
     return new Promise((resolve) => {
       window.setTimeout(resolve, duration);
+    });
+  }
+
+  function nextFrame() {
+    return new Promise((resolve) => {
+      requestAnimationFrame(resolve);
     });
   }
 })();

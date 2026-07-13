@@ -1538,7 +1538,7 @@ body {
 
 /* Paths are prepared with exact lengths by JavaScript. */
 .route-motion-ready .route-path {
-    transition: stroke-dashoffset var(--route-duration, 1000ms) cubic-bezier(0.65, 0, 0.35, 1);
+    transition: none;
 }
 
 /* Nodes begin muted and settle in only when reached. */
@@ -1548,8 +1548,7 @@ body {
 }
 
 .route-motion-ready .route-node .route-node-halo,
-.route-motion-ready .route-node .route-node-dot,
-.route-motion-ready .route-node .route-node-label {
+.route-motion-ready .route-node .route-node-dot {
     transition:
         opacity 360ms ease,
         transform 520ms var(--route-reveal-ease),
@@ -1559,6 +1558,10 @@ body {
     transform-origin: center;
 }
 
+.route-motion-ready .route-node .route-node-label {
+    transition: opacity 360ms ease;
+}
+
 .route-motion-ready .route-node:not(.is-route-reached) .route-node-halo,
 .route-motion-ready .route-node:not(.is-route-reached) .route-node-dot {
     transform: scale(0.65);
@@ -1566,7 +1569,6 @@ body {
 
 .route-motion-ready .route-node:not(.is-route-reached) .route-node-label {
     opacity: 0;
-    transform: translateY(8px);
 }
 
 .route-motion-ready .route-node.is-route-reached {
@@ -1574,10 +1576,13 @@ body {
 }
 
 .route-motion-ready .route-node.is-route-reached .route-node-halo,
-.route-motion-ready .route-node.is-route-reached .route-node-dot,
+.route-motion-ready .route-node.is-route-reached .route-node-dot {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .route-motion-ready .route-node.is-route-reached .route-node-label {
     opacity: 1;
-    transform: none;
 }
 
 .route-motion-ready .route-node.is-route-current .route-node-halo {
@@ -1607,6 +1612,16 @@ body {
     transform: none;
 }
 
+.route-node-label text {
+  dominant-baseline: auto;
+}
+
+.route-node,
+.route-node-label,
+.route-node-label text {
+  margin: 0;
+}
+
 /* Vehicles remain hidden until their section starts. */
 .route-motion-ready .route-vehicle {
     opacity: 0;
@@ -1629,6 +1644,36 @@ body {
 .route-car-art {
     transform-origin: center;
     animation: route-car-road 520ms ease-in-out infinite;
+}
+
+.route-vehicle.is-route-settled .route-vehicle-art {
+    animation: none;
+    transform: none;
+}
+
+.route-daytrip-ferry .route-vehicle-body {
+  fill: var(--coral);
+}
+
+.route-daytrip-ferry circle {
+  fill: var(--sand);
+  stroke: none;
+}
+
+.route-daytrip-ferry-art {
+  transform-origin: center;
+  animation: route-daytrip-ferry-float 850ms ease-in-out infinite;
+}
+
+@keyframes route-daytrip-ferry-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.5deg);
+  }
+
+  50% {
+    transform: translateY(-1px) rotate(0.5deg);
+  }
 }
 
 @keyframes route-node-arrival {
@@ -2784,4 +2829,14 @@ footer {
         animation: none !important;
         transition: none !important;
     }
+}
+
+.route-map-card {
+  cursor: pointer;
+}
+
+.route-map-card:has(.route-node:hover),
+.route-map-card:has(a:hover),
+.route-map-card:has(button:hover) {
+  cursor: default;
 }
